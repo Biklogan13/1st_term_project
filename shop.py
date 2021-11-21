@@ -8,9 +8,10 @@ screen = None
 
 def shop_init():
     global screen
-    screen = pygame.Surface(settings.SIZE)
+    screen = pygame.surface(settings.SIZE)
     screen.fill((100, 0, 0))
     back_button = settings.Button(0, 0, 60, 60, 'switch_to_menu')
+
 
 def shop_screen():
     global buttons, screen

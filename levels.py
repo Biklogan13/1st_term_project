@@ -16,7 +16,7 @@ def menu_init():
     buttons += [exit_button, shop_button, levels_button]
 
 
-def menu_screen():
+def levels_screen():
     global buttons, screen
     for b in buttons:
         b.draw(screen)
