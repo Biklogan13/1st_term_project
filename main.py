@@ -22,9 +22,6 @@ pygame.display.toggle_fullscreen()
 
 # Variable which shows which gamescreen is now displayed
 flag = 'menu'
-
-flag = Screen_flag()
-
 clock = pygame.time.Clock()
 
 
