@@ -1,41 +1,28 @@
 import pygame
 
+import settings
 
-global SIZE, flag
-
-
-class Button:
-    def __init__(self, x, y, width, heigth, action):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = heigth
-        self.action = action
-        self.image = Nan
-
-    def is_pressed(self, event):
-        if event.pos[0] - self.x <= self.width and event.pos[1] - self.y <= self.height:
-            if self.action == 'exit':
-                pygame.quit()
-            elif self.action == 'switch_to_menu':
-                pass
-            elif self.action == 'switch_to_levels':
-                pass
-            if self.action == 'switch_to_shop':
-                pass
+buttons = []
+screen = None
 
 
 def menu_init():
-    screen = pygame.Surface(SIZE)
+    global buttons, screen
+    screen = pygame.Surface(settings.SIZE)
     screen.fill((0, 0, 0))
-    exit_button = Button(SIZE[0] - 100, 0, 100, 100, 'exit')
+    exit_button = settings.Button(settings.WIDTH - 60, 0, 60, 60, 'exit')
+    shop_button = settings.Button(settings.WIDTH // 2, settings.HEIGHT // 2 - 100, 60, 60, 'switch_to_shop')
+    levels_button = settings.Button(settings.WIDTH - 60, 0, 60, 60, 'switch_to_levels')
+    buttons += [exit_button, shop_button, levels_button]
 
 
 def menu_screen():
+    global buttons, screen
+    for b in buttons:
+        b.draw(screen)
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             for b in buttons:
-                b.is_pressed(event)
-    pygame.screen.draw.rect
+                b.act(event)
     return screen
 
