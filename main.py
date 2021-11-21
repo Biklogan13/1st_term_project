@@ -1,34 +1,37 @@
 import math
-from random import *
 import pygame
-from pygame.mixer import *
+import pygame.mixer
 
-from menu.py import *
-from shop.py import *
-from levels.py import *
-from shuttle.py import *
-from ammunition.py import *
-from enemies.py import *
+from menu import *
+from shop import *
+from levels import *
+from shuttle import *
+from ammunition import *
+from enemies import *
 
 
 # Variable which shows what gamescreen is now displayed
-screen_flag = menu
+class Screen_flag:
+    def __init__(self):
+        self.screen = 'menu'
+
+flag = Screen_flag()
 
 
 pygame.init()
 info = pygame.display.Info()
-WIDTH, HEIGHT = info.current_w, info.current_h
-mainsurface = pygame.display.set_mode(SIZE)
+SIZE = WIDTH, HEIGHT = info.current_w, info.current_h
+main_surface = pygame.display.set_mode(SIZE)
 
 clock = pygame.time.Clock()
 
 
-while not finished:
-    if screen_flag == menu:
+while True:
+    if flag.screen == 'menu':
         screen = menu_screen()
-    elif screen_flag == levels:
+    elif screen_flag == 'levels':
         screen = menu_screen()
-    elif screen_flag == shop:
+    elif screen_flag == 'shop':
         screen = shop_screen()
-
+    main_surface.blit(screen, (0, 0))
 pygame.quit()
