@@ -5,7 +5,7 @@ import pygame.mixer
 from menu import *
 from shop import *
 from levels import *
-from shuttle import *
+#from shuttle import *
 from ammunition import *
 from enemies import *
 
@@ -21,21 +21,23 @@ pygame.display.toggle_fullscreen()
 
 
 # Variable which shows which gamescreen is now displayed
-class Screen_flag:
-    def __init__(self):
-        self.screen = 'menu'
+flag = 'menu'
 
 flag = Screen_flag()
 
 clock = pygame.time.Clock()
 
 
+menu_init()
+
 while True:
-    if flag.screen == 'menu':
+    if flag == 'menu':
         screen = menu_screen()
-    elif screen_flag == 'levels':
+    elif flag == 'levels':
         screen = menu_screen()
-    elif screen_flag == 'shop':
+    elif flag == 'shop':
         screen = shop_screen()
     main_surface.blit(screen, (0, 0))
+    pygame.display.update()
+
 pygame.quit()
