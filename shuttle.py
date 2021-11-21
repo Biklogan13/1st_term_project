@@ -4,8 +4,8 @@ import settings
 class Shuttle:
     def __init__(self, surface):
         self.surface = surface
-        self.x = WIDTH/2
-        self.y = HEIGHT/2
+        self.x = settings.WIDTH/2
+        self.y = settings.HEIGHT/2
         self.Vx = 0
         self.Vy = 0
         self.ax = 0
@@ -45,13 +45,13 @@ class Shuttle:
                 self.Vy += self.ay
 
         if self.Vx >= 0:
-            if self.x <= WIDTH:
+            if self.x <= settings.WIDTH:
                 self.x += self.Vx
         if self.Vx <= 0:
             if self.x >= 0:
                 self.x += self.Vx
         if self.Vy >= 0:
-            if self.y <= HEIGHT:
+            if self.y <= settings.HEIGHT:
                 self.y += self.Vy
         if self.Vy <= 0:
             if self.y >= 0:
