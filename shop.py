@@ -6,13 +6,15 @@ buttons = []
 screen = None
 
 
-def shop_init():
-    global screen
+def init():
+    global buttons, screen
     screen = pygame.Surface(settings.SIZE)
     screen.fill((100, 0, 0))
     back_button = settings.Button(0, 0, 60, 60, 'switch_to_menu')
+    buttons += [back_button]
 
-def shop_screen():
+
+def create_screen():
     global buttons, screen
     for b in buttons:
         b.draw(screen)

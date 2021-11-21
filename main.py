@@ -3,12 +3,12 @@ import math
 import pygame
 
 
-from menu import *
-from shop import *
-from levels import *
-#from shuttle import *
-from ammunition import *
-from enemies import *
+import menu
+import shop
+import levels
+import shuttle
+import ammunition
+import enemies
 import settings
 
 FPS = 60
@@ -24,15 +24,20 @@ pygame.display.toggle_fullscreen()
 
 clock = pygame.time.Clock()
 
-menu_init()
+menu.init()
+levels.init()
+shop.init()
 
 while settings.running:
     if settings.flag == 'menu':
-        screen = menu_screen()
+        screen = menu.create_screen()
     elif settings.flag == 'levels':
-        screen = menu_screen()
+        screen = levels.create_screen()
     elif settings.flag == 'shop':
-        screen = shop_screen()
+        pass
+        screen = shop.create_screen()
+    else:
+        print('ERROR, no screen!')
     if settings.running:
         main_surface.blit(screen, (0, 0))
         pygame.display.update()

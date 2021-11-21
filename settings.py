@@ -16,7 +16,7 @@ class Button:
 
     def act(self, event):
         global running, flag
-        if event.pos[0] - self.x <= self.width and event.pos[1] - self.y <= self.height:
+        if 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
             if self.action == 'exit':
                 pygame.quit()
                 running = False
