@@ -1,6 +1,7 @@
+import pygame.mixer
 import math
 import pygame
-import pygame.mixer
+
 
 from menu import *
 from shop import *
