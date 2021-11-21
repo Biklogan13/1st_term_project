@@ -61,14 +61,6 @@ class Ball:
         self.x += self.vx
         self.y += self.vy
 
-    def rot_center(image, angle):
-        orig_rect = image.get_rect()
-        rot_image = pygame.transform.rotate(image, angle)
-        rot_rect = orig_rect.copy()
-        rot_rect.center = rot_image.get_rect().center
-        rot_image = rot_image.subsurface(rot_rect).copy()
-        return rot_image
-
     def draw(self):
         self.angle = math.atan2(self.vy, self.vx)
         #pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
@@ -179,3 +171,11 @@ class Plasma_ball:
             return True
         else:
             return False
+
+def rot_center(image, angle):
+    orig_rect = image.get_rect()
+    rot_image = pygame.transform.rotate(image, angle)
+    rot_rect = orig_rect.copy()
+    rot_rect.center = rot_image.get_rect().center
+    rot_image = rot_image.subsurface(rot_rect).copy()
+    return rot_image
