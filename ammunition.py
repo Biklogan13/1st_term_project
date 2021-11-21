@@ -1,7 +1,9 @@
-import math
-from random import choice
+
 import random
 import pygame
+import math
+from random import choice
+
 
 plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
 plasma_ball_1.set_colorkey((255, 255, 255))
