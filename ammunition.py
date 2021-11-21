@@ -35,8 +35,8 @@ class Ball:
         y - начальное положение мяча по вертикали
         """
         self.screen = screen
-        self.x = spaceship.x
-        self.y = spaceship.y
+        self.x = settings.spaceship.x
+        self.y = settings.spaceship.y
         self.r = 10
         self.vx = 0
         self.vy = 0
@@ -104,21 +104,21 @@ class Laser:
         self.firing = 0
 
     def draw(self):
-        pygame.draw.line(self.screen, RED, (spaceship.x, spaceship.y), (spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=20)
-        pygame.draw.line(self.screen, ORANGE, (spaceship.x, spaceship.y), (spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=8)
-        pygame.draw.line(self.screen, YELLOW, (spaceship.x, spaceship.y), (spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=2)
-        self.screen.blit(settings.current_skin, (spaceship.x - 55, spaceship.y - 31))
+        pygame.draw.line(self.screen, RED, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=20)
+        pygame.draw.line(self.screen, ORANGE, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=8)
+        pygame.draw.line(self.screen, YELLOW, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=2)
+        self.screen.blit(settings.current_skin, (settings.spaceship.x - 55, settings.spaceship.y - 31))
 
     def targetting(self, event):
         if event:
-            self.angle = math.atan2((event.pos[1]-spaceship.y), (event.pos[0]-spaceship.x))
+            self.angle = math.atan2((event.pos[1]-settings.spaceship.y), (event.pos[0]-settings.spaceship.x))
         if self.firing:
             self.color = RED
         else:
             self.color = GREY
 
     def hittest_laser(self, obj):
-        if abs(math.sin(self.angle)*obj.x - math.cos(self.angle)*obj.y - math.sin(self.angle)*spaceship.x + math.cos(self.angle)*spaceship.y) <= 10 + obj.r and (pygame.mouse.get_pos()[0] - spaceship.x)*(obj.x - spaceship.x) > 0 and self.firing == 1:
+        if abs(math.sin(self.angle)*obj.x - math.cos(self.angle)*obj.y - math.sin(self.angle)*settings.spaceship.x + math.cos(self.angle)*settings.spaceship.y) <= 10 + obj.r and (pygame.mouse.get_pos()[0] - settings.spaceship.x)*(obj.x - settings.spaceship.x) > 0 and self.firing == 1:
             return True
         else:
             return False
@@ -136,8 +136,8 @@ class Plasma_ball:
         g - ускорение свободного падения
         """
         self.screen = screen
-        self.x = spaceship.x
-        self.y = spaceship.y
+        self.x = settings.spaceship.x
+        self.y = settings.spaceship.y
         self.r = 100
         self.vx = 0
         self.vy = 0
