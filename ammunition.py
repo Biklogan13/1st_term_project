@@ -1,4 +1,4 @@
-
+import settings
 import random
 import pygame
 import math
@@ -12,6 +12,7 @@ plasma_ball_2.set_colorkey((255, 255, 255))
 plasma_ball_3 = pygame.image.load('ammo_sprites/plasma_3.png')
 plasma_ball_3.set_colorkey((255, 255, 255))
 plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
+bullet = pygame.image.load('ammo_sprites/bullets-clip-art-129')
 
 RED = 0xFF0000
 BLUE = 0x0000FF
@@ -34,8 +35,8 @@ class Ball:
         y - начальное положение мяча по вертикали
         """
         self.screen = screen
-        self.x = gun.x
-        self.y = gun.y
+        self.x = spaceship.x
+        self.y = spaceship.y
         self.r = 10
         self.vx = 0
         self.vy = 0
@@ -52,13 +53,21 @@ class Ball:
         и стен по краям окна (размер окна 800х600).
         """
 
-        if self.y >= 2*HEIGHT - self.r:
+        if self.y >= 2*settings.HEIGHT - self.r:
             self.vy = 0
             self.vx = 0
         else:
             self.vy += 0.5
         self.x += self.vx
         self.y += self.vy
+
+    def rot_center(image, angle):
+        orig_rect = image.get_rect()
+        rot_image = pygame.transform.rotate(image, angle)
+        rot_rect = orig_rect.copy()
+        rot_rect.center = rot_image.get_rect().center
+        rot_image = rot_image.subsurface(rot_rect).copy()
+        return rot_image
 
     def draw(self):
         self.angle = math.atan2(self.vy, self.vx)
@@ -81,7 +90,7 @@ class Ball:
             return False
 
 class Laser:
-    def __init__(self):
+    def __init__(self, screen: pygame.Surface):
         self.screen = screen
         self.angle = 0
         self.r = 0
@@ -95,10 +104,10 @@ class Laser:
         self.firing = 0
 
     def draw(self):
-        pygame.draw.line(self.screen, RED, (gun.x, gun.y), (gun.x + math.cos(self.angle) * 2*WIDTH, gun.y + math.sin(self.angle) * 2*WIDTH), width=20)
-        pygame.draw.line(self.screen, ORANGE, (gun.x, gun.y), (gun.x + math.cos(self.angle) * 2*WIDTH, gun.y + math.sin(self.angle) * 2*WIDTH), width=8)
-        pygame.draw.line(self.screen, YELLOW, (gun.x, gun.y), (gun.x + math.cos(self.angle) * 2*WIDTH, gun.y + math.sin(self.angle) * 2*WIDTH), width=2)
-        self.screen.blit(ufo, (gun.x - 55, gun.y - 31))
+        pygame.draw.line(self.screen, RED, (spaceship.x, spaceship.y), (spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=20)
+        pygame.draw.line(self.screen, ORANGE, (spaceship.x, spaceship.y), (spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=8)
+        pygame.draw.line(self.screen, YELLOW, (spaceship.x, spaceship.y), (spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=2)
+        self.screen.blit(settings.current_skin, (spaceship.x - 55, spaceship.y - 31))
 
     #def lensdraw(self):
     #        # y = 450, x = 20
@@ -106,14 +115,14 @@ class Laser:
 
     def targetting(self, event):
         if event:
-            self.angle = math.atan2((event.pos[1]-gun.y), (event.pos[0]-gun.x))
+            self.angle = math.atan2((event.pos[1]-spaceship.y), (event.pos[0]-spaceship.x))
         if self.firing:
             self.color = RED
         else:
             self.color = GREY
 
     def hittest_laser(self, obj):
-        if abs(math.sin(self.angle)*obj.x - math.cos(self.angle)*obj.y - math.sin(self.angle)*gun.x + math.cos(self.angle)*gun.y) <= 10 + obj.r and (pygame.mouse.get_pos()[0] - gun.x)*(obj.x - gun.x) > 0 and self.firing == 1:
+        if abs(math.sin(self.angle)*obj.x - math.cos(self.angle)*obj.y - math.sin(self.angle)*spaceship.x + math.cos(self.angle)*spaceship.y) <= 10 + obj.r and (pygame.mouse.get_pos()[0] - spaceship.x)*(obj.x - spaceship.x) > 0 and self.firing == 1:
             return True
         else:
             return False
@@ -131,8 +140,8 @@ class Plasma_ball:
         g - ускорение свободного падения
         """
         self.screen = screen
-        self.x = gun.x
-        self.y = gun.y
+        self.x = spaceship.x
+        self.y = spaceship.y
         self.r = 100
         self.vx = 0
         self.vy = 0
