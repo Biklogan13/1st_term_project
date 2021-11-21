@@ -109,10 +109,6 @@ class Laser:
         pygame.draw.line(self.screen, YELLOW, (spaceship.x, spaceship.y), (spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=2)
         self.screen.blit(settings.current_skin, (spaceship.x - 55, spaceship.y - 31))
 
-    #def lensdraw(self):
-    #        # y = 450, x = 20
-    #    pygame.draw.line(self.screen, self.color, (20, (HEIGHT / 2)), (20 + math.cos(self.angle) * gun.f2_power, (HEIGHT / 2) + math.sin(self.angle) * gun.f2_power), width=10)
-
     def targetting(self, event):
         if event:
             self.angle = math.atan2((event.pos[1]-spaceship.y), (event.pos[0]-spaceship.x))
