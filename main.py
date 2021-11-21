@@ -6,7 +6,7 @@ import menu
 import shop
 import levels
 import shuttle
-from ammunition import *
+import ammunition
 import enemies
 import settings
 
