@@ -11,9 +11,9 @@ class Shuttle:
         self.ax = 0
         self.ay = 0
 
-    def draw(self, surface, skin):
+    def draw(self, surface):
         self.surface = surface
-        self.surface.blit(current_skin.image, (self.x - skin.x, self.y - skin.y))
+        self.surface.blit(settings.current_skin.image, (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
 
     def move(self):
 

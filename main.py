@@ -23,7 +23,6 @@ main_surface = pygame.display.set_mode(settings.SIZE, pygame.FULLSCREEN | pygame
 pygame.display.toggle_fullscreen()
 
 clock = pygame.time.Clock()
-spaceship = shuttle.Shuttle(main_surface)
 
 menu.init()
 levels.init()
