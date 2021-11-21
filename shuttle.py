@@ -63,5 +63,5 @@ class Shuttle_skins:
         self.height = height
         self.image = pygame.transform.scale(image, (self.width, self.height))
 
-skin1 = Shuttle_skins(55, 31, pygame.image.load('shuttle_skins/pngegg.png'))
+skin1 = Shuttle_skins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png'))
 current_skin = skin1
