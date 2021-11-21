@@ -8,9 +8,7 @@ from levels import *
 #from shuttle import *
 from ammunition import *
 from enemies import *
-from settings import *
-
-init_global()
+import settings
 
 FPS = 60
 
@@ -28,14 +26,15 @@ clock = pygame.time.Clock()
 
 menu_init()
 
-while True:
+while settings.running:
     if settings.flag == 'menu':
         screen = menu_screen()
     elif settings.flag == 'levels':
         screen = menu_screen()
     elif settings.flag == 'shop':
         screen = shop_screen()
-    main_surface.blit(screen, (0, 0))
-    pygame.display.update()
+    if settings.running:
+        main_surface.blit(screen, (0, 0))
+        pygame.display.update()
 
 pygame.quit()

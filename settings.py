@@ -1,9 +1,7 @@
 import pygame
 
-
-def init_global():
-    global SIZE, WIDTH, HEIGHT, flag
-    SIZE, WIDTH, HEIGHT, flag = 0, 0, 0, 'menu'
+# Global variables which needed in many files
+SIZE, WIDTH, HEIGHT, flag, running = 0, 0, 0, 'menu', True
 
 
 # Common classes
@@ -16,16 +14,18 @@ class Button:
         self.action = action
         self.image = None
 
-    def action(self, event):
+    def act(self, event):
+        global running, flag
         if event.pos[0] - self.x <= self.width and event.pos[1] - self.y <= self.height:
             if self.action == 'exit':
                 pygame.quit()
+                running = False
             elif self.action == 'switch_to_menu':
-                pass
+                flag = 'menu'
             elif self.action == 'switch_to_levels':
-                pass
+                flag = 'levels'
             if self.action == 'switch_to_shop':
-                pass
+                flag = 'shop'
 
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
