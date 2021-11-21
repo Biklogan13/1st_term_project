@@ -24,21 +24,19 @@ pygame.display.toggle_fullscreen()
 clock = pygame.time.Clock()
 
 menu.init()
-#levels.init()
-#shop.init()
+levels.init()
+shop.init()
 
 while settings.running:
-    print(settings.flag)
     if settings.flag == 'menu':
         screen = menu.create_screen()
     elif settings.flag == 'levels':
-        pass
-        #screen = levels.create_screen()
+        screen = levels.create_screen()
     elif settings.flag == 'shop':
         pass
-        #screen = shop.create_screen()
+        screen = shop.create_screen()
     else:
-        print('ERROR, no screen')
+        print('ERROR, no screen!')
     if settings.running:
         main_surface.blit(screen, (0, 0))
         pygame.display.update()
