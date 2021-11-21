@@ -1,3 +1,6 @@
+import pygame
+import settings
+
 class Shuttle:
     def __init__(self, surface):
         self.surface = surface
