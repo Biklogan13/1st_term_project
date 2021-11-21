@@ -2,15 +2,15 @@ import pygame
 
 # Global variables which needed in many files
 SIZE, WIDTH, HEIGHT, flag, running = 0, 0, 0, 'menu', True
-current_skin = 0
+current_skin, spaceship = None, None
 
 # Common classes
 class Button:
-    def __init__(self, x, y, width, heigth, action):
+    def __init__(self, x, y, width, height, action):
         self.x = x
         self.y = y
         self.width = width
-        self.height = heigth
+        self.height = height
         self.action = action
         self.image = None
 
