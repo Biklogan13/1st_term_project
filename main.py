@@ -9,19 +9,23 @@ from shuttle import *
 from ammunition import *
 from enemies import *
 
+FPS = 60
 
-# Variable which shows what gamescreen is now displayed
+pygame.init()
+pygame.font.init()
+pygame.mixer.init()
+info = pygame.display.Info()
+SIZE = WIDTH, HEIGHT = info.current_w, info.current_h
+main_surface = pygame.display.set_mode(SIZE, pygame.FULLSCREEN | pygame.NOFRAME)
+pygame.display.toggle_fullscreen()
+
+
+# Variable which shows which gamescreen is now displayed
 class Screen_flag:
     def __init__(self):
         self.screen = 'menu'
 
 flag = Screen_flag()
-
-
-pygame.init()
-info = pygame.display.Info()
-SIZE = WIDTH, HEIGHT = info.current_w, info.current_h
-main_surface = pygame.display.set_mode(SIZE)
 
 clock = pygame.time.Clock()
 
