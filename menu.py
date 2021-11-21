@@ -1,5 +1,6 @@
 import pygame
 
+import settings
 
 global SIZE, flag
 
@@ -12,7 +13,7 @@ class Button:
         self.height = heigth
         self.action = action
         self.screen = screen
-        self.image = Nan
+        self.image = None
 
     def action(self, event):
         if event.pos[0] - self.x <= self.width and event.pos[1] - self.y <= self.height:
@@ -29,17 +30,11 @@ class Button:
         pygame.draw.rect(self.screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
 
 
-def menu_init():
-    screen = pygame.Surface(SIZE)
-    screen.fill((0, 0, 0))
-    exit_button = Button(SIZE[0] - 100, 0, 100, 100, 'exit')
-
-
 def menu_screen():
+    for b in settings.buttons:
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
-            for b in buttons:
+            for b in settings.buttons:
                 b.action(event)
-    pygame.screen.draw.rect
     return screen
 
