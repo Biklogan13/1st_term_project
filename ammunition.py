@@ -3,7 +3,25 @@ from random import choice
 import random
 import pygame
 
-plasma_ball_sprites = []  # FIXME добавить спрайтов шариков
+plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
+plasma_ball_1.set_colorkey((255, 255, 255))
+plasma_ball_2 = pygame.image.load('ammo_sprites/plasma_2.png')
+plasma_ball_2.set_colorkey((255, 255, 255))
+plasma_ball_3 = pygame.image.load('ammo_sprites/plasma_3.png')
+plasma_ball_3.set_colorkey((255, 255, 255))
+plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
+
+RED = 0xFF0000
+BLUE = 0x0000FF
+YELLOW = 0xFFC91F
+GREEN = 0x00FF00
+MAGENTA = 0xFF03B8
+CYAN = 0x00FFCC
+ORANGE = (255, 165, 0)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREY = 0x7D7D7D
+GAME_COLORS = [BLACK, RED, GREEN]
 
 class Ball:
     def __init__(self, screen: pygame.Surface):
@@ -113,13 +131,14 @@ class Plasma_ball:
         self.screen = screen
         self.x = gun.x
         self.y = gun.y
-        self.r = 50
+        self.r = 100
         self.vx = 0
         self.vy = 0
         self.g = 0
         self.timer = 300
-        self.surf = pygame.transform.scale(plasma_balls_prites[1] (self.r, self.r))
+        self.surf = pygame.transform.scale(plasma_ball_sprites[1], (self.r, self.r))
         self.angle = math.atan2(self.vy, self.vx)
+        self.sprite_number = 1
 
     def move(self):
         """Переместить шар по прошествии 1 кадра.
@@ -129,16 +148,17 @@ class Plasma_ball:
         и стен по краям окна (размер окна 800х600).
         """
         self.x += self.vx
-        self.y -= self.vy
+        self.y += self.vy
         self.vy += self.g
         self.timer -= 1
-        self.sprite_number += 1
-        if (self.timer % 10):
-            self.surf = pygame.transform.scale(plasma_balls_prites[self.sprite.number % 3](self.r, self.r))
+        if (self.timer % 10 == 0):
+            self.sprite_number += 1
+            self.sprite_number = self.sprite_number % 2
+            self.surf = pygame.transform.scale(plasma_ball_sprites[self.sprite_number], (self.r, self.r))
 
 
     def draw(self):
-        self.r = 50
+        self.r = 100
         self.screen.blit(self.surf, (self.x - 25, self.y - 25))
 
     def hittest(self, obj):
