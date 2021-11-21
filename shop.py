@@ -1,8 +1,8 @@
 
 
 def shop_screen():
-    global SIZE
-    screen = rect(WIDTH, HEIGTH)
+    global SIZE, WIDTH, HEIGHT
+    screen = rect(WIDTH, HEIGHT)
     screen.fill(GREEN)
     return screen
 

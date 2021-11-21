@@ -8,6 +8,9 @@ from levels import *
 #from shuttle import *
 from ammunition import *
 from enemies import *
+from settings import *
+
+init_global()
 
 FPS = 60
 
@@ -21,21 +24,14 @@ pygame.display.toggle_fullscreen()
 
 
 # Variable which shows which gamescreen is now displayed
-flag = 'menu'
-
-flag = Screen_flag()
-
 clock = pygame.time.Clock()
 
-
-menu_init()
-
 while True:
-    if flag == 'menu':
+    if settings.flag == 'menu':
         screen = menu_screen()
-    elif flag == 'levels':
+    elif settings.flag == 'levels':
         screen = menu_screen()
-    elif flag == 'shop':
+    elif settings.flag == 'shop':
         screen = shop_screen()
     main_surface.blit(screen, (0, 0))
     pygame.display.update()
