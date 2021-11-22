@@ -1,6 +1,17 @@
 import pygame
 import settings
 
+screen = None
+
+class Shuttle_skins:
+    def __init__(self, x, y, width, height, image):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.image = pygame.transform.scale(image, (self.width, self.height))
+
+
 class Shuttle:
     def __init__(self, surface):
         self.surface = surface
@@ -18,30 +29,30 @@ class Shuttle:
     def move(self):
 
         if pygame.key.get_pressed()[pygame.K_w]:
-            self.ay = -1
+            self.ay = -0.2
         elif pygame.key.get_pressed()[pygame.K_s]:
-            self.ay = 1
+            self.ay = 0.2
         else:
             self.ay = 0
 
         if pygame.key.get_pressed()[pygame.K_a]:
-            self.ax = -1
+            self.ax = -0.2
         elif pygame.key.get_pressed()[pygame.K_d]:
-            self.ax = 1
+            self.ax = 0.2
         else:
             self.ax = 0
 
         if self.ax >= 0:
-            if self.Vx <= 10:
+            if self.Vx <= 5:
                 self.Vx += self.ax
         if self.ax <= 0:
-            if self.Vx >= -10:
+            if self.Vx >= -5:
                 self.Vx += self.ax
         if self.ay >= 0:
-            if self.Vy <= 10:
+            if self.Vy <= 5:
                 self.Vy += self.ay
         if self.ay <= 0:
-            if self.Vy >= -10:
+            if self.Vy >= -5:
                 self.Vy += self.ay
 
         if self.Vx >= 0:
@@ -57,14 +68,8 @@ class Shuttle:
             if self.y >= 0:
                 self.y += self.Vy
 
-
-class Shuttle_skins:
-    def __init__(self, x, y, width, height, image):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.image = pygame.transform.scale(image, (self.width, self.height))
-
-skin1 = Shuttle_skins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png'))
-current_skin = skin1
+def init():
+    global screen
+    settings.spaceship = Shuttle(screen)
+    skin1 = Shuttle_skins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png'))
+    settings.current_skin = skin1

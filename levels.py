@@ -24,5 +24,6 @@ def create_screen():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             settings.flag = 'menu'
+    screen.fill((0, 100, 0))
     return screen
 

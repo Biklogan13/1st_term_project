@@ -12,7 +12,7 @@ plasma_ball_2.set_colorkey((255, 255, 255))
 plasma_ball_3 = pygame.image.load('ammo_sprites/plasma_3.png')
 plasma_ball_3.set_colorkey((255, 255, 255))
 plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
-bullet = pygame.image.load('ammo_sprites/bullets-clip-art-129')
+bullet = pygame.image.load('ammo_sprites/bullets-clip-art-129.png')
 
 RED = 0xFF0000
 BLUE = 0x0000FF

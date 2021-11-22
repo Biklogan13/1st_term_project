@@ -28,16 +28,20 @@ menu.init()
 levels.init()
 shop.init()
 
+shuttle.init()
+
 while settings.running:
     if settings.flag == 'menu':
         screen = menu.create_screen()
     elif settings.flag == 'levels':
         screen = levels.create_screen()
+        settings.spaceship.draw(screen)
+        settings.spaceship.move()
     elif settings.flag == 'shop':
-        pass
         screen = shop.create_screen()
     else:
         print('ERROR, no screen!')
+
     if settings.running:
         main_surface.blit(screen, (0, 0))
         pygame.display.update()
