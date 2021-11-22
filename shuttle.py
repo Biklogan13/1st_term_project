@@ -2,6 +2,7 @@ import pygame
 import settings
 
 screen = None
+speed_decay = 0.02
 
 class Shuttle_skins:
     def __init__(self, x, y, width, height, image):
@@ -27,6 +28,7 @@ class Shuttle:
         self.surface.blit(settings.current_skin.image, (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
 
     def move(self):
+        global speed_decay
 
         if pygame.key.get_pressed()[pygame.K_w]:
             self.ay = -0.2
@@ -37,10 +39,10 @@ class Shuttle:
 
         if self.ay == 0:
             if self.Vy > 0:
-                self.Vy = -0.1
+                self.Vy = -speed_decay
             if self.Vy < 0:
-                self.Vy = 0.1
-            if self.Vy < 0.2 and self.Vy > -0.2:
+                self.Vy = speed_decay
+            if self.Vy < speed_decay*2 and self.Vy > -speed_decay*2:
                 self.Vy = 0
 
         if pygame.key.get_pressed()[pygame.K_a]:
@@ -52,10 +54,10 @@ class Shuttle:
 
         if self.ax == 0:
             if self.Vx > 0:
-                self.Vx = -0.1
+                self.Vx = -speed_decay
             if self.Vx < 0:
-                self.Vx = 0.1
-            if self.Vx < 0.2 and self.Vx > -0.2:
+                self.Vx = speed_decay
+            if self.Vx < speed_decay*2 and self.Vx > -speed_decay*2:
                 self.Vx = 0
 
 
@@ -76,6 +78,10 @@ class Shuttle:
             self.y += self.Vy
         if self.Vy <= 0 and self.y >= 0:
             self.y += self.Vy
+
+    def move_mouse(self):
+        self.x = pygame.mouse.get_pos()[0]
+        self.y = pygame.mouse.get_pos()[1]
 
 def init():
     global screen
