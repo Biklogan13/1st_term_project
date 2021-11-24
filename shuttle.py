@@ -2,7 +2,7 @@ import pygame
 import settings
 
 screen = None
-speed_decay = 0.02
+speed_decay = 0.05
 
 class Shuttle_skins:
     def __init__(self, x, y, width, height, image):
@@ -39,9 +39,9 @@ class Shuttle:
 
         if self.ay == 0:
             if self.Vy > 0:
-                self.Vy = -speed_decay
+                self.Vy -= speed_decay
             if self.Vy < 0:
-                self.Vy = speed_decay
+                self.Vy += speed_decay
             if self.Vy < speed_decay*2 and self.Vy > -speed_decay*2:
                 self.Vy = 0
 
@@ -54,9 +54,9 @@ class Shuttle:
 
         if self.ax == 0:
             if self.Vx > 0:
-                self.Vx = -speed_decay
+                self.Vx -= speed_decay
             if self.Vx < 0:
-                self.Vx = speed_decay
+                self.Vx += speed_decay
             if self.Vx < speed_decay*2 and self.Vx > -speed_decay*2:
                 self.Vx = 0
 
