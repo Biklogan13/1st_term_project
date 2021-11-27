@@ -230,14 +230,16 @@ class Lightring:
         # spaceship пока не иницализирован, его координат нет
         #self.x = settings.spaceship.x
         #self.y = settings.spaceship.y
-        self.x = 500
-        self.y = 500
+        self.x = 0
+        self.y = 0
         self.r = 100
         self.v = 10
         self.surf = pygame.transform.scale(lightring, (self.r, self.r))
 
 
     def move(self):
+        self.x = settings.spaceship.x
+        self.y = settings.spaceship.y
         self.r += self.v
         self.surf = pygame.transform.scale(lightring, (self.r, self.r))
         # Что это вообще должно было делать???
