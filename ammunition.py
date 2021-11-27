@@ -1,9 +1,12 @@
-import settings
-import random
 import pygame
-import math
-from random import choice
 
+import menu
+import shop
+import levels
+import shuttle
+import ammunition
+import enemies
+import settings
 
 plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
 plasma_ball_1.set_colorkey((255, 255, 255))
@@ -13,6 +16,17 @@ plasma_ball_3 = pygame.image.load('ammo_sprites/plasma_3.png')
 plasma_ball_3.set_colorkey((255, 255, 255))
 plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
 bullet = pygame.image.load('ammo_sprites/bullets-clip-art-129.png')
+bullet = pygame.transform.scale(bullet, (40, 40))
+bomb = pygame.image.load('ammo_sprites/Meta_Symbol.png')
+bomb = pygame.transform.scale(bomb, (120, 80))
+
+pygame.mixer.init()
+laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
+cannon_sound = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
+
+pygame.mixer.Sound.set_volume(cannon_sound, 0.6)
+pygame.mixer.Sound.set_volume(laser_sound, 0.6)
+
 
 RED = 0xFF0000
 BLUE = 0x0000FF
@@ -82,8 +96,8 @@ class Ball:
             return False
 
 class Laser:
-    def __init__(self, screen: pygame.Surface):
-        self.screen = screen
+    def __init__(self):
+        self.screen = levels.screen
         self.angle = 0
         self.r = 0
         self.firing = 0
@@ -99,7 +113,8 @@ class Laser:
         pygame.draw.line(self.screen, RED, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=20)
         pygame.draw.line(self.screen, ORANGE, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=8)
         pygame.draw.line(self.screen, YELLOW, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=2)
-        self.screen.blit(settings.current_skin, (settings.spaceship.x - 55, settings.spaceship.y - 31))
+        self.screen.blit(settings.current_skin.image, (settings.spaceship.x - 55, settings.spaceship.y - 31))
+
 
     def targetting(self, event):
         if event:
@@ -172,6 +187,42 @@ class Plasma_ball:
         else:
             return False
 
+
+class Meta:
+    def __init__(self):
+        self.screen = levels.screen
+        self.x = 0
+        self.y = 0
+        self.vy = 5
+    def draw(self):
+        self.screen.blit(bomb, (self.x - 60, self.y - 20))
+
+    def move(self):
+        if self.y >= 2*settings.HEIGHT:
+            self.vy = 0
+        else:
+            self.vy += 0.2
+        self.y += self.vy
+
+    def hittest(self):
+        #if self.x <= gun.x + 55 + 25 and self.x > gun.x - 55 - 70 - 25 and self.y > gun.y - 31 - 75 and self.y < gun.y + 31 - 5:
+        if (self.x - settings.spaceship.x)**2 + (self.y - 20 - settings.spaceship.y)**2 <= (35 + 45)**2:
+            return True
+        else:
+            return False
+
+
+class lightring:
+    def __init__(self, ):
+        self.x = settings.spaceship.x
+        self.y = settings.spaceship.y
+        self.r = 100
+        self.v = 10
+
+
+
+
+
 def rot_center(image, angle):
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
@@ -179,3 +230,5 @@ def rot_center(image, angle):
     rot_rect.center = rot_image.get_rect().center
     rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
+
+laser = Laser()
