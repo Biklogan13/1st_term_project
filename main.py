@@ -37,7 +37,6 @@ while settings.running:
         screen = levels.create_screen()
         settings.spaceship.draw(screen)
         settings.spaceship.move()
-
     elif settings.flag == 'shop':
         screen = shop.create_screen()
     else:

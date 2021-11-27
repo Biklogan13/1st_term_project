@@ -1,7 +1,6 @@
 import math
 import random
 import pygame
-
 import levels
 import settings
 
@@ -74,7 +73,6 @@ class Ball:
 
     def draw(self):
         self.angle = math.atan2(self.vy, self.vx)
-        #pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
         self.bullet = rot_center(bullet, self.angle*360/(-2*math.pi))
         self.screen.blit(self.bullet, (self.x - 20, self.y - 20))
 
@@ -202,22 +200,10 @@ class Meta:
         self.y += self.vy
 
     def hittest(self):
-        #if self.x <= gun.x + 55 + 25 and self.x > gun.x - 55 - 70 - 25 and self.y > gun.y - 31 - 75 and self.y < gun.y + 31 - 5:
         if (self.x - settings.spaceship.x)**2 + (self.y - 20 - settings.spaceship.y)**2 <= (35 + 45)**2:
             return True
         else:
             return False
-
-
-def ammo_change(a:int):
-    global ammo
-    if a == 1:
-        ammo = 0
-        laser.fire_end()
-        pygame.mixer.Sound.stop(laser_sound)
-    elif a == 0:
-        ammo = 1
-    print(a)
 
 
 def rot_center(image, angle):
@@ -229,3 +215,4 @@ def rot_center(image, angle):
     return rot_image
 
 laser = Laser()
+ammo = 0
