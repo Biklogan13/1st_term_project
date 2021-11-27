@@ -13,6 +13,8 @@ class Button:
         self.height = height
         self.action = action
         self.image = None
+        self.image_hover = None
+        self.hover = False
 
     def act(self, event):
         global running, flag
@@ -30,10 +32,16 @@ class Button:
     def draw(self, screen):
         if self.image is None:
             pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
+        elif self.hover:
+            screen.blit(self.image_hover, (self.x, self.y))
         else:
             screen.blit(self.image, (self.x, self.y))
 
-
+    def hover_test(self, event):
+        if 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+            self.hover = True
+        else:
+            self.hover = False
 
 
 
