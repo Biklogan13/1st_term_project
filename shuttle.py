@@ -86,10 +86,11 @@ class Shuttle:
 def init():
     global screen
     settings.spaceship = Shuttle(screen)
-    skin1 = Shuttle_skins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png'))
+    skin_test = Shuttle_skins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha())
+    skin1 = Shuttle_skins(50, 50, 100, 100, pygame.image.load('shuttle_skins/spaceship.pod_.1.red_.png').convert_alpha())
     settings.current_skin = skin1
 
-def shuttle_processing(screen):
+def processing(screen):
     settings.spaceship.draw(screen)
     settings.spaceship.move()
 
