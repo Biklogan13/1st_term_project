@@ -4,6 +4,7 @@ import pygame
 import levels
 import settings
 
+
 plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
 plasma_ball_1.set_colorkey((255, 255, 255))
 plasma_ball_2 = pygame.image.load('ammo_sprites/plasma_2.png')
@@ -16,7 +17,7 @@ bullet = pygame.transform.scale(bullet, (40, 40))
 bomb = pygame.image.load('ammo_sprites/Meta_Symbol.png')
 bomb = pygame.transform.scale(bomb, (120, 80))
 
-
+pygame.mixer.init()
 laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
 cannon_sound = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
 
