@@ -1,11 +1,13 @@
 import pygame
-
+import random
 import menu
 import shop
 import levels
 import shuttle
 import enemies
 import settings
+
+screen = levels.screen
 
 plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
 plasma_ball_1.set_colorkey((255, 255, 255))
@@ -18,6 +20,8 @@ bullet = pygame.image.load('ammo_sprites/bullets-clip-art-129.png')
 bullet = pygame.transform.scale(bullet, (40, 40))
 bomb = pygame.image.load('ammo_sprites/Meta_Symbol.png')
 bomb = pygame.transform.scale(bomb, (120, 80))
+lightring = pygame.image.load('ammo_sprites/lightring.png')
+lightring.set_colorkey((255, 255, 255))
 
 pygame.mixer.init()
 laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
@@ -25,7 +29,15 @@ cannon_sound = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
 
 pygame.mixer.Sound.set_volume(cannon_sound, 0.6)
 pygame.mixer.Sound.set_volume(laser_sound, 0.6)
-
+import pygame.mixer
+import math
+import pygame
+import menu
+import shop
+import levels
+import shuttle
+import enemies
+import settings
 
 RED = 0xFF0000
 BLUE = 0x0000FF
@@ -211,16 +223,32 @@ class Meta:
             return False
 
 
-class lightring:
-    def __init__(self, ):
+class Lightring:
+    """кольцо молний, убивающее всех"""
+    def __init__(self):
+        self.screen = screen
         self.x = settings.spaceship.x
         self.y = settings.spaceship.y
         self.r = 100
         self.v = 10
+        self.surf = pygame.transform.scale(lightring, (self.r, self.r))
 
 
+    def move(self):
+        self.r += self.v
+        self.surf = pygame.transform.scale(lightring, (self.r, self.r))
+        if (self.timer % 10 == 0):
+            self.surf = pygame.transform.scale(lightring, (self.r, self.r))
 
+    def draw(self):
+        self.screen.blit(self.surf, (self.x - self.r, self.y - self.r))
 
+    def hittest(self, obj):
+
+        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
+            return True
+        else:
+            return False
 
 def rot_center(image, angle):
     orig_rect = image.get_rect()
@@ -230,4 +258,13 @@ def rot_center(image, angle):
     rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
 
-laser = Laser()
+def init():
+    global light_ring
+    light_ring = Lightring()
+
+def shooting():
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            light_ring.draw()
+            light_ring.move
+
