@@ -209,17 +209,6 @@ class Meta:
             return False
 
 
-def ammo_change(a:int):
-    global ammo
-    if a == 1:
-        ammo = 0
-        laser.fire_end()
-        pygame.mixer.Sound.stop(laser_sound)
-    elif a == 0:
-        ammo = 1
-    print(a)
-
-
 def rot_center(image, angle):
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
