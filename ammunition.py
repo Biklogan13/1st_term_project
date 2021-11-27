@@ -17,7 +17,7 @@ bullet = pygame.transform.scale(bullet, (40, 40))
 bomb = pygame.image.load('ammo_sprites/Meta_Symbol.png')
 bomb = pygame.transform.scale(bomb, (120, 80))
 
-
+pygame.mixer.init()
 laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
 cannon_sound = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
 
