@@ -70,13 +70,13 @@ class Shuttle:
         if self.ay <= 0 and self.Vy >= -5:
             self.Vy += self.ay
 
-        if self.Vx >= 0 and self.x <= settings.WIDTH:
+        if self.Vx >= 0 and self.x <= settings.WIDTH - settings.current_skin.x:
             self.x += self.Vx
-        if self.Vx <= 0 and self.x >= 0:
+        if self.Vx <= 0 and self.x >= settings.current_skin.x:
             self.x += self.Vx
-        if self.Vy >= 0 and self.y <= settings.HEIGHT:
+        if self.Vy >= 0 and self.y <= settings.HEIGHT - settings.current_skin.y:
             self.y += self.Vy
-        if self.Vy <= 0 and self.y >= 0:
+        if self.Vy <= 0 and self.y >= settings.current_skin.y:
             self.y += self.Vy
 
     def move_mouse(self):
