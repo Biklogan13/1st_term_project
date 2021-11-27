@@ -88,3 +88,8 @@ def init():
     settings.spaceship = Shuttle(screen)
     skin1 = Shuttle_skins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png'))
     settings.current_skin = skin1
+
+def shuttle_processing(screen):
+    settings.spaceship.draw(screen)
+    settings.spaceship.move()
+
