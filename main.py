@@ -25,9 +25,9 @@ pygame.display.toggle_fullscreen()
 clock = pygame.time.Clock()
 
 menu.init()
+shuttle.init()
 levels.init()
 shop.init()
-shuttle.init()
 
 while settings.running:
     if settings.flag == 'menu':
