@@ -34,7 +34,6 @@ while settings.running:
         screen = menu.create_screen()
     elif settings.flag == 'levels':
         screen = levels.create_screen()
-        shuttle.processing(screen)
 
     elif settings.flag == 'shop':
         screen = shop.create_screen()
