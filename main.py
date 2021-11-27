@@ -41,7 +41,7 @@ while settings.running:
     elif settings.flag == 'shop':
         screen = shop.create_screen()
     else:
-        print('ERROR, no screen!')
+        print('ERROR, no screen! ')
 
     if settings.running:
         main_surface.blit(screen, (0, 0))
