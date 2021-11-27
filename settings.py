@@ -28,7 +28,11 @@ class Button:
                 flag = 'shop'
 
     def draw(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
+        if self.image is None:
+            pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
+        else:
+            screen.blit(self.image, (self.x, self.y))
+
 
 
 
