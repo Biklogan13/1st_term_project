@@ -209,6 +209,17 @@ class Meta:
             return False
 
 
+class lightring:
+    def __init__(self, ):
+        self.x = settings.spaceship.x
+        self.y = settings.spaceship.y
+        self.r = 100
+        self.v = 10
+
+
+
+
+
 def rot_center(image, angle):
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
