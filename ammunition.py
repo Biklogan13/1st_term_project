@@ -7,8 +7,6 @@ import shuttle
 import enemies
 import settings
 
-screen = levels.screen
-
 plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
 plasma_ball_1.set_colorkey((255, 255, 255))
 plasma_ball_2 = pygame.image.load('ammo_sprites/plasma_2.png')
@@ -50,6 +48,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY = 0x7D7D7D
 GAME_COLORS = [BLACK, RED, GREEN]
+
+light_ring = None
 
 class Ball:
     def __init__(self, screen: pygame.Surface):
@@ -227,8 +227,11 @@ class Lightring:
     """кольцо молний, убивающее всех"""
     def __init__(self, screen):
         self.screen = screen
-        self.x = settings.spaceship.x
-        self.y = settings.spaceship.y
+        # spaceship пока не иницализирован, его координат нет
+        #self.x = settings.spaceship.x
+        #self.y = settings.spaceship.y
+        self.x = 500
+        self.y = 500
         self.r = 100
         self.v = 10
         self.surf = pygame.transform.scale(lightring, (self.r, self.r))
@@ -237,8 +240,9 @@ class Lightring:
     def move(self):
         self.r += self.v
         self.surf = pygame.transform.scale(lightring, (self.r, self.r))
-        if (self.timer % 10 == 0):
-            self.surf = pygame.transform.scale(lightring, (self.r, self.r))
+        # Что это вообще должно было делать???
+        #if (self.timer % 10 == 0):
+            #self.surf = pygame.transform.scale(lightring, (self.r, self.r))
 
     def draw(self):
         self.screen.blit(self.surf, (self.x - self.r, self.y - self.r))
@@ -250,6 +254,7 @@ class Lightring:
         else:
             return False
 
+
 def rot_center(image, angle):
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
@@ -258,12 +263,13 @@ def rot_center(image, angle):
     rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
 
-def init():
+
+def init(screen):
     global light_ring
     light_ring = Lightring(screen)
 
+
 def shooting():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            light_ring.draw()
-            light_ring.move()
+    light_ring.draw()
+    light_ring.move()
 

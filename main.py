@@ -28,7 +28,6 @@ menu.init()
 levels.init()
 shop.init()
 shuttle.init()
-ammunition.init()
 
 while settings.running:
     if settings.flag == 'menu':
@@ -36,7 +35,6 @@ while settings.running:
     elif settings.flag == 'levels':
         screen = levels.create_screen()
         shuttle.shuttle_processing(screen)
-        ammunition.shooting()
 
     elif settings.flag == 'shop':
         screen = shop.create_screen()
