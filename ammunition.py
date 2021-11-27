@@ -225,7 +225,7 @@ class Meta:
 
 class Lightring:
     """кольцо молний, убивающее всех"""
-    def __init__(self):
+    def __init__(self, screen):
         self.screen = screen
         self.x = settings.spaceship.x
         self.y = settings.spaceship.y
@@ -260,11 +260,10 @@ def rot_center(image, angle):
 
 def init():
     global light_ring
-    light_ring = Lightring()
+    light_ring = Lightring(screen)
 
 def shooting():
-    for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             light_ring.draw()
-            light_ring.move
+            light_ring.move()
 
