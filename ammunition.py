@@ -263,6 +263,7 @@ def init():
     light_ring = Lightring(screen)
 
 def shooting():
+    for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             light_ring.draw()
             light_ring.move()
