@@ -61,7 +61,7 @@ class Bullet:
         self.live = 30
         self.angle = math.atan2(self.vy, self.vx)
         self.bullet = settings.bullet_image
-        self.timer = 50
+        self.timer = 150
 
     def move(self):
         """Переместить пулю по прошествии единицы времени.
@@ -144,7 +144,7 @@ class Plasma_ball:
         self.r = 100
         self.vx = 0
         self.vy = 0
-        self.timer = 300
+        self.timer = 900
         self.surf = pygame.transform.scale(settings.plasma_ball_sprites[1], (self.r, self.r))
         self.angle = math.atan2(self.vy, self.vx)
         self.sprite_number = 1
@@ -248,7 +248,7 @@ def processing(screen):
             new_ball.vy = 3 * math.sin(new_ball.angle)
             settings.plasma_balls.append(new_ball)
 
-    if pygame.key.get_pressed()[pygame.K_SPACE]:
+    if pygame.mouse.get_pressed()[0]:
         settings.ammo = levels.ammo_type
     else:
         settings.ammo = 0

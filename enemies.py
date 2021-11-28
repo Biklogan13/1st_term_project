@@ -80,7 +80,11 @@ def processing(screen):
     for k in settings.enemies:
         if k.hittest(settings.spaceship):
             k.live = 0
+        for b in settings.bullets:
+            if k.hittest(b):
+                k.live = 0
 
     for k in settings.enemies:
         k.draw(screen)
         k.move()
+
