@@ -1,5 +1,6 @@
 import pygame
 import settings
+import ammunition
 
 screen = None
 speed_decay = 0.05
@@ -82,6 +83,7 @@ class Shuttle:
     def move_mouse(self):
         self.x = pygame.mouse.get_pos()[0]
         self.y = pygame.mouse.get_pos()[1]
+
 
 def init():
     global screen
