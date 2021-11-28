@@ -244,8 +244,8 @@ def processing(screen):
         if settings.seconds % settings.plasma_balls_firerate == 0:
             new_ball = Plasma_ball(levels.screen)
             new_ball.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
-            new_ball.vx = 3 * math.cos(new_ball.angle)
-            new_ball.vy = 3 * math.sin(new_ball.angle)
+            new_ball.vx = 10 * math.cos(new_ball.angle)
+            new_ball.vy = 10 * math.sin(new_ball.angle)
             settings.plasma_balls.append(new_ball)
 
     if pygame.mouse.get_pressed()[0]:
