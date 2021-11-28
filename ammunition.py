@@ -9,7 +9,7 @@ import enemies
 import settings
 import random
 def init():
-    """
+
     plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
     plasma_ball_1.set_colorkey((255, 255, 255))
     plasma_ball_2 = pygame.image.load('ammo_sprites/plasma_2.png')
@@ -17,11 +17,11 @@ def init():
     plasma_ball_3 = pygame.image.load('ammo_sprites/plasma_3.png')
     plasma_ball_3.set_colorkey((255, 255, 255))
     plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
-    """
+
     bullet_image = pygame.image.load('ammo_sprites/bullets-clip-art-129.png')
     bullet_image = pygame.transform.scale(bullet_image, (40, 40))
     settings.bullet_image = bullet_image
-    """
+
     lightring = pygame.image.load('ammo_sprites/lightring.png')
     lightring.set_colorkey((255, 255, 255))
     settings.plasma_ball_sprites = plasma_ball_sprites
@@ -38,7 +38,7 @@ def init():
     settings.RED = 0xFF0000
     settings.YELLOW = 0xFFC91F
     settings.ORANGE = (255, 165, 0)
-    """
+
 
 
 
@@ -228,9 +228,9 @@ def processing(screen):
         if b.timer <= 0:
             settings.bullets.remove(b)
     if settings.ammo == 1:
-        if settings.seconds % 10:
+        if settings.seconds % settings.bullets_firerate == 0:
             new_bullet = Bullet(levels.screen)
-            new_bullet.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y) , (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
+            new_bullet.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
             new_bullet.vx = 30 * math.cos(new_bullet.angle)
             new_bullet.vy = 30 * math.sin(new_bullet.angle)
             settings.bullets.append(new_bullet)
@@ -239,5 +239,6 @@ def processing(screen):
         settings.ammo = 1
     else:
         settings.ammo = 0
+        settings.seconds = 0
     settings.spaceship.draw(screen)
     settings.seconds += 1
