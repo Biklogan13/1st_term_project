@@ -235,8 +235,21 @@ def processing(screen):
             new_bullet.vy = 30 * math.sin(new_bullet.angle)
             settings.bullets.append(new_bullet)
 
+    for b in settings.plasma_balls:
+        b.draw()
+        b.move()
+        if b.timer <= 0:
+            settings.plasma_balls.remove(b)
+    if settings.ammo == 2:
+        if settings.seconds % settings.plasma_balls_firerate == 0:
+            new_ball = Plasma_ball(levels.screen)
+            new_ball.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
+            new_ball.vx = 3 * math.cos(new_ball.angle)
+            new_ball.vy = 3 * math.sin(new_ball.angle)
+            settings.plasma_balls.append(new_ball)
+
     if pygame.key.get_pressed()[pygame.K_SPACE]:
-        settings.ammo = 1
+        settings.ammo = levels.ammo_type
     else:
         settings.ammo = 0
         settings.seconds = 0
