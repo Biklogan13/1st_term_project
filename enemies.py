@@ -131,6 +131,6 @@ def rot_center(image, angle):
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = rot_image.get_rect()
     rot_rect.center = rot_image.get_rect().center
-    print(orig_rect, rot_rect)
+    #print(orig_rect, rot_rect)
     rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
