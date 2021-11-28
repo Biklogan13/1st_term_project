@@ -51,8 +51,8 @@ class Enemy_kamikaze:
 
     def move(self):
         self.angle = math.atan2(settings.spaceship.y - self.y, settings.spaceship.x - self.x)
-        self.Vx = math.cos(self.angle)
-        self.Vy = math.sin(self.angle)
+        self.Vx = 2*math.cos(self.angle)
+        self.Vy = 2*math.sin(self.angle)
         self.x += self.Vx
         self.y += self.Vy
 
@@ -127,7 +127,7 @@ def processing(screen):
 def rot_center(image, angle):
     WIDTH = image.get_width()
     HEIGHT = image.get_height()
-    orig_rect = image.get_rect(width=min(WIDTH, HEIGHT), height=min(WIDTH, HEIGHT))
+    orig_rect = image.get_rect() #width=min(WIDTH, HEIGHT), height=min(WIDTH, HEIGHT))
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = rot_image.get_rect()
     rot_rect.center = rot_image.get_rect().center
