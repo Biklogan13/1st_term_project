@@ -83,6 +83,9 @@ def processing(screen):
         for b in settings.bullets:
             if k.hittest(b):
                 k.live = 0
+        for p in settings.plasma_balls:
+            if k.hittest(p):
+                k.live = 0
 
     for k in settings.enemies:
         k.draw(screen)
