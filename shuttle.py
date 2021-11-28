@@ -10,7 +10,7 @@ class Shuttle_skins:
         self.y = y
         self.width = width
         self.height = height
-        self.image = pygame.transform.scale(image, (self.width, self.height))
+        self.image = pygame.transform.scale(image, (width, height))
 
 
 class Shuttle:
@@ -22,9 +22,11 @@ class Shuttle:
         self.Vy = 0
         self.ax = 0
         self.ay = 0
+        self.r = 0
 
     def draw(self, surface):
         self.surface = surface
+        self.r = max(settings.current_skin.width / 2, settings.current_skin.height / 2)
         self.surface.blit(settings.current_skin.image, (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
 
     def move(self):
