@@ -95,6 +95,7 @@ def init():
     settings.current_skin = skin1
 
 def processing(screen):
-    settings.spaceship.move()
     settings.spaceship.draw(screen)
+    settings.spaceship.move()
+
 

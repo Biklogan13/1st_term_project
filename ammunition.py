@@ -253,5 +253,4 @@ def processing(screen):
     else:
         settings.ammo = 0
         settings.seconds = 0
-    settings.spaceship.draw(screen)
     settings.seconds += 1
