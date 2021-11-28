@@ -220,8 +220,9 @@ def rot_center(image, angle):
 def processing(screen):
     for b in settings.bullets:
         b.draw()
-    for b in settings.bullets:
         b.move()
+        if b.timer <= 0:
+            settings.bullets.remove(b)
     if settings.ammo == 1:
         new_bullet = Bullet(levels.screen)
         new_bullet.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0] - settings.spaceship.x))
