@@ -82,8 +82,10 @@ class Shuttle:
             self.y += self.Vy
 
     def move_mouse(self):
+        #pygame.mouse.set_visible(False)
         self.x = pygame.mouse.get_pos()[0]
         self.y = pygame.mouse.get_pos()[1]
+
 
 def init():
     global screen
