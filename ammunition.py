@@ -18,8 +18,8 @@ def init():
     plasma_ball_3.set_colorkey((255, 255, 255))
     plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
 
-    bullet_image = pygame.image.load('ammo_sprites/bullets-clip-art-129.png')
-    bullet_image = pygame.transform.scale(bullet_image, (40, 40))
+    bullet_image = pygame.image.load('ammo_sprites/plasma_bullet.png')
+    bullet_image = pygame.transform.scale(bullet_image, (80, 40))
     settings.bullet_image = bullet_image
 
     lightring = pygame.image.load('ammo_sprites/lightring.png')
@@ -54,7 +54,7 @@ class Bullet:
         self.screen = screen
         self.x = settings.spaceship.x
         self.y = settings.spaceship.y
-        self.r = 3
+        self.r = 10
         self.vx = 0
         self.vy = 0
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
@@ -79,7 +79,7 @@ class Bullet:
     def draw(self):
         self.angle = math.atan2(self.vy, self.vx)
         self.bullet = rot_center(settings.bullet_image, self.angle*360/(-2*math.pi))
-        self.screen.blit(self.bullet, (self.x - 20, self.y - 20))
+        self.screen.blit(self.bullet, (self.x - 40, self.y - 20))
 
     def hittest(self, obj):
         """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.
@@ -141,11 +141,11 @@ class Plasma_ball:
         self.screen = screen
         self.x = settings.spaceship.x
         self.y = settings.spaceship.y
-        self.r = 100
+        self.r = 50
         self.vx = 0
         self.vy = 0
         self.timer = 900
-        self.surf = pygame.transform.scale(settings.plasma_ball_sprites[1], (self.r, self.r))
+        self.surf = pygame.transform.scale(settings.plasma_ball_sprites[1], (2*self.r, 2*self.r))
         self.angle = math.atan2(self.vy, self.vx)
         self.sprite_number = 1
 
@@ -162,12 +162,12 @@ class Plasma_ball:
         if (self.timer % 10 == 0):
             self.sprite_number += 1
             self.sprite_number = self.sprite_number % 2
-            self.surf = pygame.transform.scale(settings.plasma_ball_sprites[self.sprite_number], (self.r, self.r))
+            self.surf = pygame.transform.scale(settings.plasma_ball_sprites[self.sprite_number], (2*self.r, 2*self.r))
 
 
     def draw(self):
-        self.r = 100
-        self.screen.blit(self.surf, (self.x - 25, self.y - 25))
+        self.r = 50
+        self.screen.blit(self.surf, (self.x - 50, self.y - 50))
 
     def hittest(self, obj):
         """Функция проверяет сталкивалкивается ли шар с целью.
@@ -215,7 +215,7 @@ class Lightring:
 def rot_center(image, angle):
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
-    rot_rect = orig_rect.copy()
+    rot_rect = rot_image.get_rect() #orig_rect.copy()
     rot_rect.center = rot_image.get_rect().center
     rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
@@ -231,8 +231,8 @@ def processing(screen):
         if settings.seconds % settings.bullets_firerate == 0:
             new_bullet = Bullet(levels.screen)
             new_bullet.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
-            new_bullet.vx = 30 * math.cos(new_bullet.angle)
-            new_bullet.vy = 30 * math.sin(new_bullet.angle)
+            new_bullet.vx = 50 * math.cos(new_bullet.angle)
+            new_bullet.vy = 50 * math.sin(new_bullet.angle)
             settings.bullets.append(new_bullet)
 
     for b in settings.plasma_balls:
