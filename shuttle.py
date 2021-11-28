@@ -2,7 +2,7 @@ import pygame
 import settings
 
 screen = None
-speed_decay = 0.05
+speed_decay = 0
 
 class Shuttle_skins:
     def __init__(self, x, y, width, height, image):
@@ -33,9 +33,9 @@ class Shuttle:
         global speed_decay
 
         if pygame.key.get_pressed()[pygame.K_w]:
-            self.ay = -0.2
+            self.ay = -1
         elif pygame.key.get_pressed()[pygame.K_s]:
-            self.ay = 0.2
+            self.ay = 1
         else:
             self.ay = 0
 
@@ -48,9 +48,9 @@ class Shuttle:
                 self.Vy = 0
 
         if pygame.key.get_pressed()[pygame.K_a]:
-            self.ax = -0.2
+            self.ax = -1
         elif pygame.key.get_pressed()[pygame.K_d]:
-            self.ax = 0.2
+            self.ax = 1
         else:
             self.ax = 0
 
@@ -63,13 +63,13 @@ class Shuttle:
                 self.Vx = 0
 
 
-        if self.ax >= 0 and self.Vx <= 3:
+        if self.ax >= 0 and self.Vx <= 10:
             self.Vx += self.ax
-        if self.ax <= 0 and self.Vx >= -3:
+        if self.ax <= 0 and self.Vx >= -10:
             self.Vx += self.ax
-        if self.ay >= 0 and self.Vy <= 3:
+        if self.ay >= 0 and self.Vy <= 10:
             self.Vy += self.ay
-        if self.ay <= 0 and self.Vy >= -3:
+        if self.ay <= 0 and self.Vy >= -10:
             self.Vy += self.ay
 
         if self.Vx >= 0 and self.x <= settings.WIDTH - settings.current_skin.x:

@@ -51,8 +51,8 @@ class Enemy_kamikaze:
 
     def move(self):
         self.angle = math.atan2(settings.spaceship.y - self.y, settings.spaceship.x - self.x)
-        self.Vx = 2*math.cos(self.angle)
-        self.Vy = 2*math.sin(self.angle)
+        self.Vx = 12*math.cos(self.angle)
+        self.Vy = 12*math.sin(self.angle)
         self.x += self.Vx
         self.y += self.Vy
 
@@ -68,7 +68,7 @@ class Mine:
         self.x = random.randint(25, settings.WIDTH - 25)
         self.y = -100
         self.Vx = 0
-        self.Vy = 1
+        self.Vy = 5
         self.live = 1
         self.image = mine_image
         self.r = 25
@@ -95,14 +95,14 @@ def init():
 
 def processing(screen):
     global enemy_counter
-    if settings.tick_counter % 180 == 0:
+    if settings.tick_counter % 60 == 0:
         new_mine = Mine()
         #nemy_counter += 1
         #if len(settings.enemies) < 100:
         settings.enemies.append(new_mine)
         #else:
         #settings.enemies[enemy_counter % 100] = new_mine
-    if settings.tick_counter % 360 == 0:
+    if settings.tick_counter % 120 == 0:
         new_kamikaze = Enemy_kamikaze()
         #enemy_counter += 1
         #if len(settings.enemies) < 100:
