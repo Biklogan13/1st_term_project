@@ -61,13 +61,13 @@ class Shuttle:
                 self.Vx = 0
 
 
-        if self.ax >= 0 and self.Vx <= 5:
+        if self.ax >= 0 and self.Vx <= 3:
             self.Vx += self.ax
-        if self.ax <= 0 and self.Vx >= -5:
+        if self.ax <= 0 and self.Vx >= -3:
             self.Vx += self.ax
-        if self.ay >= 0 and self.Vy <= 5:
+        if self.ay >= 0 and self.Vy <= 3:
             self.Vy += self.ay
-        if self.ay <= 0 and self.Vy >= -5:
+        if self.ay <= 0 and self.Vy >= -3:
             self.Vy += self.ay
 
         if self.Vx >= 0 and self.x <= settings.WIDTH - settings.current_skin.x:

@@ -66,10 +66,10 @@ def processing(screen):
     if settings.tick_counter % 60 == 0:
         new_mine = Mine()
         enemy_counter += 1
-        if len(settings.enemies) < 20:
+        if len(settings.enemies) < 100:
             settings.enemies.append(new_mine)
         else:
-            settings.enemies[enemy_counter % 20] = new_mine
+            settings.enemies[enemy_counter % 100] = new_mine
 
     for k in settings.enemies:
         k.draw(screen)
