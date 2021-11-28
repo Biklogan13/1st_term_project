@@ -1,4 +1,6 @@
 import pygame
+
+import enemies
 import shuttle
 import settings
 import ammunition
@@ -30,6 +32,8 @@ def create_screen():
             settings.flag = 'menu'
     shuttle.processing(screen)
     ammunition.processing(screen)
+    enemies.processing(screen)
+    
     return screen
 
 

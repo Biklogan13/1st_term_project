@@ -25,10 +25,13 @@ pygame.display.toggle_fullscreen()
 clock = pygame.time.Clock()
 
 menu.init()
+shuttle.init()
 levels.init()
 shop.init()
 shuttle.init()
 ammunition.init()
+enemies.init()
+
 
 while settings.running:
     if settings.flag == 'menu':
@@ -44,5 +47,6 @@ while settings.running:
     if settings.running:
         main_surface.blit(screen, (0, 0))
         pygame.display.update()
+        settings.tick_counter += 1
 
 pygame.quit()

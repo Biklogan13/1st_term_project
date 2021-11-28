@@ -213,6 +213,7 @@ class Lightring:
         # spaceship пока не иницализирован, его координат нет
         self.x = settings.spaceship.x
         self.y = settings.spaceship.y
+
         self.r = 100
         self.v = 10
         self.surf = pygame.transform.scale(lightring, (self.r, self.r))
