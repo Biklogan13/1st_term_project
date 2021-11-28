@@ -55,13 +55,14 @@ class Mine:
         self.r = 25
 
     def draw(self, screen):
-        screen.blit(self.image, (self.x - 25, self.y - 25))
+        if self.live == 1:
+            screen.blit(self.image, (self.x - 25, self.y - 25))
 
     def move(self):
         self.y += self.Vy
 
     def hittest(self, obj):
-        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r - obj.r)**2:
+        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             return True
         else:
             return False
@@ -80,6 +81,10 @@ def processing(screen):
             settings.enemies.append(new_mine)
         else:
             settings.enemies[enemy_counter % 100] = new_mine
+
+    for k in settings.enemies:
+        if k.hittest(settings.spaceship):
+            k.live = 0
 
     for k in settings.enemies:
         k.draw(screen)
