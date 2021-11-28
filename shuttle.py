@@ -2,7 +2,7 @@ import pygame
 import settings
 
 screen = None
-speed_decay = 0.05
+speed_decay = 0
 
 class Shuttle_skins:
     def __init__(self, x, y, width, height, image):
@@ -10,7 +10,7 @@ class Shuttle_skins:
         self.y = y
         self.width = width
         self.height = height
-        self.image = pygame.transform.scale(image, (self.width, self.height))
+        self.image = pygame.transform.scale(image, (width, height))
 
 
 class Shuttle:
@@ -22,18 +22,20 @@ class Shuttle:
         self.Vy = 0
         self.ax = 0
         self.ay = 0
+        self.r = 0
 
     def draw(self, surface):
         self.surface = surface
+        self.r = max(settings.current_skin.width / 2, settings.current_skin.height / 2)
         self.surface.blit(settings.current_skin.image, (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
 
     def move(self):
         global speed_decay
 
         if pygame.key.get_pressed()[pygame.K_w]:
-            self.ay = -0.2
+            self.ay = -1
         elif pygame.key.get_pressed()[pygame.K_s]:
-            self.ay = 0.2
+            self.ay = 1
         else:
             self.ay = 0
 
@@ -46,9 +48,9 @@ class Shuttle:
                 self.Vy = 0
 
         if pygame.key.get_pressed()[pygame.K_a]:
-            self.ax = -0.2
+            self.ax = -1
         elif pygame.key.get_pressed()[pygame.K_d]:
-            self.ax = 0.2
+            self.ax = 1
         else:
             self.ax = 0
 
@@ -61,13 +63,13 @@ class Shuttle:
                 self.Vx = 0
 
 
-        if self.ax >= 0 and self.Vx <= 5:
+        if self.ax >= 0 and self.Vx <= 10:
             self.Vx += self.ax
-        if self.ax <= 0 and self.Vx >= -5:
+        if self.ax <= 0 and self.Vx >= -10:
             self.Vx += self.ax
-        if self.ay >= 0 and self.Vy <= 5:
+        if self.ay >= 0 and self.Vy <= 10:
             self.Vy += self.ay
-        if self.ay <= 0 and self.Vy >= -5:
+        if self.ay <= 0 and self.Vy >= -10:
             self.Vy += self.ay
 
         if self.Vx >= 0 and self.x <= settings.WIDTH - settings.current_skin.x:
@@ -80,8 +82,10 @@ class Shuttle:
             self.y += self.Vy
 
     def move_mouse(self):
+        #pygame.mouse.set_visible(False)
         self.x = pygame.mouse.get_pos()[0]
         self.y = pygame.mouse.get_pos()[1]
+
 
 def init():
     global screen
@@ -93,4 +97,5 @@ def init():
 def processing(screen):
     settings.spaceship.draw(screen)
     settings.spaceship.move()
+
 

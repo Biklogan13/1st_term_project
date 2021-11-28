@@ -28,8 +28,11 @@ menu.init()
 shuttle.init()
 levels.init()
 shop.init()
+enemies.init()
+ammunition.init()
 
 while settings.running:
+    clock.tick(FPS)
     if settings.flag == 'menu':
         screen = menu.create_screen()
     elif settings.flag == 'levels':
@@ -43,5 +46,6 @@ while settings.running:
     if settings.running:
         main_surface.blit(screen, (0, 0))
         pygame.display.update()
+        settings.tick_counter += 1
 
 pygame.quit()
