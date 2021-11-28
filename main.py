@@ -32,6 +32,7 @@ enemies.init()
 ammunition.init()
 
 while settings.running:
+    clock.tick(FPS)
     if settings.flag == 'menu':
         screen = menu.create_screen()
     elif settings.flag == 'levels':
