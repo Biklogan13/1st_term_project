@@ -22,6 +22,7 @@ def init():
     bomb = pygame.transform.scale(bomb, (120, 80))
     lightring = pygame.image.load('ammo_sprites/lightring.png')
     lightring.set_colorkey((255, 255, 255))
+    settings.bullet = bullet_image
 
     pygame.mixer.init()
     laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
@@ -29,7 +30,6 @@ def init():
 
     pygame.mixer.Sound.set_volume(cannon_sound, 0.6)
     pygame.mixer.Sound.set_volume(laser_sound, 0.6)
-
     RED = 0xFF0000
     BLUE = 0x0000FF
     YELLOW = 0xFFC91F
@@ -41,37 +41,7 @@ def init():
     WHITE = (255, 255, 255)
     GREY = 0x7D7D7D
     GAME_COLORS = [BLACK, RED, GREEN]
-plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
-plasma_ball_1.set_colorkey((255, 255, 255))
-plasma_ball_2 = pygame.image.load('ammo_sprites/plasma_2.png')
-plasma_ball_2.set_colorkey((255, 255, 255))
-plasma_ball_3 = pygame.image.load('ammo_sprites/plasma_3.png')
-plasma_ball_3.set_colorkey((255, 255, 255))
-plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
-bullet_image = pygame.image.load('ammo_sprites/bullets-clip-art-129.png')
-bullet_image = pygame.transform.scale(bullet_image, (40, 40))
-bomb = pygame.image.load('ammo_sprites/Meta_Symbol.png')
-bomb = pygame.transform.scale(bomb, (120, 80))
-lightring = pygame.image.load('ammo_sprites/lightring.png')
-lightring.set_colorkey((255, 255, 255))
 
-pygame.mixer.init()
-laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
-cannon_sound = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
-
-pygame.mixer.Sound.set_volume(cannon_sound, 0.6)
-pygame.mixer.Sound.set_volume(laser_sound, 0.6)
-RED = 0xFF0000
-BLUE = 0x0000FF
-YELLOW = 0xFFC91F
-GREEN = 0x00FF00
-MAGENTA = 0xFF03B8
-CYAN = 0x00FFCC
-ORANGE = (255, 165, 0)
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREY = 0x7D7D7D
-GAME_COLORS = [BLACK, RED, GREEN]
 
 class Bullet:
     def __init__(self, screen: pygame.Surface):
@@ -84,13 +54,14 @@ class Bullet:
         self.screen = screen
         self.x = settings.spaceship.x
         self.y = settings.spaceship.y
-        self.r = 10
+        self.r = 3
         self.vx = 0
         self.vy = 0
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.live = 30
         self.angle = math.atan2(self.vy, self.vx)
-        self.bullet = bullet_image
+        self.bullet = settings.bullet
+        self.timer = 50
 
     def move(self):
         """Переместить пулю по прошествии единицы времени.
@@ -98,18 +69,16 @@ class Bullet:
         Метод описывает перемещение пули за один кадр перерисовки. То есть, обновляет значения
         self.x и self.y с учетом скоростей self.vx и self.vy.
         """
-
+        self.timer -= 1
         if self.y >= 2*settings.HEIGHT - self.r:
             self.vy = 0
             self.vx = 0
-        else:
-            self.vy += 0.5
         self.x += self.vx
         self.y += self.vy
 
     def draw(self):
         self.angle = math.atan2(self.vy, self.vx)
-        self.bullet = rot_center(bullet_image, self.angle*360/(-2*math.pi))
+        self.bullet = rot_center(settings.bullet, self.angle*360/(-2*math.pi))
         self.screen.blit(self.bullet, (self.x - 20, self.y - 20))
 
     def hittest(self, obj):
@@ -288,11 +257,13 @@ def processing(screen):
         new_bullet = Bullet(levels.screen)
         new_bullet.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0] - settings.spaceship.x))
         new_bullet.vx = 30 * math.cos(new_bullet.angle)
-        new_bullet.vy = - 30 * math.sin(new_bullet.angle)
+        new_bullet.vy = 30 * math.sin(new_bullet.angle)
         settings.bullets.append(new_bullet)
 
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
                 settings.ammo = 1
+        if event.type == pygame.MOUSEBUTTONUP:
+            settings.ammo = 0
 
 
