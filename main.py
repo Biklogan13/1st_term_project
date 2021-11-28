@@ -29,6 +29,7 @@ shuttle.init()
 levels.init()
 shop.init()
 enemies.init()
+ammunition.init()
 
 while settings.running:
     if settings.flag == 'menu':
