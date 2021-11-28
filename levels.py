@@ -1,4 +1,6 @@
 import pygame
+
+import enemies
 import shuttle
 import settings
 import ammunition
@@ -29,6 +31,7 @@ def create_screen():
         if keys[pygame.K_ESCAPE]:
             settings.flag = 'menu'
     shuttle.processing(screen)
+    enemies.processing(screen)
     return screen
 
 
