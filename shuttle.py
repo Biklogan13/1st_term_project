@@ -31,7 +31,7 @@ class Shuttle:
         self.surface = surface
         self.r = max(settings.current_skin.width / 2, settings.current_skin.height / 2)
         #rot_center(settings.current_skin.image, math.atan2(self.Vy, self.Vx))
-        self.surface.blit(rot_center(settings.current_skin.image, math.atan2(30, self.Vx)*180/math.pi - 90), (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
+        self.surface.blit(rot_center(settings.current_skin.image, math.atan2(20 - self.Vy, self.Vx)*180/math.pi - 90), (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
 
     def move(self):
         global speed_decay
