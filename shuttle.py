@@ -95,8 +95,8 @@ def init():
     global screen
     settings.spaceship = Shuttle(screen)
     skin_test = Shuttle_skins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha())
-    skin1 = Shuttle_skins(50, 50, 100, 100, pygame.image.load('shuttle_skins/spaceship.pod_.1.red_.png').convert_alpha())
-    settings.current_skin = skin1
+    gunship = Shuttle_skins(50, 50, 100, 100, pygame.image.load('shuttle_skins/gunship.png').convert_alpha())
+    settings.current_skin = gunship
 
 def processing(screen):
     settings.spaceship.draw(screen)

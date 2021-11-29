@@ -90,7 +90,7 @@ def init():
     global mine_image, kamikaze_image
     mine_image = pygame.image.load('enemy_skins/mine.png').convert_alpha()
     mine_image = pygame.transform.scale(mine_image, (50, 50))
-    kamikaze_image = pygame.image.load('enemy_skins/smalldrone_1.PNG').convert_alpha()
+    kamikaze_image = pygame.image.load('enemy_skins/kamikaze.PNG').convert_alpha()
     kamikaze_image = pygame.transform.scale(kamikaze_image, (30, 45))
 
 def processing(screen):
