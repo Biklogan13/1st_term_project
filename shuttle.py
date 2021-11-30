@@ -1,5 +1,8 @@
 import pygame
+
+import enemies
 import settings
+import math
 
 screen = None
 speed_decay = 0
@@ -27,7 +30,8 @@ class Shuttle:
     def draw(self, surface):
         self.surface = surface
         self.r = max(settings.current_skin.width / 2, settings.current_skin.height / 2)
-        self.surface.blit(settings.current_skin.image, (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
+        #rot_center(settings.current_skin.image, math.atan2(self.Vy, self.Vx))
+        self.surface.blit(rot_center(settings.current_skin.image, math.atan2(20 - self.Vy, self.Vx)*180/math.pi - 90), (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
 
     def move(self):
         global speed_decay
@@ -63,13 +67,13 @@ class Shuttle:
                 self.Vx = 0
 
 
-        if self.ax >= 0 and self.Vx <= 10:
+        if self.ax >= 0 and self.Vx < 10:
             self.Vx += self.ax
-        if self.ax <= 0 and self.Vx >= -10:
+        if self.ax <= 0 and self.Vx > -10:
             self.Vx += self.ax
-        if self.ay >= 0 and self.Vy <= 10:
+        if self.ay >= 0 and self.Vy < 10:
             self.Vy += self.ay
-        if self.ay <= 0 and self.Vy >= -10:
+        if self.ay <= 0 and self.Vy > -10:
             self.Vy += self.ay
 
         if self.Vx >= 0 and self.x <= settings.WIDTH - settings.current_skin.x:
@@ -91,11 +95,20 @@ def init():
     global screen
     settings.spaceship = Shuttle(screen)
     skin_test = Shuttle_skins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha())
-    skin1 = Shuttle_skins(50, 50, 100, 100, pygame.image.load('shuttle_skins/spaceship.pod_.1.red_.png').convert_alpha())
-    settings.current_skin = skin1
+    gunship = Shuttle_skins(50, 50, 100, 100, pygame.image.load('shuttle_skins/gunship.png').convert_alpha())
+    settings.current_skin = gunship
 
 def processing(screen):
     settings.spaceship.draw(screen)
     settings.spaceship.move()
 
-
+def rot_center(image, angle):
+    WIDTH = image.get_width()
+    HEIGHT = image.get_height()
+    orig_rect = image.get_rect() #width=min(WIDTH, HEIGHT), height=min(WIDTH, HEIGHT))
+    rot_image = pygame.transform.rotate(image, angle)
+    rot_rect = rot_image.get_rect()
+    rot_rect.center = rot_image.get_rect().center
+    #print(orig_rect, rot_rect)
+    rot_image = rot_image.subsurface(rot_rect).copy()
+    return rot_image

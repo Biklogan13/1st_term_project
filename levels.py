@@ -8,18 +8,19 @@ import ammunition
 buttons = []
 screen = None
 ammo_type = 1
-
+level_background = None
 
 def init():
-    global buttons, screen
+    global buttons, screen, level_background
     screen = pygame.Surface(settings.SIZE)
-    screen.fill((0, 100, 0))
+    level_background = pygame.image.load('backgrounds/menu_background.png').convert_alpha()
+    level_background = pygame.transform.scale(level_background, settings.SIZE)
     ammunition.processing(screen)
 
 
 def create_screen():
-    global buttons, screen, ammo_type
-    screen.fill((0, 100, 0))
+    global buttons, screen, ammo_type, level_background
+    screen.blit(level_background, (0, 0))
     for b in buttons:
         b.draw(screen)
     for event in pygame.event.get():

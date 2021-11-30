@@ -90,7 +90,7 @@ def init():
     global mine_image, kamikaze_image
     mine_image = pygame.image.load('enemy_skins/mine.png').convert_alpha()
     mine_image = pygame.transform.scale(mine_image, (50, 50))
-    kamikaze_image = pygame.image.load('enemy_skins/smalldrone_1.PNG').convert_alpha()
+    kamikaze_image = pygame.image.load('enemy_skins/kamikaze.PNG').convert_alpha()
     kamikaze_image = pygame.transform.scale(kamikaze_image, (30, 45))
 
 def processing(screen):
@@ -131,6 +131,6 @@ def rot_center(image, angle):
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = rot_image.get_rect()
     rot_rect.center = rot_image.get_rect().center
-    print(orig_rect, rot_rect)
+    #print(orig_rect, rot_rect)
     rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
