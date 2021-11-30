@@ -8,8 +8,11 @@ import shuttle
 import enemies
 import settings
 import random
-def init():
 
+laser = None
+
+def init():
+    global laser
     plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
     plasma_ball_1.set_colorkey((255, 255, 255))
     plasma_ball_2 = pygame.image.load('ammo_sprites/plasma_2.png')
@@ -38,9 +41,7 @@ def init():
     settings.RED = 0xFF0000
     settings.YELLOW = 0xFFC91F
     settings.ORANGE = (255, 165, 0)
-
-
-
+    laser = Laser(levels.screen)
 
 
 class Bullet:
@@ -96,10 +97,10 @@ class Bullet:
             return False
 
 class Laser:
-    def __init__(self):
-        self.screen = levels.screen
+    def __init__(self, screen: pygame.Surface):
+        self.screen = screen
         self.angle = 0
-        self.r = 0
+        self.r = 50
         self.firing = 0
         self.color = settings.YELLOW
 
@@ -113,15 +114,12 @@ class Laser:
         pygame.draw.line(self.screen, settings.RED, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=20)
         pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=8)
         pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x, settings.spaceship.y), (settings.spaceship.x + math.cos(self.angle) * 2*settings.WIDTH, settings.spaceship.y + math.sin(self.angle) * 2*settings.WIDTH), width=2)
-        self.screen.blit(settings.current_skin.image, (settings.spaceship.x - 55, settings.spaceship.y - 31))
+
+    def targetting(self):
+        self.angle = math.atan2((pygame.mouse.get_pos()[1]-settings.spaceship.y), (pygame.mouse.get_pos()[0]-settings.spaceship.x))
 
 
-    def targetting(self, event):
-        if event:
-            self.angle = math.atan2((event.pos[1]-settings.spaceship.y), (event.pos[0]-settings.spaceship.x))
-
-
-    def hittest_laser(self, obj):
+    def hittest(self, obj):
         if abs(math.sin(self.angle)*obj.x - math.cos(self.angle)*obj.y - math.sin(self.angle)*settings.spaceship.x + math.cos(self.angle)*settings.spaceship.y) <= 10 + obj.r and (pygame.mouse.get_pos()[0] - settings.spaceship.x)*(obj.x - settings.spaceship.x) > 0 and self.firing == 1:
             return True
         else:
@@ -231,7 +229,7 @@ def processing(screen):
     if settings.ammo == 0:
         if settings.seconds % settings.bullets_firerate == 0:
             new_bullet = Bullet(levels.screen)
-            new_bullet.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
+            new_bullet.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0]-settings.spaceship.x)) + random.randint(-10, 10) * 0.008
             new_bullet.vx = 50 * math.cos(new_bullet.angle)
             new_bullet.vy = 50 * math.sin(new_bullet.angle)
             settings.bullets.append(new_bullet)
@@ -248,6 +246,12 @@ def processing(screen):
             new_ball.vx = 10 * math.cos(new_ball.angle)
             new_ball.vy = 10 * math.sin(new_ball.angle)
             settings.plasma_balls.append(new_ball)
+
+    if settings.ammo == 2:
+        laser.fire_start()
+        laser.angle = math.atan2((pygame.mouse.get_pos()[1]-settings.spaceship.y), (pygame.mouse.get_pos()[0]-settings.spaceship.x))
+        laser.draw()
+
 
     if pygame.mouse.get_pressed()[0]:
         settings.ammo = levels.ammo_type
