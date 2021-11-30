@@ -7,7 +7,7 @@ import ammunition
 
 buttons = []
 screen = None
-ammo_type = 1
+ammo_type = 0
 super_charge = 100
 level_background = None
 bullets_indicator, plasma_indicator, laser_indicator, super_charge_edges = None, None, None, None
