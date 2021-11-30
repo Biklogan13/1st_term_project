@@ -2,7 +2,7 @@ import pygame
 
 # Global variables which needed in many files
 SIZE, WIDTH, HEIGHT, flag, running = 0, 0, 0, 'menu', True
-current_skin, spaceship, enemies, tick_counter = None, None, [], 0
+current_skin, spaceship, enemies, tick_counter, enemy_bullets = None, None, [], 0, []
 light_rings, bullets, laser, plasma_balls, ammo, bullet_image, light_ring_image, plasma_ball_sprites, laaser_sound, cannon_sound = [], [], None, [], 0, None, None, [], None, None
 seconds, bullets_firerate, plasma_balls_firerate = 0, 10, 60
 # Common classes
