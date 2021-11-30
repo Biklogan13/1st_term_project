@@ -8,6 +8,7 @@ import ammunition
 buttons = []
 screen = None
 ammo_type = 1
+super_charge = 0
 level_background = None
 bullets_indicator, plasma_indicator, laser_indicator = None, None, None
 
@@ -36,7 +37,7 @@ def blit_interface():
         screen.blit(plasma_indicator, (0, settings.HEIGHT - 100))
     elif ammo_type == 2:
         screen.blit(laser_indicator, (0, settings.HEIGHT - 100))
-
+    # Super indicator
 
 def create_screen():
     global buttons, screen, ammo_type, level_background
