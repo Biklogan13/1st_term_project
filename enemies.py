@@ -2,6 +2,7 @@ import pygame
 import random
 import settings
 import math
+import ammunition
 
 kamikaze_image = None
 mine_image = None
