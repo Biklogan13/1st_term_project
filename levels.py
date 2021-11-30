@@ -48,9 +48,13 @@ def create_screen():
         if event.type == pygame.MOUSEBUTTONDOWN:
             for b in buttons:
                 b.act(event)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LSHIFT:
-            ammo_type += 1
-            ammo_type = ammo_type % 3
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_1:
+            ammo_type = 0
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_2:
+            ammo_type = 1
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_3:
+            ammo_type = 2
+
         # Exiting to menu if esc is pressed
     keys = pygame.key.get_pressed()
     if keys[pygame.K_ESCAPE]:

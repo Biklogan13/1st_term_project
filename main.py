@@ -31,6 +31,7 @@ shop.init()
 enemies.init()
 ammunition.init()
 
+
 while settings.running:
     clock.tick(FPS)
     if settings.flag == 'menu':

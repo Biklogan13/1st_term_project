@@ -227,6 +227,7 @@ def processing(screen):
         b.move()
         if b.timer <= 0:
             settings.bullets.remove(b)
+
     if settings.ammo == 0:
         if settings.seconds % settings.bullets_firerate == 0:
             new_bullet = Bullet(levels.screen)
