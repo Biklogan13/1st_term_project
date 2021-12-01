@@ -35,25 +35,26 @@ class Enemy_standart:
             screen.blit(self.image, (self.x - 40, self.y - 40))
 
     def move(self):
-        self.angle = math.atan2(self.Vy, self.Vx)
-        if self.y < settings.HEIGHT/2 - 8 and self.phase == 1:
-            self.Vx += - self.heading*(self.Vx**2 + self.Vy**2) * math.sin(self.angle) / (settings.HEIGHT/2 + 100)
-            self.Vy += self.heading*(self.Vx**2 + self.Vy**2) * math.cos(self.angle) / (settings.HEIGHT/2 + 100)
-            self.x += self.Vx
-            self.y += self.Vy
-        else:
-            self.phase = 2
+        if self.live == 1:
+            self.angle = math.atan2(self.Vy, self.Vx)
+            if self.y < settings.HEIGHT/2 - 8:
+                self.Vx += - self.heading*(self.Vx**2 + self.Vy**2) * math.sin(self.angle) / (settings.HEIGHT/2 + 100)
+                self.Vy += self.heading*(self.Vx**2 + self.Vy**2) * math.cos(self.angle) / (settings.HEIGHT/2 + 100)
+                self.x += self.Vx
+                self.y += self.Vy
+            else:
+                self.phase = 2
 
-        if self.phase == 2:
-            self.ticks += 1
-            if self.ticks >= 30:
-                self.phase = 3
+            if self.phase == 2:
+                self.ticks += 1
+                if self.ticks >= 30:
+                    self.phase = 3
 
-        if self.phase == 3 and self.live == 1:
-            self.Vx += self.heading*(self.Vx ** 2 + self.Vy ** 2) * math.sin(self.angle) / (settings.HEIGHT / 2 + 100)
-            self.Vy += - self.heading*(self.Vx ** 2 + self.Vy ** 2) * math.cos(self.angle) / (settings.HEIGHT / 2 + 100)
-            self.x += self.Vx
-            self.y += self.Vy
+            if self.phase == 3 and self.live == 1:
+                self.Vx += self.heading*(self.Vx ** 2 + self.Vy ** 2) * math.sin(self.angle) / (settings.HEIGHT / 2 + 100)
+                self.Vy += - self.heading*(self.Vx ** 2 + self.Vy ** 2) * math.cos(self.angle) / (settings.HEIGHT / 2 + 100)
+                self.x += self.Vx
+                self.y += self.Vy
 
         if self.y >= settings.HEIGHT:
             self.live = 0
@@ -191,10 +192,11 @@ def processing(screen):
             k.live = 0
 
     for k in settings.enemies:
-        k.move()
-        k.draw(screen)
-        if k.phase == 2 and k.live == 1:
-            k.shoot()
+        if k.live == 1:
+            k.move()
+            k.draw(screen)
+            if k.phase == 2:
+                k.shoot()
 
     for b in settings.enemy_bullets:
         b.draw()
