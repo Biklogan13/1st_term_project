@@ -187,6 +187,8 @@ def processing(screen):
         for p in settings.plasma_balls:
             if k.hittest(p):
                 k.live = 0
+        if ammunition.laser.hittest(k):
+            k.live = 0
 
     for k in settings.enemies:
         k.move()
