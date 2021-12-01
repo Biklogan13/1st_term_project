@@ -120,7 +120,7 @@ class Laser:
 
 
     def hittest(self, obj):
-        if abs(math.sin(self.angle)*obj.x - math.cos(self.angle)*obj.y - math.sin(self.angle)*settings.spaceship.x + math.cos(self.angle)*settings.spaceship.y) <= 10 + obj.r and (pygame.mouse.get_pos()[0] - settings.spaceship.x)*(obj.x - settings.spaceship.x) > 0 and self.firing == 1:
+        if abs(math.sin(self.angle)*obj.x - math.cos(self.angle)*obj.y - math.sin(self.angle)*settings.spaceship.x + math.cos(self.angle)*settings.spaceship.y) <= 15 + obj.r and (pygame.mouse.get_pos()[0] - settings.spaceship.x)*(obj.x - settings.spaceship.x) > 0 and self.firing == 1:
             return True
         else:
             return False

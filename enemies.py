@@ -49,7 +49,7 @@ class Enemy_standart:
             if self.ticks >= 30:
                 self.phase = 3
 
-        if self.phase == 3:
+        if self.phase == 3 and self.live == 1:
             self.Vx += self.heading*(self.Vx ** 2 + self.Vy ** 2) * math.sin(self.angle) / (settings.HEIGHT / 2 + 100)
             self.Vy += - self.heading*(self.Vx ** 2 + self.Vy ** 2) * math.cos(self.angle) / (settings.HEIGHT / 2 + 100)
             self.x += self.Vx
