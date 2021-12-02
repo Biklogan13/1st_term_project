@@ -77,9 +77,9 @@ def create_screen():
             elif section == 'appearance':
                 for i in items_appearance:
                     i.act()
-            if event.button == 4: #event.type == pygame.MOUSEWHEEL and pygame.mouse.get_pressed(3):
+            if event.button == 4:
                 y = 15
-            elif event.button == 5: #event.type == pygame.MOUSEWHEEL and pygame.mouse.get_pressed(5):
+            elif event.button == 5:
                 y = -15
 
     # Drawing
