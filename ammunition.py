@@ -10,9 +10,12 @@ import settings
 import random
 
 laser = None
+cannons = None
+
 
 def init():
-    global laser
+    global laser, cannons, laser_sound, plasma_gun_sound
+
     plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
     plasma_ball_1.set_colorkey((255, 255, 255))
     plasma_ball_2 = pygame.image.load('ammo_sprites/plasma_2.png')
@@ -30,14 +33,13 @@ def init():
     settings.plasma_ball_sprites = plasma_ball_sprites
     settings.light_ring_image = lightring
 
-
     pygame.mixer.init()
     laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
-    settings.laser_sound = laser_sound
-    cannon_sound = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
-    settings.cannon_sound = cannon_sound
-    pygame.mixer.Sound.set_volume(settings.cannon_sound, 0.6)
-    pygame.mixer.Sound.set_volume(settings.laser_sound, 0.6)
+    cannons = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
+    plasma_gun_sound = pygame.mixer.Sound('Sounds/plasma_gun_powerup_01.mp3')
+    pygame.mixer.Sound.set_volume(cannons, 0.2)
+    pygame.mixer.Sound.set_volume(laser_sound, 0.02)
+    pygame.mixer.Sound.set_volume(plasma_gun_sound, 0.05)
     settings.RED = 0xFF0000
     settings.YELLOW = 0xFFC91F
     settings.ORANGE = (255, 165, 0)
@@ -213,13 +215,15 @@ class Lightring:
 def rot_center(image, angle):
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
-    rot_rect = rot_image.get_rect() #orig_rect.copy()
+    rot_rect = rot_image.get_rect()
     rot_rect.center = rot_image.get_rect().center
     rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
 
 
 def processing(screen):
+    global cannons
+
     for b in settings.bullets:
         b.draw()
         b.move()
@@ -233,6 +237,8 @@ def processing(screen):
             new_bullet.vx = 50 * math.cos(new_bullet.angle)
             new_bullet.vy = 50 * math.sin(new_bullet.angle)
             settings.bullets.append(new_bullet)
+            pygame.mixer.Sound.set_volume(cannons, 0.1)
+            cannons.play()
 
     for b in settings.plasma_balls:
         b.draw()
@@ -240,6 +246,7 @@ def processing(screen):
         if b.timer <= 0:
             settings.plasma_balls.remove(b)
     if settings.ammo == 1:
+        plasma_gun_sound.play()
         if settings.seconds % settings.plasma_balls_firerate == 0:
             new_ball = Plasma_ball(levels.screen)
             new_ball.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y), (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
@@ -251,6 +258,10 @@ def processing(screen):
         laser.fire_start()
         laser.angle = math.atan2((pygame.mouse.get_pos()[1]-settings.spaceship.y), (pygame.mouse.get_pos()[0]-settings.spaceship.x))
         laser.draw()
+        laser_sound.play()
+    else:
+        laser_sound.stop()
+        laser.fire_end()
 
 
     if pygame.mouse.get_pressed()[0]:
