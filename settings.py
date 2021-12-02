@@ -8,7 +8,10 @@ seconds, bullets_firerate, plasma_balls_firerate = 0, 10, 60
 RED = 0xFF0000
 YELLOW = 0xFFC91F
 ORANGE = (255, 165, 0)
+
 # Common classes
+
+
 class Button:
     def __init__(self, x, y, width, height, action):
         self.x = x
@@ -30,8 +33,10 @@ class Button:
                 flag = 'menu'
             elif self.action == 'switch_to_levels':
                 flag = 'levels'
-            if self.action == 'switch_to_shop':
+            elif self.action == 'switch_to_shop':
                 flag = 'shop'
+            elif self.action == 'is_pressed':
+                return True
 
     def draw(self, screen):
         if self.image is None:
