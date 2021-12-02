@@ -35,7 +35,7 @@ def init():
     super_ready = pygame.image.load('menu_images/super_ready.png').convert_alpha()
     super_ready = pygame.transform.scale(super_ready, (350, 100))
 
-    ammunition.processing(screen)
+    ammunition.init()
 
 
 def blit_interface():

@@ -14,6 +14,37 @@ import settings
 FPS = 60
 
 pygame.init()
+
+thickarrow_strings = (               #sized 24x24
+  " xxxxxxxxx              ",
+  " xx......xx             ",
+  "    xx.....xx           ",
+  "       xxxx             ",
+  "         xxxxx          ",
+  "       xx..x..xx        ",
+  "      xx...x...xx       ",
+  "      xx...x...xx       ",
+  "      xxxx..xxxxx       ",
+  "      xx.......xx       ",
+  "      xx.......xx       ",
+  "      xx.......xxx      ",
+  "       xx........xx     ",
+  "       xx........xx     ",
+  "       xx........xx     ",
+  "       xx........xx     ",
+  "       xx........xx     ",
+  "      xx..........xx    ",
+  "  xxxx............xxxx  ",
+  "xx.........xx.........xx",
+  "xx.........xx.........xx",
+  "xx.........xx.........xx",
+  "  xx....xx   xx.....xx  ",
+  "    xxxx        xxx     ")
+
+cursor, mask = pygame.cursors.compile(thickarrow_strings, "X", ".")
+cursor_sizer = ((24, 24), (7, 11), cursor, mask)
+pygame.mouse.set_cursor(*cursor_sizer)
+
 pygame.font.init()
 pygame.mixer.init()
 
