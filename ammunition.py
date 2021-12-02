@@ -38,7 +38,8 @@ def init():
     cannons = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
     plasma_gun_sound = pygame.mixer.Sound('Sounds/plasma_gun_powerup_01.mp3')
     pygame.mixer.Sound.set_volume(cannons, 0.2)
-    pygame.mixer.Sound.set_volume(laser_sound, 0.2)
+    pygame.mixer.Sound.set_volume(laser_sound, 0.02)
+    pygame.mixer.Sound.set_volume(plasma_gun_sound, 0.05)
     settings.RED = 0xFF0000
     settings.YELLOW = 0xFFC91F
     settings.ORANGE = (255, 165, 0)
@@ -260,6 +261,7 @@ def processing(screen):
         laser_sound.play()
     else:
         laser_sound.stop()
+        laser.fire_end()
 
 
     if pygame.mouse.get_pressed()[0]:
