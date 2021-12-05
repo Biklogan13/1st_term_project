@@ -28,6 +28,7 @@ class Enemy_standart:
         self.ticks = 0
         self.heading = heading
         self.targetting = 0
+        self.damage = 20
 
     def draw(self, screen):
 
@@ -72,6 +73,7 @@ class Enemy_standart:
 
     def hittest(self, obj):
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
+            settings.spaceship.hp -= self.damage
             return True
         else:
             return False
@@ -103,6 +105,7 @@ class Enemy_kamikaze:
         self.angle = 0
         self.r = 22.5
         self.phase = 0
+        self.damage = 50
 
     def draw(self, screen):
         if self.live > 0:
@@ -118,6 +121,7 @@ class Enemy_kamikaze:
 
     def hittest(self, obj):
         if (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2:
+            settings.spaceship.hp -= self.damage
             return True
         else:
             return False

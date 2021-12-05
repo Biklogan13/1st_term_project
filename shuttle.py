@@ -26,6 +26,7 @@ class Shuttle:
         self.ax = 0
         self.ay = 0
         self.r = 0
+        self.hp = 500
 
     def draw(self, surface):
         self.surface = surface
