@@ -14,26 +14,26 @@ lightrings = []
 def init():
     global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image
 
-    plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
+    plasma_ball_1 = pygame.image.load(settings.PLASMA_1_PATH)
     plasma_ball_1.set_colorkey((255, 255, 255))
-    plasma_ball_2 = pygame.image.load('ammo_sprites/plasma_2.png')
+    plasma_ball_2 = pygame.image.load(settings.PLASMA_2_PATH)
     plasma_ball_2.set_colorkey((255, 255, 255))
-    plasma_ball_3 = pygame.image.load('ammo_sprites/plasma_3.png')
+    plasma_ball_3 = pygame.image.load(settings.PLASMA_3_PATH)
     plasma_ball_3.set_colorkey((255, 255, 255))
     plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
 
-    bullet_image = pygame.image.load('ammo_sprites/plasma_bullet.png')
+    bullet_image = pygame.image.load(settings.PLASMA_BULLET_PATH)
     bullet_image = pygame.transform.scale(bullet_image, (80, 40))
     settings.bullet_image = bullet_image
 
-    light_ring_image = pygame.image.load('ammo_sprites/lightring.png')
+    light_ring_image = pygame.image.load(settings.LIGHT_RING_PATH)
     light_ring_image.set_colorkey((255, 255, 255))
     settings.plasma_ball_sprites = plasma_ball_sprites
 
     pygame.mixer.init()
-    laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
-    cannons = pygame.mixer.Sound('Sounds/ES_Cannon Blast 4.mp3')
-    plasma_gun_sound = pygame.mixer.Sound('Sounds/plasma_gun_powerup_01.mp3')
+    laser_sound = pygame.mixer.Sound(settings.LASER_SOUND_PATH)
+    cannons = pygame.mixer.Sound(settings.CANNONS_SOUND_PATH)
+    plasma_gun_sound = pygame.mixer.Sound(settings.PLASMAGUN_SOUND_PATH)
     pygame.mixer.Sound.set_volume(cannons, 0.2)
     pygame.mixer.Sound.set_volume(laser_sound, 0.02)
     pygame.mixer.Sound.set_volume(plasma_gun_sound, 0.05)
@@ -90,10 +90,8 @@ class Bullet:
             Возвращает True в случае столкновения пули и цели. В противном случае возвращает False.
         """
 
-        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
-            return True
-        else:
-            return False
+        return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2
+
 
 class Laser:
     def __init__(self, screen: pygame.Surface):

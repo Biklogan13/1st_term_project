@@ -1,4 +1,5 @@
 import pygame
+import os
 
 # Global variables which needed in many files
 SIZE, WIDTH, HEIGHT, flag, running = 0, 0, 0, 'menu', True
@@ -8,6 +9,21 @@ seconds, bullets_firerate, plasma_balls_firerate, dash_range = 0, 10, 60, 300
 RED = 0xFF0000
 YELLOW = 0xFFC91F
 ORANGE = (255, 165, 0)
+
+PLASMA_1_PATH = os.path.join('.', 'ammo_sprites', 'plasma_1.png')
+PLASMA_2_PATH = os.path.join('.', 'ammo_sprites', 'plasma_2.png')
+PLASMA_3_PATH = os.path.join('.', 'ammo_sprites', 'plasma_3.png')
+
+PLASMA_BULLET_PATH = os.path.join('.', 'ammo_sprites', 'plasma_bullet.png')
+LIGHT_RING_PATH = os.path.join('.', 'ammo_sprites', 'lightring.png')
+
+LASER_SOUND_PATH = os.path.join('.', 'Sounds', 'LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
+CANNONS_SOUND_PATH = os.path.join('.', 'Sounds', 'ES_Cannon Blast 4.mp3')
+PLASMAGUN_SOUND_PATH = os.path.join('.', 'Sounds', 'plasma_gun_powerup_01.mp3')
+
+MINE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'mine.png')
+KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
+ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
 # Common classes
 
 class Button:

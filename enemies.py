@@ -154,11 +154,11 @@ class Mine:
 
 def init():
     global mine_image, kamikaze_image, enemy_image
-    mine_image = pygame.image.load('enemy_skins/mine.png').convert_alpha()
+    mine_image = pygame.image.load(settings.MINE_IMAGE_PATH).convert_alpha()
     mine_image = pygame.transform.scale(mine_image, (50, 50))
-    kamikaze_image = pygame.image.load('enemy_skins/kamikaze.PNG').convert_alpha()
+    kamikaze_image = pygame.image.load(settings.KAMIKADZE_IMAGE_PATH).convert_alpha()
     kamikaze_image = pygame.transform.scale(kamikaze_image, (30, 45))
-    enemy_image = pygame.image.load('enemy_skins/enemy.PNG').convert_alpha()
+    enemy_image = pygame.image.load(settings.ENEMY_IMAGE_PATH).convert_alpha()
     enemy_image = pygame.transform.scale(enemy_image, (100, 80))
 
 
