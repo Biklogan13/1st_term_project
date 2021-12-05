@@ -6,7 +6,7 @@ buttons = []
 screen, background = None, None
 
 items_ships, items_upgrades, items_appearance = [], [], []
-section = None
+section, section_indicator = None, None
 
 
 class Item:
@@ -47,18 +47,21 @@ class Item:
 
 
 def init():
-    global buttons, screen, background, section
+    global buttons, screen, background, section, section_indicator
     section = 'ships'
     screen = pygame.Surface(settings.SIZE)
     background = pygame.image.load('backgrounds/shop_background.jpg').convert()
+    section_indicator = pygame.image.load('menu_images/section_indicator.png').convert_alpha()
+    plate = pygame.im
     background = pygame.transform.scale(background, settings.SIZE)
+    section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
     for i in range(20):
         items_ships.append(Item(200, i * 100, 300, 50))
 
 
 def create_screen():
-    global buttons, screen, items_ships, items_upgrades, items_appearance, section
+    global buttons, screen, items_ships, items_upgrades, items_appearance, section, section_indicator
     screen.blit(background, (0, 0))
 
     # Events
@@ -79,6 +82,9 @@ def create_screen():
                 y = 15
             elif event.button == 5:
                 y = -15
+
+    # Drawing left-sided menu
+    screen.blit(section_indicator, (0, int(settings.HEIGHT/2 - 540)))
 
     # Drawing and moving blocks
     if (y > 0 and items_ships[0].y <= 0) or (y < 0 and items_ships[len(items_ships) - 1].y >= settings.HEIGHT - items_ships[len(items_ships) - 1].height):
