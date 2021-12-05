@@ -62,7 +62,8 @@ def create_screen():
     screen.blit(level_background, (0, 0))
     for b in buttons:
         b.draw(screen)
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for b in buttons:
                 b.act(event)
@@ -77,7 +78,7 @@ def create_screen():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_ESCAPE]:
         settings.flag = 'menu'
-    ammunition.processing(screen)
+    ammunition.processing(screen, events)
     enemies.processing(screen)
     shuttle.processing(screen)
     blit_interface()

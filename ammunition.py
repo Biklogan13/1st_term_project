@@ -11,10 +11,12 @@ import random
 
 laser = None
 cannons = None
+ult = 1
+lightrings = []
 
 
 def init():
-    global laser, cannons, laser_sound, plasma_gun_sound
+    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image
 
     plasma_ball_1 = pygame.image.load('ammo_sprites/plasma_1.png')
     plasma_ball_1.set_colorkey((255, 255, 255))
@@ -28,10 +30,9 @@ def init():
     bullet_image = pygame.transform.scale(bullet_image, (80, 40))
     settings.bullet_image = bullet_image
 
-    lightring = pygame.image.load('ammo_sprites/lightring.png')
-    lightring.set_colorkey((255, 255, 255))
+    light_ring_image = pygame.image.load('ammo_sprites/lightring.png')
+    light_ring_image.set_colorkey((255, 255, 255))
     settings.plasma_ball_sprites = plasma_ball_sprites
-    settings.light_ring_image = lightring
 
     pygame.mixer.init()
     laser_sound = pygame.mixer.Sound('Sounds/LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
@@ -190,23 +191,23 @@ class Lightring:
         self.y = settings.spaceship.y
         self.r = 100
         self.v = 10
-        self.surf = pygame.transform.scale(settings.light_ring_image, (self.r, self.r))
+        self.surf = pygame.transform.scale(light_ring_image, (self.r, self.r))
+        self.timer = 100
 
 
     def move(self):
         self.x = settings.spaceship.x
         self.y = settings.spaceship.y
         self.r += self.v
-        self.surf = pygame.transform.scale(settings.light_ring_image, (self.r, self.r))
+        self.surf = pygame.transform.scale(light_ring_image, (self.r, self.r))
+        self.timer -= 1
 
 
     def draw(self):
-
-        self.screen.blit(self.surf, (self.x - self.r, self.y - self.r))
+        self.screen.blit(self.surf, (self.x - self.r / 2, self.y - self.r / 2))
 
     def hittest(self, obj):
-
-        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
+        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r - 500 + obj.r)**2:
             return True
         else:
             return False
@@ -221,8 +222,8 @@ def rot_center(image, angle):
     return rot_image
 
 
-def processing(screen):
-    global cannons
+def processing(screen, events):
+    global cannons, ult
 
     for b in settings.bullets:
         b.draw()
@@ -262,6 +263,19 @@ def processing(screen):
     else:
         laser_sound.stop()
         laser.fire_end()
+
+    for b in lightrings:
+        b.draw()
+        b.move()
+        if b.timer <= 0:
+            lightrings.remove(b)
+
+    for event in events:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            if ult == 1:
+                new_lightring = Lightring(levels.screen)
+                new_lightring.v = 30
+                lightrings.append(new_lightring)
 
 
     if pygame.mouse.get_pressed()[0]:

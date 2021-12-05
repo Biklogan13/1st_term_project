@@ -190,6 +190,9 @@ def processing(screen):
                 k.live = 0
         if ammunition.laser.hittest(k):
             k.live = 0
+        for b in ammunition.lightrings:
+            if b.hittest(k):
+                k.live = 0
 
     for k in settings.enemies:
         if k.live == 1:
