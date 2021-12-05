@@ -20,18 +20,16 @@ class Item:
         self.image_hover = None
         self.hover = False
 
-    def move(self, y):
+    def move(self, y, move):
         global section, items_ships, items_upgrades, items_appearance
-        if section == 'ships':
-            if (y > 0 and items_ships[0].y <= 0) or (y < 0 and items_ships[len(items_ships)-1].y >= settings.HEIGHT):
+        if move:
+            if section == 'ships':
                 self.y += y
                 self.button.y += y
-        elif section == 'upgrades':
-            if (y > 0 and items_upgrades[0].y <= 0) or (y < 0 and items_upgrades[len(items_upgrades) - 1].y >= settings.HEIGHT):
+            elif section == 'upgrades':
                 self.y += y
                 self.button.y += y
-        elif section == 'appearance':
-            if (y > 0 and items_upgrades[0].y <= 0) or (y < 0 and items_upgrades[len(items_upgrades) - 1].y >= settings.HEIGHT):
+            elif section == 'appearance':
                 self.y += y
                 self.button.y += y
 
@@ -82,18 +80,22 @@ def create_screen():
             elif event.button == 5:
                 y = -15
 
-    # Drawing
+    # Drawing and moving blocks
+    if (y > 0 and items_ships[0].y <= 0) or (y < 0 and items_ships[len(items_ships) - 1].y >= settings.HEIGHT - items_ships[len(items_ships) - 1].height):
+        move = True
+    else:
+        move = False
     if section == 'ships':
         for i in items_ships:
-            i.move(y)
+            i.move(y, move)
             i.draw(screen)
     elif section == 'upgrades':
         for i in items_upgrades:
-            i.move(y)
+            i.move(y, move)
             i.draw(screen)
     elif section == 'appearance':
         for i in items_appearance:
-            i.move(y)
+            i.move(y, move)
             i.draw(screen)
 
     # Exiting to menu
