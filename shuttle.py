@@ -85,6 +85,15 @@ class Shuttle:
         if self.Vy <= 0 and self.y >= settings.current_skin.y:
             self.y += self.Vy
 
+        if self.x > settings.WIDTH:
+            self.x = settings.WIDTH
+        if self.y > settings.HEIGHT:
+            self.y = settings.HEIGHT
+        if self.x < 0:
+            self.x = 0
+        if self.y < 0:
+            self.y = 0
+
     def move_mouse(self):
         #pygame.mouse.set_visible(False)
         self.x = pygame.mouse.get_pos()[0]

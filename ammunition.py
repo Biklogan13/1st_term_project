@@ -196,8 +196,6 @@ class Lightring:
 
 
     def move(self):
-        self.x = settings.spaceship.x
-        self.y = settings.spaceship.y
         self.r += self.v
         self.surf = pygame.transform.scale(light_ring_image, (self.r, self.r))
         self.timer -= 1
@@ -276,6 +274,9 @@ def processing(screen, events):
                 new_lightring = Lightring(levels.screen)
                 new_lightring.v = 30
                 lightrings.append(new_lightring)
+            elif ult == 2:
+                settings.spaceship.x += settings.dash_range * math.cos(math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y, pygame.mouse.get_pos()[0] - settings.spaceship.x))
+                settings.spaceship.y += settings.dash_range * math.sin(math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y, pygame.mouse.get_pos()[0] - settings.spaceship.x))
 
 
     if pygame.mouse.get_pressed()[0]:

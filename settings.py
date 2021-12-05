@@ -4,7 +4,7 @@ import pygame
 SIZE, WIDTH, HEIGHT, flag, running = 0, 0, 0, 'menu', True
 current_skin, spaceship, enemies, tick_counter, enemy_bullets = None, None, [], 0, []
 light_rings, bullets, laser, plasma_balls, ammo, bullet_image, light_ring_image, plasma_ball_sprites = [], [], None, [], 0, None, None, []
-seconds, bullets_firerate, plasma_balls_firerate = 0, 10, 60
+seconds, bullets_firerate, plasma_balls_firerate, dash_range = 0, 10, 60, 300
 RED = 0xFF0000
 YELLOW = 0xFFC91F
 ORANGE = (255, 165, 0)
@@ -47,6 +47,3 @@ class Button:
             self.hover = True
         else:
             self.hover = False
-
-
-
