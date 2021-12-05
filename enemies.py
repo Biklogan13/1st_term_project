@@ -20,7 +20,7 @@ class Enemy_standart:
         self.y = -100
         self.Vx = 0
         self.Vy = 10
-        self.live = 1
+        self.live = 100
         self.image = enemy_image
         self.r = 40
         self.angle = 0
@@ -30,12 +30,12 @@ class Enemy_standart:
         self.targetting = 0
 
     def draw(self, screen):
-        if self.live == 1:
+
             self.image = rot_center(enemy_image, self.angle*360/(-2*math.pi) - 90)
             screen.blit(self.image, (self.x - 40, self.y - 40))
 
     def move(self):
-        if self.live == 1:
+
             self.angle = math.atan2(self.Vy, self.Vx)
             if self.y < settings.HEIGHT/2 - 8:
                 self.Vx += - self.heading*(self.Vx**2 + self.Vy**2) * math.sin(self.angle) / (settings.HEIGHT/2 + 100)
@@ -56,8 +56,8 @@ class Enemy_standart:
                 self.x += self.Vx
                 self.y += self.Vy
 
-        if self.y >= settings.HEIGHT:
-            self.live = 0
+            if self.y >= settings.HEIGHT:
+                self.live = 0
 
     def shoot(self):
         self.targetting = math.atan2(settings.spaceship.y - self.y, settings.spaceship.x - self.x)
@@ -83,7 +83,7 @@ class Enemy_heavy:
         self.y = 0
         self.Vx = 0
         self.Vy = 0
-        self.live = 1
+        self.live = 100
         self.image = None
         self.r = 0
         self.phase = 0
@@ -105,7 +105,7 @@ class Enemy_kamikaze:
         self.phase = 0
 
     def draw(self, screen):
-        if self.live == 1:
+        if self.live > 0:
             self.image = rot_center(kamikaze_image, self.angle*360/(-2*math.pi) - 90)
             screen.blit(self.image, (self.x - 15, self.y - 15))
 
@@ -135,7 +135,7 @@ class Mine:
         self.phase = 0
 
     def draw(self, screen):
-        if self.live == 1:
+        if self.live > 0:
             screen.blit(self.image, (self.x - 25, self.y - 25))
 
     def move(self):
@@ -180,22 +180,25 @@ def processing(screen):
             settings.enemies.append(new_enemy)
 
     for k in settings.enemies:
+        if k.live <= 0:
+            settings.enemies.remove(k)
         if k.hittest(settings.spaceship):
-            k.live = 0
+            k.live -= 50
         for b in settings.bullets:
             if k.hittest(b):
-                k.live = 0
+                settings.bullets.remove(b)
+                k.live -= 20
         for p in settings.plasma_balls:
             if k.hittest(p):
-                k.live = 0
+                k.live -= 100
         if ammunition.laser.hittest(k):
-            k.live = 0
+            k.live -= 1
         for b in ammunition.lightrings:
             if b.hittest(k):
                 k.live = 0
 
     for k in settings.enemies:
-        if k.live == 1:
+        if k.live >= 1:
             k.move()
             k.draw(screen)
             if k.phase == 2:
