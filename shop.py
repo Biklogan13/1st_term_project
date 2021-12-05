@@ -81,10 +81,8 @@ def create_screen():
                 y = -15
 
     # Drawing and moving blocks
-    if (y > 0 and items_ships[0].y <= 0) or (y < 0 and items_ships[len(items_ships) - 1].y >= settings.HEIGHT - items_ships[len(items_ships) - 1].height):
-        move = True
-    else:
-        move = False
+    move = (y > 0 and items_ships[0].y <= 0) or (y < 0 and items_ships[len(items_ships) - 1].y >= settings.HEIGHT -
+                                                 items_ships[len(items_ships) - 1].height)
     if section == 'ships':
         for i in items_ships:
             i.move(y, move)
