@@ -52,7 +52,7 @@ def init():
     screen = pygame.Surface(settings.SIZE)
     background = pygame.image.load('backgrounds/shop_background.jpg').convert()
     section_indicator = pygame.image.load('menu_images/section_indicator.png').convert_alpha()
-    plate = pygame.im
+    #plate = pygame.im
     background = pygame.transform.scale(background, settings.SIZE)
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
