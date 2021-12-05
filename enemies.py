@@ -74,6 +74,7 @@ class Enemy_standart:
     def hittest(self, obj):
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             settings.spaceship.hp -= self.damage
+            print('standart hit'+str(settings.spaceship.hp))
             return True
         else:
             return False
@@ -122,6 +123,7 @@ class Enemy_kamikaze:
     def hittest(self, obj):
         if (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2:
             settings.spaceship.hp -= self.damage
+            print('kamikaze hit' + str(settings.spaceship.hp))
             return True
         else:
             return False
@@ -137,6 +139,7 @@ class Mine:
         self.image = mine_image
         self.r = 25
         self.phase = 0
+        self.damage = 100
 
     def draw(self, screen):
         if self.live > 0:
@@ -147,6 +150,8 @@ class Mine:
 
     def hittest(self, obj):
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
+            settings.spaceship.hp -= self.damage
+            print('mine hit' + str(settings.spaceship.hp))
             return True
         else:
             return False
