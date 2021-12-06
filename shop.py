@@ -6,19 +6,17 @@ buttons = []
 screen, background = None, None
 
 items_ships, items_upgrades, items_appearance = [], [], []
-section, section_indicator =  None, None
-shop_plate, left_side, right_side = None, None, None
+section, section_indicator = None, None
 
 
 class Item:
-    def __init__(self, x, y, width, height, image):
+    def __init__(self, x, y, width, height):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.button = settings.Button(self.x + self.width // 2, self.y + self.height // 2, 400, 100, 'is_pressed')
-        self.icon = None
-        self.image = image
+        self.image = None
         self.image_hover = None
         self.hover = False
 
@@ -39,7 +37,7 @@ class Item:
         pass
 
     def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+        pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
 
     def hover_test(self, event):
         if 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
@@ -49,30 +47,21 @@ class Item:
 
 
 def init():
-    global buttons, screen, background, section, section_indicator, shop_plate, left_side, right_side
+    global buttons, screen, background, section, section_indicator
     section = 'ships'
     screen = pygame.Surface(settings.SIZE)
     background = pygame.image.load('backgrounds/shop_background.jpg').convert()
     section_indicator = pygame.image.load('menu_images/section_indicator.png').convert_alpha()
-    shop_plate = pygame.image.load('menu_images/plate_shop.png').convert_alpha()
-    left_side = pygame.image.load('menu_images/left_side.png').convert_alpha()
-    right_side = pygame.image.load('menu_images/right_side.png').convert_alpha()
+    #plate = pygame.im
     background = pygame.transform.scale(background, settings.SIZE)
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
-    left_side = pygame.transform.scale(left_side, (50, 300))
-    right_side = pygame.transform.scale(right_side, (50, 300))
-    shop_plate = pygame.transform.scale(shop_plate, (settings.WIDTH - 580, 300))
-    block = pygame.Surface((settings.WIDTH - 480, 300))
-    block.set_colorkey((0, 0, 0))
-    block.blit(left_side, (0, 0))
-    block.blit(shop_plate, (50, 0))
-    block.blit(right_side, (settings.WIDTH - 530, 0))
+
     for i in range(20):
-        items_ships.append(Item(440, i * 340, settings.WIDTH - 480, 300, block))
+        items_ships.append(Item(200, i * 100, 300, 50))
 
 
 def create_screen():
-    global buttons, screen, items_ships, items_upgrades, items_appearance, section, section_indicator, plate
+    global buttons, screen, items_ships, items_upgrades, items_appearance, section, section_indicator
     screen.blit(background, (0, 0))
 
     # Events
@@ -90,15 +79,15 @@ def create_screen():
                 for i in items_appearance:
                     i.act()
             if event.button == 4:
-                y = 25
+                y = 15
             elif event.button == 5:
-                y = -25
+                y = -15
 
     # Drawing left-sided menu
     screen.blit(section_indicator, (0, int(settings.HEIGHT/2 - 540)))
 
     # Drawing and moving blocks
-    if (y > 0 and items_ships[0].y < 0) or (y < 0 and items_ships[len(items_ships) - 1].y > settings.HEIGHT - items_ships[len(items_ships) - 1].height):
+    if (y > 0 and items_ships[0].y <= 0) or (y < 0 and items_ships[len(items_ships) - 1].y >= settings.HEIGHT - items_ships[len(items_ships) - 1].height):
         move = True
     else:
         move = False

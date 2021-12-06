@@ -167,8 +167,7 @@ class Plasma_ball:
 
 
     def draw(self):
-        self.r = 50
-        self.screen.blit(self.surf, (self.x - 50, self.y - 50))
+        self.screen.blit(self.surf, (self.x - self.r, self.y - self.r))
 
     def hittest(self, obj):
         """Функция проверяет сталкивалкивается ли шар с целью.
@@ -205,7 +204,7 @@ class Lightring:
         self.screen.blit(self.surf, (self.x - self.r / 2, self.y - self.r / 2))
 
     def hittest(self, obj):
-        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r - 500 + obj.r)**2:
+        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r * 0.4 + obj.r)**2:
             return True
         else:
             return False
@@ -275,8 +274,8 @@ def processing(screen, events):
                 new_lightring.v = 30
                 lightrings.append(new_lightring)
             elif ult == 2:
-                settings.spaceship.x += settings.dash_range * math.cos(math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y, pygame.mouse.get_pos()[0] - settings.spaceship.x))
-                settings.spaceship.y += settings.dash_range * math.sin(math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y, pygame.mouse.get_pos()[0] - settings.spaceship.x))
+                settings.spaceship.x = pygame.mouse.get_pos()[0]
+                settings.spaceship.y = pygame.mouse.get_pos()[1]
 
 
     if pygame.mouse.get_pressed()[0]:
