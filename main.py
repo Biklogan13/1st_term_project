@@ -79,9 +79,4 @@ while settings.running:
         pygame.display.update()
         settings.tick_counter += 1
 
-    if settings.spaceship.hp <= 0:
-        # FIXME надо сделать геймовер, пока просто квит, для тестов вырубайте его
-        print('GAME OVER, SACKBOY')
-        pygame.quit()
-        running = False
 pygame.quit()
