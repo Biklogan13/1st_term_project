@@ -10,6 +10,7 @@ mine_image = None
 enemy_image = None
 enemy_counter = 0
 
+
 class Enemy_standart:
     def __init__(self, heading):
         self.surface = None
@@ -79,6 +80,7 @@ class Enemy_standart:
         else:
             return False
 
+
 class Enemy_heavy:
     def __init__(self):
         self.surface = None
@@ -90,6 +92,7 @@ class Enemy_heavy:
         self.image = None
         self.r = 0
         self.phase = 0
+
 
 class Enemy_kamikaze:
     def __init__(self):
@@ -128,6 +131,7 @@ class Enemy_kamikaze:
         else:
             return False
 
+
 class Mine:
     def __init__(self):
         self.surface = None
@@ -156,14 +160,16 @@ class Mine:
         else:
             return False
 
+
 def init():
     global mine_image, kamikaze_image, enemy_image
-    mine_image = pygame.image.load('enemy_skins/mine.png').convert_alpha()
+    mine_image = pygame.image.load(settings.MINE_IMAGE_PATH).convert_alpha()
     mine_image = pygame.transform.scale(mine_image, (50, 50))
-    kamikaze_image = pygame.image.load('enemy_skins/kamikaze.PNG').convert_alpha()
+    kamikaze_image = pygame.image.load(settings.KAMIKADZE_IMAGE_PATH).convert_alpha()
     kamikaze_image = pygame.transform.scale(kamikaze_image, (30, 45))
-    enemy_image = pygame.image.load('enemy_skins/enemy.PNG').convert_alpha()
+    enemy_image = pygame.image.load(settings.ENEMY_IMAGE_PATH).convert_alpha()
     enemy_image = pygame.transform.scale(enemy_image, (100, 80))
+
 
 def processing(screen):
     global enemy_counter
@@ -218,6 +224,7 @@ def processing(screen):
         b.move()
         if b.timer <= 0:
             settings.enemy_bullets.remove(b)
+
 
 def rot_center(image, angle):
     WIDTH = image.get_width()

@@ -1,11 +1,11 @@
 import pygame
 
-import enemies
 import settings
 import math
 
 screen = None
 speed_decay = 0
+
 
 class Shuttle_skins:
     def __init__(self, x, y, width, height, image):
