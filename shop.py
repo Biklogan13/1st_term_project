@@ -64,33 +64,35 @@ def init():
         items_ships.append(Item(440, i * 340 + 40, settings.WIDTH - 480, 300, None))
 
     # Buttons
-    cosmetics_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')
+    ships_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')
     upgrades_button = settings.Button(50, settings.HEIGHT // 2 - 270, 300, 75, 'switch_to_upgrades')
-    ships_button = settings.Button(50, settings.HEIGHT // 2 - 395, 300, 75, 'switch_to_cosmetics')
+    cosmetics_button = settings.Button(50, settings.HEIGHT // 2 - 395, 300, 75, 'switch_to_cosmetics')
 
     ships_button.image = pygame.image.load('menu_images/ships_button.png').convert_alpha()
     upgrades_button.image = pygame.image.load('menu_images/upgrades_button.png').convert_alpha()
     cosmetics_button.image = pygame.image.load('menu_images/cosmetics_button.png').convert_alpha()
 
-    ships_button.image = pygame.transform.scale((300, 100))
-    upgrades_button.image = pygame.transform.scale((300, 100))
-    cosmetics_button.image = pygame.transform.scale((300, 100))
+    button_size = (300, 75)
+
+    ships_button.image = pygame.transform.scale(ships_button.image, button_size)
+    upgrades_button.image = pygame.transform.scale(upgrades_button.image, button_size)
+    cosmetics_button.image = pygame.transform.scale(cosmetics_button.image, button_size)
 
     ships_button.image_hover = pygame.image.load('menu_images/ships_button_hover.png').convert_alpha()
     upgrades_button.image_hover = pygame.image.load('menu_images/upgrades_button_hover.png').convert_alpha()
     cosmetics_button.image_hover = pygame.image.load('menu_images/cosmetics_button_hover.png').convert_alpha()
 
-    ships_button.image_hover = pygame.transform.scale((300, 100))
-    upgrades_button.image_hover = pygame.transform.scale((300, 100))
-    cosmetics_button.image_hover = pygame.transform.scale((300, 100))
+    ships_button.image_hover = pygame.transform.scale(ships_button.image_hover, button_size)
+    upgrades_button.image_hover = pygame.transform.scale(upgrades_button.image_hover, button_size)
+    cosmetics_button.image_hover = pygame.transform.scale(cosmetics_button.image_hover, button_size)
 
     ships_button.image_pressed = pygame.image.load('menu_images/ships_button_pressed.png').convert_alpha()
     upgrades_button.image_pressed = pygame.image.load('menu_images/upgrades_button_pressed.png').convert_alpha()
     cosmetics_button.image_pressed = pygame.image.load('menu_images/cosmetics_button_pressed.png').convert_alpha()
 
-    ships_button.image_pressed = pygame.transform.scale((300, 100))
-    upgrades_button.image_pressed = pygame.transform.scale((300, 100))
-    cosmetics_button.image_pressed = pygame.transform.scale((300, 100))
+    ships_button.image_pressed = pygame.transform.scale(ships_button.image_pressed, button_size)
+    upgrades_button.image_pressed = pygame.transform.scale(upgrades_button.image_pressed, button_size)
+    cosmetics_button.image_pressed = pygame.transform.scale(cosmetics_button.image_pressed, button_size)
 
     ships_button.pressed = True
 
@@ -117,6 +119,12 @@ def create_screen():
         elif event.type == pygame.MOUSEMOTION:
             for b in buttons:
                 b.hover_test(event)
+
+    for b in buttons:
+        if b.action == 'switch_to_'+settings.shop_section:
+            b.pressed = True
+        else:
+            b.pressed = False
 
     for b in buttons:
         b.draw(screen)

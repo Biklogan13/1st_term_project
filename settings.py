@@ -64,6 +64,8 @@ class Button:
     def draw(self, screen):
         if self.image is None:
             pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
+        elif self.pressed:
+            screen.blit(self.image_pressed, (self.x, self.y))
         elif self.hover:
             screen.blit(self.image_hover, (self.x, self.y))
         else:
