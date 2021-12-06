@@ -16,7 +16,7 @@ FPS = 60
 pygame.init()
 
 thickarrow_strings = (               #sized 24x24
-"XX                      ",
+  "XX                      ",
   "XXX                     ",
   "XXXX                    ",
   "XX.XX                   ",

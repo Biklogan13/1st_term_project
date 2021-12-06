@@ -2,7 +2,7 @@ import pygame
 import os
 
 # Global variables which needed in many files
-SIZE, WIDTH, HEIGHT, flag, running = 0, 0, 0, 'menu', True
+SIZE, WIDTH, HEIGHT, flag, shop_section, running = 0, 0, 0, 'menu', 'ships', True
 current_skin, spaceship, enemies, tick_counter, enemy_bullets = None, None, [], 0, []
 light_rings, bullets, laser, plasma_balls, ammo, bullet_image, light_ring_image, plasma_ball_sprites = [], [], None, [], 0, None, None, []
 seconds, bullets_firerate, plasma_balls_firerate, dash_range = 0, 10, 60, 300
@@ -26,6 +26,7 @@ KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
 ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
 # Common classes
 
+
 class Button:
     def __init__(self, x, y, width, height, action):
         self.x = x
@@ -36,10 +37,12 @@ class Button:
         self.image = None
         self.image_hover = None
         self.hover = False
+        self.pressed = False
+        self.image_pressed = None
 
     def act(self, event):
-        global running, flag
-        if 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+        global running, flag, shop_section
+        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
             if self.action == 'exit':
                 pygame.quit()
                 running = False
@@ -47,8 +50,16 @@ class Button:
                 flag = 'menu'
             elif self.action == 'switch_to_levels':
                 flag = 'levels'
-            if self.action == 'switch_to_shop':
+            elif self.action == 'switch_to_shop':
                 flag = 'shop'
+            elif self.action == 'switch_to_ships':
+                shop_section = 'ships'
+            elif self.action == 'switch_to_upgrades':
+                shop_section = 'upgrades'
+            elif self.action == 'switch_to_cosmetics':
+                shop_section = 'cosmetics'
+            elif self.action == 'is_pressed':
+                return True
 
     def draw(self, screen):
         if self.image is None:
