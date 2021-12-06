@@ -14,7 +14,8 @@ bullets_indicator, plasma_indicator, laser_indicator, super_charge_edges = None,
 super_indicator, charge_plate, super_ready = None, None, None
 
 def init():
-    global buttons, screen, level_background, bullets_indicator, plasma_indicator, laser_indicator, super_indicator, charge_plate, super_ready, super_charge_edges
+    global buttons, screen, level_background, bullets_indicator, plasma_indicator, laser_indicator, super_indicator,\
+        charge_plate, super_ready, super_charge_edges
     screen = pygame.Surface(settings.SIZE)
     level_background = pygame.image.load('backgrounds/menu_background.png').convert_alpha()
     level_background = pygame.transform.scale(level_background, settings.SIZE)
@@ -39,7 +40,8 @@ def init():
 
 
 def blit_interface():
-    global screen, bullets_indicator, bullets_indicator, plasma_indicator, laser_indicator, super_charge, super_indicator, charge_plate, super_ready, super_charge_edges
+    global screen, bullets_indicator, bullets_indicator, plasma_indicator, laser_indicator, super_charge,\
+        super_indicator, charge_plate, super_ready, super_charge_edges
     # Weapon indicator
     if ammo_type == 0:
         screen.blit(bullets_indicator, (0, settings.HEIGHT - 100))
