@@ -57,7 +57,7 @@ def init():
     left_side = pygame.image.load('menu_images/left_side.png').convert_alpha()
     right_side = pygame.image.load('menu_images/right_side.png').convert_alpha()
     background = pygame.transform.scale(background, settings.SIZE)
-    shop_plate = pygame.transform.scale(shop_plate, (settings.WIDTH - 580, 300)).convert_alpha()
+    shop_plate = pygame.transform.scale(shop_plate, (settings.WIDTH - 580, 300))
     left_side = pygame.transform.scale(left_side, (50, 300))
     right_side = pygame.transform.scale(right_side, (50, 300))
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
