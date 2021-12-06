@@ -170,8 +170,7 @@ class Plasma_ball:
                                                (2 * self.r, 2 * self.r))
 
     def draw(self):
-        self.r = 50
-        self.screen.blit(self.surf, (self.x - 50, self.y - 50))
+        self.screen.blit(self.surf, (self.x - self.r, self.y - self.r))
 
     def hittest(self, obj):
         """Функция проверяет сталкивалкивается ли шар с целью.
@@ -205,6 +204,7 @@ class Lightring:
 
     def hittest(self, obj):
         return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r - 500 + obj.r) ** 2
+
 
 
 def rot_center(image, angle):
@@ -282,6 +282,8 @@ def processing(screen, events):
                 settings.spaceship.y += settings.dash_range * math.sin(
                     math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y,
                                pygame.mouse.get_pos()[0] - settings.spaceship.x))
+
+
 
     if pygame.mouse.get_pressed()[0]:
         settings.ammo = levels.ammo_type
