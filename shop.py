@@ -35,35 +35,26 @@ cosmetics_button_image_pressed_path = os.path.join('.', 'interface_elements', 'c
 
 
 class Item:
-    def __init__(self, x, y, width, height, image):
+    def __init__(self, x, y, width, height, image, cost, purchase):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.button = settings.Button(self.x + self.width // 2, self.y + self.height // 2, 400, 100, 'is_pressed')
         self.image = image
-        self.image_hover = None
-        self.hover = False
+        self.cost = cost
+        self.purchase = purchase
 
     def move(self, y, move):
         if move:
             self.y += y
             self.button.y += y
 
-    def act(self, event):
-        pass
-
-    def draw(self, screen):
+    def draw(self):
         screen.blit(left_side, (self.x, self.y))
         screen.blit(shop_plate, (self.x + 50, self.y))
         screen.blit(right_side, (self.x + settings.WIDTH - 530, self.y))
-        #screen.blit(self.image, (self.x, self.y))
-
-    def hover_test(self, event):
-        if 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
-            self.hover = True
-        else:
-            self.hover = False
+        self.button.draw(screen)
 
 
 class ShopButton(settings.Button):
@@ -74,9 +65,39 @@ class ShopButton(settings.Button):
         self.height = height
         self.bought = False
         self.hover = False
-        self.image = None
-        self.image_bought = None
-        self.image_se = None
+        self.selected = False
+        self.enough_money = False
+        self.image_buy_enough_money = None
+        self.image_buy_enough_money_hover = None
+        self.image_buy_not_enough_money = None
+        self.image_select = None
+        self.image_select_hover = None
+        self.image_selected = None
+
+    def act(self, event):
+        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+            if self.button.bought:
+                self.button.selected = True
+            elif self.cost <= settings.money:
+                self.button.bought = True
+                settings.money -= self.cost
+
+    def draw(self):
+        if self.selected:
+            #screen.blit(self.image_selected, (self.x, self.y))
+        elif self.bought:
+            if self.hover:
+                #screen.blit(self.image_select_hover, (self.x, self.y))
+            else:
+                #screen.blit(self.image_select, (self.x, self.y))
+        else:
+            if self.enough_money:
+                if self.hover:
+                    #screen.blit(self.image_buy_enough_money_hover, (self.x, self.y))
+                else:
+                    #screen.blit(self.image_buy_enough_money, (self.x, self.y))
+            else:
+                #screen.blit(self.image_buy_not_enough_money, (self.x, self.y))
 
 
 def init():
@@ -92,48 +113,50 @@ def init():
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
     # Creating Items
-    for i in range(20):
-        items_ships.append(Item(440, i * 340 + 40, settings.WIDTH - 480, 300, None))
+    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[0].image, 0, settings.skins[0]))
 
     # Creating Buttons
     ships_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')
     upgrades_button = settings.Button(50, settings.HEIGHT // 2 - 270, 300, 75, 'switch_to_upgrades')
     cosmetics_button = settings.Button(50, settings.HEIGHT // 2 - 395, 300, 75, 'switch_to_cosmetics')
 
+    button_size = (300, 75)
+
     ships_button.image = pygame.image.load(ships_button_image_path).convert_alpha()
     upgrades_button.image = pygame.image.load(upgrades_button_image_path).convert_alpha()
     cosmetics_button.image = pygame.image.load(cosmetics_button_image_path).convert_alpha()
-
-    button_size = (300, 75)
-
-    ships_button.image = pygame.transform.scale(ships_button.image, button_size)
-    upgrades_button.image = pygame.transform.scale(upgrades_button.image, button_size)
-    cosmetics_button.image = pygame.transform.scale(cosmetics_button.image, button_size)
 
     ships_button.image_hover = pygame.image.load(ships_button_image_hover_path).convert_alpha()
     upgrades_button.image_hover = pygame.image.load(upgrades_button_image_hover_path).convert_alpha()
     cosmetics_button.image_hover = pygame.image.load(cosmetics_button_image_hover_path).convert_alpha()
 
-    ships_button.image_hover = pygame.transform.scale(ships_button.image_hover, button_size)
-    upgrades_button.image_hover = pygame.transform.scale(upgrades_button.image_hover, button_size)
-    cosmetics_button.image_hover = pygame.transform.scale(cosmetics_button.image_hover, button_size)
-
     ships_button.image_pressed = pygame.image.load(ships_button_image_pressed_path).convert_alpha()
     upgrades_button.image_pressed = pygame.image.load(upgrades_button_image_pressed_path).convert_alpha()
     cosmetics_button.image_pressed = pygame.image.load(cosmetics_button_image_pressed_path).convert_alpha()
 
-    ships_button.image_pressed = pygame.transform.scale(ships_button.image_pressed, button_size)
-    upgrades_button.image_pressed = pygame.transform.scale(upgrades_button.image_pressed, button_size)
-    cosmetics_button.image_pressed = pygame.transform.scale(cosmetics_button.image_pressed, button_size)
+    ships_button.image, upgrades_button.image, cosmetics_button.image,\
+    ships_button.image_hover, upgrades_button.image_hover, cosmetics_button.image_hover,\
+    ships_button.image_pressed, upgrades_button.image_pressed, cosmetics_button.image_pressed = [
+        pygame.transform.scale(image, button_size) for image in
+        (ships_button.image, upgrades_button.image, cosmetics_button.image,
+         ships_button.image_hover, upgrades_button.image_hover, cosmetics_button.image_hover,
+         ships_button.image_pressed, upgrades_button.image_pressed, cosmetics_button.image_pressed)]
 
     ships_button.pressed = True
-
     buttons += [cosmetics_button, upgrades_button, ships_button]
 
 
 def create_screen():
     global buttons, screen, items_ships, items_upgrades, items_cosmetics, section_indicator
     screen.blit(background, (0, 0))
+
+    # Selection of section
+    if settings.shop_section == 'ships':
+        current_items = items_ships
+    elif settings.shop_section == 'upgrades':
+        current_items = items_upgrades
+    elif settings.shop_section == 'cosmetics':
+        current_items = items_cosmetics
 
     # Events
     dy = 0
@@ -163,19 +186,15 @@ def create_screen():
 
     for event in events:
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if settings.shop_section == 'ships':
-                for i in items_ships:
-                    i.act(event)
-            elif settings.shop_section == 'upgrades':
-                for i in items_upgrades:
-                    i.act(event)
-            elif settings.shop_section == 'appearance':
-                for i in items_cosmetics:
-                    i.act(event)
+            for i in current_items:
+                i.button.act(event)
             if event.button == 4:
                 dy = 40
             elif event.button == 5:
                 dy = -40
+        if event.type == pygame.MOUSEMOTION:
+            for i in current_items:
+                i.button.hover_test(event)
 
     # Drawing and moving blocks
     if (dy > 0 and items_ships[0].y < 40) or (dy < 0 and items_ships[len(items_ships) - 1].y > settings.HEIGHT - items_ships[len(items_ships) - 1].height + 40):
@@ -183,18 +202,9 @@ def create_screen():
     else:
         move = False
 
-    if settings.shop_section == 'ships':
-        for i in items_ships:
-            i.move(dy, move)
-            i.draw(screen)
-    elif settings.shop_section == 'upgrades':
-        for i in items_upgrades:
-            i.move(dy, move)
-            i.draw(screen)
-    elif settings.shop_section == 'appearance':
-        for i in items_cosmetics:
-            i.move(dy, move)
-            i.draw(screen)
+    for i in current_items:
+        i.move(dy, move)
+        i.draw()
 
     # Exiting to menu
     keys = pygame.key.get_pressed()

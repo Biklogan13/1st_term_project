@@ -16,6 +16,12 @@ bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
 # Game settings
 seconds, bullets_firerate, plasma_balls_firerate, dash_range = 0, 10, 60, 300
 
+# Skins
+skins = []
+
+# Money
+money = 0
+
 # Colors
 RED = 0xFF0000
 YELLOW = 0xFFC91F
@@ -70,8 +76,6 @@ class Button:
                 shop_section = 'upgrades'
             elif self.action == 'switch_to_cosmetics':
                 shop_section = 'cosmetics'
-            elif self.action == 'is_pressed':
-                return True
 
     def draw(self, screen):
         if self.image is None:
