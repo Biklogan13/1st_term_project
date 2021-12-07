@@ -2,14 +2,26 @@ import pygame
 import os
 
 # Global variables which needed in many files
+
+# Flags and screen characteristics
 SIZE, WIDTH, HEIGHT, flag, shop_section, running = 0, 0, 0, 'menu', 'ships', True
+
+# Objects needed in various modules
 current_skin, spaceship, enemies, tick_counter, enemy_bullets = None, None, [], 0, []
-light_rings, bullets, laser, plasma_balls, ammo, bullet_image, light_ring_image, plasma_ball_sprites = [], [], None, [], 0, None, None, []
+light_rings, bullets, laser, plasma_balls, ammo, = [], [], None, [], 0
+
+# REMOVE from here!
+bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
+
+# Game settings
 seconds, bullets_firerate, plasma_balls_firerate, dash_range = 0, 10, 60, 300
+
+# Colors
 RED = 0xFF0000
 YELLOW = 0xFFC91F
 ORANGE = (255, 165, 0)
 
+# REMOVE from here!
 PLASMA_1_PATH = os.path.join('.', 'ammo_sprites', 'plasma_1.png')
 PLASMA_2_PATH = os.path.join('.', 'ammo_sprites', 'plasma_2.png')
 PLASMA_3_PATH = os.path.join('.', 'ammo_sprites', 'plasma_3.png')
@@ -24,9 +36,9 @@ PLASMAGUN_SOUND_PATH = os.path.join('.', 'Sounds', 'plasma_gun_powerup_01.mp3')
 MINE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'mine.png')
 KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
 ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
+
+
 # Common classes
-
-
 class Button:
     def __init__(self, x, y, width, height, action):
         self.x = x
@@ -34,10 +46,10 @@ class Button:
         self.width = width
         self.height = height
         self.action = action
-        self.image = None
-        self.image_hover = None
         self.hover = False
         self.pressed = False
+        self.image = None
+        self.image_hover = None
         self.image_pressed = None
 
     def act(self, event):
