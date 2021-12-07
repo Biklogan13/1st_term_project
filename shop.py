@@ -84,19 +84,25 @@ class ShopButton(settings.Button):
 
     def draw(self):
         if self.selected:
+            pass
             #screen.blit(self.image_selected, (self.x, self.y))
         elif self.bought:
             if self.hover:
+                pass
                 #screen.blit(self.image_select_hover, (self.x, self.y))
             else:
+                pass
                 #screen.blit(self.image_select, (self.x, self.y))
         else:
             if self.enough_money:
                 if self.hover:
+                    pass
                     #screen.blit(self.image_buy_enough_money_hover, (self.x, self.y))
                 else:
+                    pass
                     #screen.blit(self.image_buy_enough_money, (self.x, self.y))
             else:
+                pass
                 #screen.blit(self.image_buy_not_enough_money, (self.x, self.y))
 
 
