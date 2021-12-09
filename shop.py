@@ -8,6 +8,7 @@ buy_button_selected, buy_button_select, buy_button_select_hover, \
     buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
     buy_button_buy_not_enough_money = None, None, None, None, None, None
 section_indicator = 'ships'
+current_items = None
 screen = None
 
 # Loading images
@@ -50,10 +51,9 @@ class Item:
         self.y = y
         self.width = width
         self.height = height
-        self.button = ShopButton(self.x + self.width // 2, self.y + self.height // 2, 400, 100)
+        self.button = ShopButton(self.x + self.width // 2, self.y + self.height // 2, 400, 100, purchase)
         self.image = image
         self.cost = cost
-        self.purchase = purchase
 
     def move(self, y, move):
         if move:
@@ -68,7 +68,7 @@ class Item:
 
 
 class ShopButton(settings.Button):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, purchase):
         self.x = x
         self.y = y
         self.width = width
@@ -78,11 +78,16 @@ class ShopButton(settings.Button):
         self.hover = False
         self.selected = False
         self.enough_money = False
+        self.purchase = purchase
 
     def act(self, event):
         if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
             if self.bought:
+                for i in current_items:
+                    i.button.selected = False
                 self.selected = True
+                if settings.shop_section == 'ships':
+                    settings.current_skin = self.purchase
             elif self.cost <= settings.money:
                 self.bought = True
                 settings.money -= self.cost
@@ -121,6 +126,7 @@ def init():
 
     # Creating Items
     items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[0].image, 0, settings.skins[0]))
+    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[1].image, 0, settings.skins[1]))
 
     # Creating Buttons
     ships_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')
@@ -169,7 +175,7 @@ def init():
 
 
 def create_screen():
-    global buttons, screen, items_ships, items_upgrades, items_cosmetics, section_indicator
+    global buttons, screen, items_ships, items_upgrades, items_cosmetics, section_indicator, current_items
     screen.blit(background, (0, 0))
 
     # Selection of section
