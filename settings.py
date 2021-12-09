@@ -20,7 +20,7 @@ seconds, bullets_firerate, plasma_balls_firerate, dash_range = 0, 10, 60, 300
 skins = []
 
 # Money
-money = 0
+money = 200
 
 # Colors
 RED = 0xFF0000

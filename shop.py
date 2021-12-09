@@ -4,6 +4,9 @@ import settings
 
 # Creating global variables (variables needed for more than 1 frame but only in shop module)
 buttons, items_ships, items_upgrades, items_cosmetics = [], [], [], []
+buy_button_selected, buy_button_select, buy_button_select_hover, \
+    buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
+    buy_button_buy_not_enough_money = None, None, None, None, None, None
 section_indicator = 'ships'
 screen = None
 
@@ -33,6 +36,13 @@ ships_button_image_pressed_path = os.path.join('.', 'interface_elements', 'ships
 upgrades_button_image_pressed_path = os.path.join('.', 'interface_elements', 'upgrades_button_pressed.png')
 cosmetics_button_image_pressed_path = os.path.join('.', 'interface_elements', 'cosmetics_button_pressed.png')
 
+buy_button_selected_path = os.path.join('.', 'interface_elements', 'buy_button_selected.png')
+buy_button_select_path = os.path.join('.', 'interface_elements', 'buy_button_select.png')
+buy_button_select_hover_path = os.path.join('.', 'interface_elements', 'buy_button_select_hover.png')
+buy_button_buy_enough_money_path = os.path.join('.', 'interface_elements', 'buy_button_buy_enough_money.png')
+buy_button_buy_enough_money_hover_path = os.path.join('.', 'interface_elements', 'buy_button_buy_enough_money_hover.png')
+buy_button_buy_not_enough_money_path = os.path.join('.', 'interface_elements', 'buy_button_buy_not_enough_money.png')
+
 
 class Item:
     def __init__(self, x, y, width, height, image, cost, purchase):
@@ -40,7 +50,7 @@ class Item:
         self.y = y
         self.width = width
         self.height = height
-        self.button = settings.Button(self.x + self.width // 2, self.y + self.height // 2, 400, 100, 'is_pressed')
+        self.button = ShopButton(self.x + self.width // 2, self.y + self.height // 2, 400, 100)
         self.image = image
         self.cost = cost
         self.purchase = purchase
@@ -54,7 +64,7 @@ class Item:
         screen.blit(left_side, (self.x, self.y))
         screen.blit(shop_plate, (self.x + 50, self.y))
         screen.blit(right_side, (self.x + settings.WIDTH - 530, self.y))
-        self.button.draw(screen)
+        self.button.draw()
 
 
 class ShopButton(settings.Button):
@@ -63,51 +73,42 @@ class ShopButton(settings.Button):
         self.y = y
         self.width = width
         self.height = height
+        self.cost = 100
         self.bought = False
         self.hover = False
         self.selected = False
         self.enough_money = False
-        self.image_buy_enough_money = None
-        self.image_buy_enough_money_hover = None
-        self.image_buy_not_enough_money = None
-        self.image_select = None
-        self.image_select_hover = None
-        self.image_selected = None
 
     def act(self, event):
         if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
-            if self.button.bought:
-                self.button.selected = True
+            if self.bought:
+                self.selected = True
             elif self.cost <= settings.money:
-                self.button.bought = True
+                self.bought = True
                 settings.money -= self.cost
 
     def draw(self):
         if self.selected:
-            pass
-            #screen.blit(self.image_selected, (self.x, self.y))
+            screen.blit(buy_button_selected, (self.x, self.y))
         elif self.bought:
             if self.hover:
-                pass
-                #screen.blit(self.image_select_hover, (self.x, self.y))
+                screen.blit(buy_button_select_hover, (self.x, self.y))
             else:
-                pass
-                #screen.blit(self.image_select, (self.x, self.y))
+                screen.blit(buy_button_select, (self.x, self.y))
         else:
             if self.enough_money:
                 if self.hover:
-                    pass
-                    #screen.blit(self.image_buy_enough_money_hover, (self.x, self.y))
+                    screen.blit(buy_button_buy_enough_money_hover, (self.x, self.y))
                 else:
-                    pass
-                    #screen.blit(self.image_buy_enough_money, (self.x, self.y))
+                    screen.blit(buy_button_buy_enough_money, (self.x, self.y))
             else:
-                pass
-                #screen.blit(self.image_buy_not_enough_money, (self.x, self.y))
+                screen.blit(buy_button_buy_not_enough_money, (self.x, self.y))
 
 
 def init():
-    global buttons, screen, background, section_indicator, shop_plate, left_side, right_side
+    global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, buy_button_selected,\
+        buy_button_select, buy_button_select_hover, buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
+        buy_button_buy_not_enough_money
     settings.shop_section = 'ships'
 
     # Creating screen and transforming images
@@ -151,6 +152,21 @@ def init():
     ships_button.pressed = True
     buttons += [cosmetics_button, upgrades_button, ships_button]
 
+    buy_button_selected = pygame.image.load(buy_button_selected_path).convert_alpha()
+    buy_button_select = pygame.image.load(buy_button_select_path).convert_alpha()
+    buy_button_select_hover = pygame.image.load(buy_button_select_hover_path).convert_alpha()
+    buy_button_buy_enough_money = pygame.image.load(buy_button_buy_enough_money_path).convert_alpha()
+    buy_button_buy_enough_money_hover = pygame.image.load(buy_button_buy_enough_money_hover_path).convert_alpha()
+    buy_button_buy_not_enough_money = pygame.image.load(buy_button_buy_not_enough_money_path).convert_alpha()
+
+    button_size = (400, 100)
+
+    buy_button_selected, buy_button_select, buy_button_select_hover, \
+    buy_button_buy_enough_money, buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money = [
+        pygame.transform.scale(image, button_size) for image in
+        (buy_button_selected, buy_button_select, buy_button_select_hover, \
+         buy_button_buy_enough_money, buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money)]
+
 
 def create_screen():
     global buttons, screen, items_ships, items_upgrades, items_cosmetics, section_indicator
@@ -163,6 +179,13 @@ def create_screen():
         current_items = items_upgrades
     elif settings.shop_section == 'cosmetics':
         current_items = items_cosmetics
+
+    # Money analysis
+    for i in current_items:
+        if i.button.cost <= settings.money:
+            i.button.enough_money = True
+        else:
+            i.button.enough_money = False
 
     # Events
     dy = 0
