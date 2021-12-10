@@ -15,10 +15,13 @@ bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
 
 # Game settings
 # FIXME split enemies and hero firerate and damage!
-seconds, bullets_firerate, plasma_balls_firerate, bullet_damage, plasma_ball_damage, laser_damage = 0, 1, 10, 20, 100, 1
+seconds, bullets_firerate, plasma_balls_firerate, bullet_damage, plasma_ball_damage, laser_damage = 0, 2, 60, 20, 100, 1
 
 # Skins
 skins = []
+
+# Super
+super_charge = 100
 
 # Money
 money = 200

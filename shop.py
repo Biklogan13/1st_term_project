@@ -19,7 +19,7 @@ current_items = None
 screen = None
 font = None
 
-# Loading images
+# Images paths
 background_path = os.path.join('.', 'backgrounds', 'shop_background.jpg')
 background = pygame.image.load(background_path)
 
@@ -59,7 +59,7 @@ class Item:
         self.y = y
         self.width = width
         self.height = height
-        self.button = ShopButton(self.x + self.width // 2, self.y + self.height // 2, 400, 100, purchase)
+        self.button = ShopButton(self.x + self.width - 500, self.y + self.height // 2, 400, 100, purchase, cost)
         self.image = image
         self.cost = cost
 
@@ -76,18 +76,18 @@ class Item:
         # Button
         self.button.draw()
         # Cost
-        screen.blit(font.render(str(self.cost), True, WHITE), (self.x + 300, self.y))
+        screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 500, self.y + 45))
         # Picture
         # Description
 
 
 class ShopButton(settings.Button):
-    def __init__(self, x, y, width, height, purchase):
+    def __init__(self, x, y, width, height, purchase, cost):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-        self.cost = 100
+        self.cost = cost
         self.bought = False
         self.hover = False
         self.selected = False
@@ -142,8 +142,8 @@ def init():
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
     # Creating Items
-    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[0].image, 0, settings.skins[0]))
-    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[1].image, 0, settings.skins[1]))
+    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0]))
+    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1]))
 
     # Creating Buttons
     ships_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')

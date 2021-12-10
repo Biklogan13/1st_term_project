@@ -1,4 +1,5 @@
 import pygame
+import os
 
 import enemies
 import shuttle
@@ -8,40 +9,60 @@ import ammunition
 buttons = []
 screen = None
 ammo_type = 0
-super_charge = 100
 level_background = None
-bullets_indicator, plasma_indicator, laser_indicator, super_charge_edges = None, None, None, None
-super_indicator, charge_plate, super_ready = None, None, None
+bullets_indicator, plasma_indicator, laser_indicator = None, None, None
+super_and_hp_indicator, super_and_hp_indicator_edges, hp_bar, super_bar, super_bar_ready = None, None, None, None, None
+
+# Images paths
+level_background_path = os.path.join('backgrounds/menu_background_2.jpg')
+
+bullets_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_bullets.png')
+plasma_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_plasma.png')
+laser_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_laser.png')
+
+super_and_hp_indicator_path = os.path.join('.', 'interface_elements', 'super_and_hp_indicator.png')
+super_and_hp_indicator_edges_path = os.path.join('.', 'interface_elements', 'super_and_hp_indicator_edges.png')
+hp_bar_path = os.path.join('.', 'interface_elements', 'hp_bar.png')
+super_bar_path = os.path.join('.', 'interface_elements', 'super_bar.png')
+super_bar_ready_path = os.path.join('.', 'interface_elements', 'super_bar_ready.png')
+
 
 def init():
-    global buttons, screen, level_background, bullets_indicator, plasma_indicator, laser_indicator, super_indicator,\
-        charge_plate, super_ready, super_charge_edges
+    global buttons, screen, level_background, bullets_indicator, plasma_indicator, laser_indicator,\
+        super_and_hp_indicator, super_and_hp_indicator_edges, hp_bar, super_bar, super_bar_ready
+
+    # Creating screen and transforming images
     screen = pygame.Surface(settings.SIZE)
-    level_background = pygame.image.load('backgrounds/menu_background.png').convert_alpha()
+
+    level_background = pygame.image.load(level_background_path).convert_alpha()
     level_background = pygame.transform.scale(level_background, settings.SIZE)
 
-    bullets_indicator = pygame.image.load('interface_elements/weapon_indicator_bullets.png').convert_alpha()
-    bullets_indicator = pygame.transform.scale(bullets_indicator, (350, 100))
-    plasma_indicator = pygame.image.load('interface_elements/weapon_indicator_plasma.png').convert_alpha()
-    plasma_indicator = pygame.transform.scale(plasma_indicator, (350, 100))
-    laser_indicator = pygame.image.load('interface_elements/weapon_indicator_laser.png').convert_alpha()
-    laser_indicator = pygame.transform.scale(laser_indicator, (350, 100))
+    indicator_size = (350, 100)
 
-    super_indicator = pygame.image.load('interface_elements/super_indicator.png').convert_alpha()
-    super_indicator = pygame.transform.scale(super_indicator, (350, 100))
-    charge_plate = pygame.image.load('interface_elements/charge_plate.png').convert_alpha()
-    charge_plate = pygame.transform.scale(charge_plate, (350, 100))
-    super_charge_edges = pygame.image.load('interface_elements/super_charge_edges.png').convert_alpha()
-    super_charge_edges = pygame.transform.scale(super_charge_edges, (350, 100))
-    super_ready = pygame.image.load('interface_elements/super_ready.png').convert_alpha()
-    super_ready = pygame.transform.scale(super_ready, (350, 100))
+    bullets_indicator = pygame.image.load(bullets_indicator_path).convert_alpha()
+    plasma_indicator = pygame.image.load(plasma_indicator_path).convert_alpha()
+    laser_indicator = pygame.image.load(laser_indicator_path).convert_alpha()
+    bullets_indicator = pygame.transform.scale(bullets_indicator, indicator_size)
+    plasma_indicator = pygame.transform.scale(plasma_indicator, indicator_size)
+    laser_indicator = pygame.transform.scale(laser_indicator, indicator_size)
+
+    super_and_hp_indicator = pygame.image.load(super_and_hp_indicator_path).convert_alpha()
+    super_and_hp_indicator = pygame.transform.scale(super_and_hp_indicator, indicator_size)
+    super_and_hp_indicator_edges = pygame.image.load(super_and_hp_indicator_edges_path).convert_alpha()
+    super_and_hp_indicator_edges = pygame.transform.scale(super_and_hp_indicator_edges, indicator_size)
+    hp_bar = pygame.image.load(hp_bar_path).convert_alpha()
+    hp_bar = pygame.transform.scale(hp_bar, indicator_size)
+    super_bar = pygame.image.load(super_bar_path).convert_alpha()
+    super_bar = pygame.transform.scale(super_bar, indicator_size)
+    super_bar_ready = pygame.image.load(super_bar_ready_path).convert_alpha()
+    super_bar_ready = pygame.transform.scale(super_bar_ready, (265, 25))
 
     ammunition.init()
 
 
 def blit_interface():
-    global screen, bullets_indicator, bullets_indicator, plasma_indicator, laser_indicator, super_charge,\
-        super_indicator, charge_plate, super_ready, super_charge_edges
+    global screen, bullets_indicator, bullets_indicator, plasma_indicator, laser_indicator, super_charge, \
+        super_and_hp_indicator, super_and_hp_indicator_edges, hp_bar, super_bar, super_bar_ready
     # Weapon indicator
     if ammo_type == 0:
         screen.blit(bullets_indicator, (0, settings.HEIGHT - 100))
@@ -49,13 +70,16 @@ def blit_interface():
         screen.blit(plasma_indicator, (0, settings.HEIGHT - 100))
     elif ammo_type == 2:
         screen.blit(laser_indicator, (0, settings.HEIGHT - 100))
-    # Super indicator
-    if super_charge < 100:
-        screen.blit(super_indicator, (settings.WIDTH - 350, settings.HEIGHT - 100))
-        screen.blit(pygame.transform.scale(charge_plate, (530 * super_charge // 200, 130 // 2)), (settings.WIDTH - 350 + 135 // 2, settings.HEIGHT - 100 + 35 // 2))
-        screen.blit(super_charge_edges, (settings.WIDTH - 350, settings.HEIGHT - 100))
+    # Super and hp indicator
+    screen.blit(super_and_hp_indicator, (settings.WIDTH - 350, settings.HEIGHT - 100))
+    screen.blit(pygame.transform.scale(hp_bar, (265 * max(settings.spaceship.hp, 0) // settings.spaceship.max_hp, 25)),
+                (settings.WIDTH - 350 + 135 // 2, settings.HEIGHT - 100 + 25 // 2))
+    if settings.super_charge < 100:
+        screen.blit(pygame.transform.scale(super_bar, (265 * settings.super_charge // 100, 25)),
+                    (settings.WIDTH - 350 + 135 // 2, settings.HEIGHT - 100 + 125 // 2))
     else:
-        screen.blit(super_ready, (settings.WIDTH - 350, settings.HEIGHT - 100))
+        screen.blit(super_bar_ready, (settings.WIDTH - 350 + 135 // 2, settings.HEIGHT - 100 + 125 // 2))
+    screen.blit(super_and_hp_indicator_edges, (settings.WIDTH - 350, settings.HEIGHT - 100))
 
 
 def create_screen():
