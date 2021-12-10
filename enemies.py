@@ -202,12 +202,12 @@ def processing(screen):
         for b in settings.bullets:
             if k.hittest(b):
                 settings.bullets.remove(b)
-                k.live -= 20
+                k.live -= settings.bullet_damage
         for p in settings.plasma_balls:
             if k.hittest(p):
-                k.live -= 100
+                k.live -= settings.plasma_ball_damage
         if ammunition.laser.hittest(k):
-            k.live -= 1
+            k.live -= settings.laser_damage
         for b in ammunition.lightrings:
             if b.hittest(k):
                 k.live = 0
