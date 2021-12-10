@@ -10,7 +10,7 @@ SIZE, WIDTH, HEIGHT, flag, shop_section, running = 0, 0, 0, 'menu', 'ships', Tru
 current_skin, spaceship, enemies, tick_counter, enemy_bullets = None, None, [], 0, []
 light_rings, bullets, laser, plasma_balls, ammo, = [], [], None, [], 0
 
-# REMOVE from here!
+# FIXME REMOVE from here!
 bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
 
 # Game settings
@@ -27,7 +27,7 @@ RED = 0xFF0000
 YELLOW = 0xFFC91F
 ORANGE = (255, 165, 0)
 
-# REMOVE from here!
+# FIXME REMOVE from here!
 PLASMA_1_PATH = os.path.join('.', 'ammo_sprites', 'plasma_1.png')
 PLASMA_2_PATH = os.path.join('.', 'ammo_sprites', 'plasma_2.png')
 PLASMA_3_PATH = os.path.join('.', 'ammo_sprites', 'plasma_3.png')

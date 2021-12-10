@@ -9,6 +9,7 @@ laser = None
 cannons = None
 ult = 1
 lightrings = []
+light_ring_animation = []
 
 
 def init():
@@ -41,6 +42,9 @@ def init():
     settings.YELLOW = 0xFFC91F
     settings.ORANGE = (255, 165, 0)
     laser = Laser(levels.screen)
+
+    for i in range(0, 101):
+        light_ring_animation.append(pygame.transform.scale(light_ring_image, (30 * i, 30 * i)))
 
 
 class Bullet:
@@ -193,12 +197,13 @@ class Lightring:
         self.v = 10
         self.surf = pygame.transform.scale(light_ring_image, (self.r, self.r))
         self.timer = 100
+        self.k = 0
 
     def move(self):
         self.r += self.v
-        self.surf = pygame.transform.scale(light_ring_image, (self.r, self.r))
+        self.surf = light_ring_animation[self.k]
         self.timer -= 1
-
+        self.k += 1
     def draw(self):
         self.screen.blit(self.surf, (self.x - self.r / 2, self.y - self.r / 2))
 
