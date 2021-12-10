@@ -14,7 +14,8 @@ light_rings, bullets, laser, plasma_balls, ammo, = [], [], None, [], 0
 bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
 
 # Game settings
-seconds, bullets_firerate, plasma_balls_firerate, bullet_damage, plasma_ball_damage, laser_damage = 0, 10, 60, 20, 100, 1
+# FIXME split enemies and hero firerate and damage!
+seconds, bullets_firerate, plasma_balls_firerate, bullet_damage, plasma_ball_damage, laser_damage = 0, 1, 10, 20, 100, 1
 
 # Skins
 skins = []

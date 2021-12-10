@@ -2,6 +2,13 @@ import pygame
 import os
 import settings
 
+# Colors
+WHITE = (255, 255, 255)
+DARK_GREEN = (9, 44, 50)
+
+# Fonts
+font_path = os.path.join('.', 'interface_elements', 'Montserrat-Bold.ttf')
+
 # Creating global variables (variables needed for more than 1 frame but only in shop module)
 buttons, items_ships, items_upgrades, items_cosmetics = [], [], [], []
 buy_button_selected, buy_button_select, buy_button_select_hover, \
@@ -10,6 +17,7 @@ buy_button_selected, buy_button_select, buy_button_select_hover, \
 section_indicator = 'ships'
 current_items = None
 screen = None
+font = None
 
 # Loading images
 background_path = os.path.join('.', 'backgrounds', 'shop_background.jpg')
@@ -61,10 +69,16 @@ class Item:
             self.button.y += y
 
     def draw(self):
+        # Plate
         screen.blit(left_side, (self.x, self.y))
         screen.blit(shop_plate, (self.x + 50, self.y))
         screen.blit(right_side, (self.x + settings.WIDTH - 530, self.y))
+        # Button
         self.button.draw()
+        # Cost
+        screen.blit(font.render(str(self.cost), True, WHITE), (self.x + 300, self.y))
+        # Picture
+        # Description
 
 
 class ShopButton(settings.Button):
@@ -113,8 +127,11 @@ class ShopButton(settings.Button):
 def init():
     global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, buy_button_selected,\
         buy_button_select, buy_button_select_hover, buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
-        buy_button_buy_not_enough_money
+        buy_button_buy_not_enough_money, font
     settings.shop_section = 'ships'
+
+    # Font
+    font = pygame.font.Font(font_path, 55)
 
     # Creating screen and transforming images
     screen = pygame.Surface(settings.SIZE)
