@@ -63,7 +63,7 @@ class Enemy_standart:
 
     def shoot(self):
         self.targetting = math.atan2(settings.spaceship.y - self.y, settings.spaceship.x - self.x)
-        if self.ticks % settings.bullets_firerate == 0:
+        if self.ticks % settings.standart_enemy_bullet_firerate == 0:
             new_bullet = ammunition.Bullet(levels.screen)
             new_bullet.angle = self.targetting + random.randint(-10, 10) * 0.008
             new_bullet.x = self.x
@@ -124,8 +124,9 @@ class Enemy_kamikaze:
         self.y += self.Vy
 
     def hittest(self, obj):
-        if (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2:
+        if (self.x - settings.spaceship.x) ** 2 + (self.y - settings.spaceship. y) ** 2 <= (self.r + settings.spaceship.r) ** 2:
             settings.spaceship.hp -= self.damage
+        if (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2:
             print('kamikaze hit' + str(settings.spaceship.hp))
             return True
         else:
@@ -153,8 +154,9 @@ class Mine:
         self.y += self.Vy
 
     def hittest(self, obj):
-        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
+        if (self.x - settings.spaceship.x) ** 2 + (self.y - settings.spaceship. y) ** 2 <= (self.r + settings.spaceship.r) ** 2:
             settings.spaceship.hp -= self.damage
+        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             print('mine hit' + str(settings.spaceship.hp))
             return True
         else:
@@ -202,11 +204,11 @@ def processing(screen):
         if k.hittest(settings.spaceship):
             k.live -= 50
         for b in settings.bullets:
-            if k.hittest(b):
+            if b.hittest(k):
                 settings.bullets.remove(b)
                 k.live -= settings.bullet_damage
         for p in settings.plasma_balls:
-            if k.hittest(p):
+            if p.hittest(k):
                 k.live -= settings.plasma_ball_damage
         if ammunition.laser.hittest(k):
             k.live -= settings.laser_damage
@@ -224,6 +226,8 @@ def processing(screen):
     for b in settings.enemy_bullets:
         b.draw()
         b.move()
+        if b.hittest(settings.spaceship):
+            settings.spaceship.hp -= settings.standart_enemy_bullet_damage
         if b.timer <= 0:
             settings.enemy_bullets.remove(b)
 
