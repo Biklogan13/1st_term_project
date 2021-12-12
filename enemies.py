@@ -76,7 +76,7 @@ class Enemy_standart:
     def hittest(self, obj):
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             settings.spaceship.hp -= self.damage
-            print('standart hit'+str(settings.spaceship.hp))
+            print('standard hit'+str(settings.spaceship.hp))
             return True
         else:
             return False

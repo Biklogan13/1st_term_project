@@ -19,8 +19,7 @@ buy_button_selected, buy_button_select, buy_button_select_hover, \
 section_indicator = 'ships'
 current_items = None
 screen = None
-font = None
-image_test = None
+font, font_small = None, None
 
 # Images paths
 background_path = os.path.join('.', 'backgrounds', 'shop_background.jpg')
@@ -57,7 +56,7 @@ buy_button_buy_not_enough_money_path = os.path.join('.', 'interface_elements', '
 
 
 class Item:
-    def __init__(self, x, y, width, height, image, cost, purchase):
+    def __init__(self, x, y, width, height, image, cost, purchase, name, capture):
         self.x = x
         self.y = y
         self.width = width
@@ -65,6 +64,8 @@ class Item:
         self.button = ShopButton(self.x + self.width - 500, self.y + self.height // 2, 400, 100, purchase, cost)
         self.image = image
         self.cost = cost
+        self.name = name
+        self.capture = capture
 
     def move(self, y, move):
         if move:
@@ -80,8 +81,11 @@ class Item:
         self.button.draw()
         # Cost
         screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 500, self.y + 45))
-        # Picture
-        # Description
+        # Text
+        screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
+        screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
+        # Image
+        screen.blit(self.image, (self.x + 100, self.y + 50))
 
 
 class ShopButton(settings.Button):
@@ -130,14 +134,13 @@ class ShopButton(settings.Button):
 def init():
     global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, buy_button_selected,\
         buy_button_select, buy_button_select_hover, buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
-        buy_button_buy_not_enough_money, font
-    global image_test
-    settings.shop_section = 'ships'
+        buy_button_buy_not_enough_money, font, font_small
 
-    image_test = levels.red_image(settings.current_skin.image)
+    settings.shop_section = 'ships'
 
     # Font
     font = pygame.font.Font(font_path, 55)
+    font_small = pygame.font.Font(font_path, 30)
 
     # Creating screen and transforming images
     screen = pygame.Surface(settings.SIZE)
@@ -148,8 +151,15 @@ def init():
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
     # Creating Items
-    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0]))
-    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1]))
+
+    # Ships
+    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
+                            'Zuckerberg machine', 'Super is teleportation'))
+    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1],
+                            'Standard spaceship', 'Super is lightring'))
+
+    # Upgrades
+    # Cosmetics
 
     # Creating Buttons
     ships_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')
@@ -193,7 +203,7 @@ def init():
     buy_button_selected, buy_button_select, buy_button_select_hover, \
     buy_button_buy_enough_money, buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money = [
         pygame.transform.scale(image, button_size) for image in
-        (buy_button_selected, buy_button_select, buy_button_select_hover, \
+        (buy_button_selected, buy_button_select, buy_button_select_hover,
          buy_button_buy_enough_money, buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money)]
 
 
@@ -222,7 +232,7 @@ def create_screen():
 
     # Drawing left-sided menu
     screen.blit(section_indicator, (0, int(settings.HEIGHT/2 - 540)))
-    screen.blit(levels.red_image(settings.current_skin.image), (50, int(settings.HEIGHT/2 + 225)))
+    screen.blit(settings.current_skin.image, (50, int(settings.HEIGHT/2 + 225)))
     screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT/2) + 50 + 45 // 2))
 
     # Buttons in left-sided menu and blocks
