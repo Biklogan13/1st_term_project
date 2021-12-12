@@ -64,6 +64,7 @@ class Enemy_standart:
     def shoot(self):
         self.targetting = math.atan2(settings.spaceship.y - self.y, settings.spaceship.x - self.x)
         if self.ticks % settings.standart_enemy_bullet_firerate == 0:
+            ammunition.cannons.play()
             new_bullet = ammunition.Bullet(levels.screen)
             new_bullet.angle = self.targetting + random.randint(-10, 10) * 0.008
             new_bullet.x = self.x
