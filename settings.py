@@ -25,7 +25,7 @@ skins = []
 super_charge = 100
 
 # Money
-money = 200
+money = 2000
 
 # Colors
 RED = 0xFF0000
