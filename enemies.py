@@ -180,6 +180,7 @@ def processing(screen):
         settings.enemies.append(new_mine)
         #else:
         #settings.enemies[enemy_counter % 100] = new_mine
+
     if settings.tick_counter % 120 == 0:
         new_kamikaze = Enemy_kamikaze()
         #enemy_counter += 1
@@ -193,6 +194,7 @@ def processing(screen):
         for i in range(3):
             new_enemy = Enemy_standart(heading)
             settings.enemies.append(new_enemy)
+
 
     for k in settings.enemies:
         if k.live <= 0:

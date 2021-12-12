@@ -35,7 +35,7 @@ def init():
     laser_sound = pygame.mixer.Sound(settings.LASER_SOUND_PATH)
     cannons = pygame.mixer.Sound(settings.CANNONS_SOUND_PATH)
     plasma_gun_sound = pygame.mixer.Sound(settings.PLASMAGUN_SOUND_PATH)
-    pygame.mixer.Sound.set_volume(cannons, 0.2)
+    pygame.mixer.Sound.set_volume(cannons, 0.1)
     pygame.mixer.Sound.set_volume(laser_sound, 0.02)
     pygame.mixer.Sound.set_volume(plasma_gun_sound, 0.05)
     settings.RED = 0xFF0000
@@ -231,7 +231,9 @@ def processing(screen, events):
             settings.bullets.remove(b)
 
     if settings.ammo == 0:
-        if settings.seconds % settings.bullets_firerate == 0:
+        if settings.seconds == settings.bullets_firerate:
+            cannons.play()
+        if settings.seconds > settings.bullets_firerate:
             new_bullet = Bullet(levels.screen)
             new_bullet.angle = math.atan2(
                 (pygame.mouse.get_pos()[1] - settings.spaceship.y),
@@ -239,8 +241,7 @@ def processing(screen, events):
             new_bullet.vx = 50 * math.cos(new_bullet.angle)
             new_bullet.vy = 50 * math.sin(new_bullet.angle)
             settings.bullets.append(new_bullet)
-            pygame.mixer.Sound.set_volume(cannons, 0.1)
-            cannons.play()
+            settings.seconds = 0
 
     for b in settings.plasma_balls:
         b.draw()
@@ -248,8 +249,9 @@ def processing(screen, events):
         if b.timer <= 0:
             settings.plasma_balls.remove(b)
     if settings.ammo == 1:
-        plasma_gun_sound.play()
-        if settings.seconds % settings.plasma_balls_firerate == 0:
+        if settings.seconds == 1:
+            plasma_gun_sound.play()
+        if settings.seconds > settings.plasma_balls_firerate:
             new_ball = Plasma_ball(levels.screen)
             new_ball.angle = math.atan2(
                 (pygame.mouse.get_pos()[1] - settings.spaceship.y),
@@ -257,6 +259,7 @@ def processing(screen, events):
             new_ball.vx = 10 * math.cos(new_ball.angle)
             new_ball.vy = 10 * math.sin(new_ball.angle)
             settings.plasma_balls.append(new_ball)
+            settings.seconds = 0
 
     if settings.ammo == 2:
         laser.fire_start()
@@ -281,18 +284,24 @@ def processing(screen, events):
                 new_lightring.v = 30
                 lightrings.append(new_lightring)
             elif ult == 2:
-                settings.spaceship.x += settings.dash_range * math.cos(
-                    math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y,
-                               pygame.mouse.get_pos()[0] - settings.spaceship.x))
-                settings.spaceship.y += settings.dash_range * math.sin(
-                    math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y,
-                               pygame.mouse.get_pos()[0] - settings.spaceship.x))
+                settings.spaceship.x = pygame.mouse.get_pos()[0]
+                settings.spaceship.x = pygame.mouse.get_pos()[1]
+                #settings.spaceship.x += settings.dash_range * math.cos(
+                 #   math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y,
+                  #             pygame.mouse.get_pos()[0] - settings.spaceship.x))
+                #settings.spaceship.y += settings.dash_range * math.sin(
+                 #   math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y,
+                  #             pygame.mouse.get_pos()[0] - settings.spaceship.x))
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            settings.ammo = levels.ammo_type
+            settings.seconds = 0
+        elif event.type == pygame.MOUSEBUTTONUP:
+            settings.ammo = None
 
 
-
-    if pygame.mouse.get_pressed()[0]:
-        settings.ammo = levels.ammo_type
-    else:
-        settings.ammo = 0
-        settings.seconds = 0
+   # if pygame.mouse.get_pressed()[0]:
+    #    settings.ammo = levels.ammo_type
+    #else:
+     #   settings.ammo = 0
+      #  settings.seconds = 0
     settings.seconds += 1
