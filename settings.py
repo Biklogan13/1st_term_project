@@ -16,7 +16,7 @@ bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
 # Game settings
 # FIXME split enemies and hero firerate and damage!
 seconds, bullets_firerate, plasma_balls_firerate, bullet_damage, plasma_ball_damage, laser_damage = 0, 10, 60, 20, 100, 1
-standart_enemy_bullet_damage, standart_enemy_bullet_firerate = 20, 10
+standart_enemy_bullet_damage, standart_enemy_bullet_firerate, enemy_missile_damage = 20, 10, 50
 
 # Skins
 skins = []
@@ -48,6 +48,8 @@ LIGHT_RING_SOUND_PATH = os.path.join('.', 'Sounds', 'Dio Brando - ZA WARUDO!.mp3
 MINE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'mine.png')
 KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
 ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
+HEAVY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'heavy.png')
+MISSILE_IMAGE_PATH = os.path.join('.', 'ammo_sprites', 'missile.png')
 
 # Common classes
 class Button:

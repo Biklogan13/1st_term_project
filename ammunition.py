@@ -67,6 +67,7 @@ class Bullet:
         self.angle = math.atan2(self.vy, self.vx)
         self.bullet = settings.bullet_image
         self.timer = 150
+        self.damage = settings.standart_enemy_bullet_damage
 
     def move(self):
         """Переместить пулю по прошествии единицы времени.
@@ -82,9 +83,10 @@ class Bullet:
         self.y += self.vy
 
     def draw(self):
-        self.angle = math.atan2(self.vy, self.vx)
-        self.bullet = rot_center(settings.bullet_image, self.angle * 360 / (-2 * math.pi))
-        self.screen.blit(self.bullet, (self.x - 20, self.y - 20))
+        if self.live > 0:
+            self.angle = math.atan2(self.vy, self.vx)
+            self.bullet = rot_center(settings.bullet_image, self.angle * 360 / (-2 * math.pi))
+            self.screen.blit(self.bullet, (self.x - 20, self.y - 20))
 
     def hittest(self, obj):
         """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.

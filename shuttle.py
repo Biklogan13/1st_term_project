@@ -113,7 +113,7 @@ def init():
     skin_test = ShuttleSkins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha())
     gunship = ShuttleSkins(50, 50, 100, 100, pygame.image.load('shuttle_skins/gunship.png').convert_alpha())
     settings.skins = [skin_test, gunship]
-    settings.current_skin = settings.skins[0]
+    settings.current_skin = settings.skins[1]
 
 def processing(screen):
     if settings.spaceship.hit_timer > 0:
