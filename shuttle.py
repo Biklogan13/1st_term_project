@@ -1,5 +1,6 @@
 import pygame
 
+import levels
 import settings
 import math
 
@@ -28,12 +29,16 @@ class Shuttle:
         self.r = 0
         self.hp = 2500
         self.max_hp = 2500
+        self.hit_timer = 0
 
     def draw(self, surface):
         self.surface = surface
         self.r = max(settings.current_skin.width / 2, settings.current_skin.height / 2)
         #rot_center(settings.current_skin.image, math.atan2(self.Vy, self.Vx))
-        self.surface.blit(rot_center(settings.current_skin.image, math.atan2(20 - self.Vy, self.Vx)*180/math.pi - 90), (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
+        image = settings.current_skin.image
+        if self.hit_timer > 0:
+            image = levels.red_image(image)
+        self.surface.blit(rot_center(image, math.atan2(20 - self.Vy, self.Vx)*180/math.pi - 90), (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
 
     def move(self):
         global speed_decay
@@ -111,6 +116,8 @@ def init():
     settings.current_skin = settings.skins[0]
 
 def processing(screen):
+    if settings.spaceship.hit_timer > 0:
+        settings.spaceship.hit_timer -= 1
     settings.spaceship.draw(screen)
     settings.spaceship.move()
 

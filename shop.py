@@ -34,6 +34,8 @@ left_side_path = os.path.join('.', 'interface_elements', 'left_side.png')
 left_side = pygame.image.load(left_side_path)
 right_side_path = os.path.join('.', 'interface_elements', 'right_side.png')
 right_side = pygame.image.load(right_side_path)
+price_tag_path = os.path.join('.', 'interface_elements', 'price_tag.png')
+price_tag = pygame.image.load(price_tag_path)
 
 ships_button_image_path = os.path.join('.', 'interface_elements', 'ships_button.png')
 upgrades_button_image_path = os.path.join('.', 'interface_elements', 'upgrades_button.png')
@@ -80,7 +82,8 @@ class Item:
         # Button
         self.button.draw()
         # Cost
-        screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 500, self.y + 45))
+        screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
+        screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
         # Text
         screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
         screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
@@ -132,9 +135,9 @@ class ShopButton(settings.Button):
 
 
 def init():
-    global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, buy_button_selected,\
-        buy_button_select, buy_button_select_hover, buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
-        buy_button_buy_not_enough_money, font, font_small
+    global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, price_tag,\
+        buy_button_selected,buy_button_select, buy_button_select_hover, buy_button_buy_enough_money,\
+        buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money, font, font_small
 
     settings.shop_section = 'ships'
 

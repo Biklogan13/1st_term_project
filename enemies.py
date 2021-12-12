@@ -76,6 +76,7 @@ class Enemy_standart:
     def hittest(self, obj):
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             settings.spaceship.hp -= self.damage
+            settings.spaceship.hit_timer = 10
             print('standard hit'+str(settings.spaceship.hp))
             return True
         else:
@@ -127,6 +128,7 @@ class Enemy_kamikaze:
     def hittest(self, obj):
         if (self.x - settings.spaceship.x) ** 2 + (self.y - settings.spaceship. y) ** 2 <= (self.r + settings.spaceship.r) ** 2:
             settings.spaceship.hp -= self.damage
+            settings.spaceship.hit_timer = 10
         if (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2:
             print('kamikaze hit' + str(settings.spaceship.hp))
             return True
@@ -157,6 +159,7 @@ class Mine:
     def hittest(self, obj):
         if (self.x - settings.spaceship.x) ** 2 + (self.y - settings.spaceship. y) ** 2 <= (self.r + settings.spaceship.r) ** 2:
             settings.spaceship.hp -= self.damage
+            settings.spaceship.hit_timer = 10
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             print('mine hit' + str(settings.spaceship.hp))
             return True
@@ -229,6 +232,7 @@ def processing(screen):
         b.move()
         if b.hittest(settings.spaceship):
             settings.spaceship.hp -= settings.standart_enemy_bullet_damage
+            settings.spaceship.hit_timer = 10
         if b.timer <= 0:
             settings.enemy_bullets.remove(b)
 
