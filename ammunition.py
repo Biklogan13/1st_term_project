@@ -13,7 +13,7 @@ light_ring_animation = []
 
 
 def init():
-    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image
+    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, light_ring_sound
 
     plasma_ball_1 = pygame.image.load(settings.PLASMA_1_PATH)
     plasma_ball_1.set_colorkey((255, 255, 255))
@@ -35,7 +35,8 @@ def init():
     laser_sound = pygame.mixer.Sound(settings.LASER_SOUND_PATH)
     cannons = pygame.mixer.Sound(settings.CANNONS_SOUND_PATH)
     plasma_gun_sound = pygame.mixer.Sound(settings.PLASMAGUN_SOUND_PATH)
-    pygame.mixer.Sound.set_volume(cannons, 0.1)
+    light_ring_sound = pygame.mixer.Sound(settings.LIGHT_RING_SOUND_PATH)
+    pygame.mixer.Sound.set_volume(cannons, 0.02)
     pygame.mixer.Sound.set_volume(laser_sound, 0.02)
     pygame.mixer.Sound.set_volume(plasma_gun_sound, 0.05)
     settings.RED = 0xFF0000
@@ -283,6 +284,7 @@ def processing(screen, events):
                 new_lightring = Lightring(levels.screen)
                 new_lightring.v = 30
                 lightrings.append(new_lightring)
+                light_ring_sound.play()
             elif ult == 2:
                 settings.spaceship.x = pygame.mouse.get_pos()[0]
                 settings.spaceship.x = pygame.mouse.get_pos()[1]
