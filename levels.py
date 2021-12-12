@@ -1,5 +1,6 @@
 import pygame
 import os
+import copy
 
 import enemies
 import shuttle
@@ -25,6 +26,24 @@ super_and_hp_indicator_edges_path = os.path.join('.', 'interface_elements', 'sup
 hp_bar_path = os.path.join('.', 'interface_elements', 'hp_bar.png')
 super_bar_path = os.path.join('.', 'interface_elements', 'super_bar.png')
 super_bar_ready_path = os.path.join('.', 'interface_elements', 'super_bar_ready.png')
+
+
+def red_image(image_original):
+    image = copy.copy(image_original)
+    # Making inverted mask
+    mask = pygame.mask.from_surface(image)
+    mask = mask.to_surface()
+    mask_inv = pygame.Surface(mask.get_rect().size, pygame.SRCALPHA)
+    mask_inv.fill((255, 255, 255, 255))
+    mask_inv.blit(mask, (0, 0), None, pygame.BLEND_RGB_SUB)
+    # Pouring image with red
+    red = pygame.Surface(image.get_size()).convert_alpha()
+    red.fill((255, 0, 0, 100))
+    image.blit(red, (0, 0))
+    # Deleting red edges of the picture which must be transparent
+    image.blit(mask_inv, (0, 0), None, pygame.BLEND_RGB_MAX)
+    image.set_colorkey((255, 255, 255))
+    return image
 
 
 def init():

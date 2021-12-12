@@ -1,6 +1,8 @@
 import pygame
 import os
+
 import settings
+import levels
 
 # Colors
 WHITE = (255, 255, 255)
@@ -18,6 +20,7 @@ section_indicator = 'ships'
 current_items = None
 screen = None
 font = None
+image_test = None
 
 # Images paths
 background_path = os.path.join('.', 'backgrounds', 'shop_background.jpg')
@@ -128,7 +131,10 @@ def init():
     global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, buy_button_selected,\
         buy_button_select, buy_button_select_hover, buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
         buy_button_buy_not_enough_money, font
+    global image_test
     settings.shop_section = 'ships'
+
+    image_test = levels.red_image(settings.current_skin.image)
 
     # Font
     font = pygame.font.Font(font_path, 55)
@@ -216,7 +222,8 @@ def create_screen():
 
     # Drawing left-sided menu
     screen.blit(section_indicator, (0, int(settings.HEIGHT/2 - 540)))
-    screen.blit(settings.current_skin.image, (50, int(settings.HEIGHT/2 + 225)))
+    screen.blit(levels.red_image(settings.current_skin.image), (50, int(settings.HEIGHT/2 + 225)))
+    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT/2) + 50 + 45 // 2))
 
     # Buttons in left-sided menu and blocks
     for event in events:

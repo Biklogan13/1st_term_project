@@ -47,7 +47,6 @@ MINE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'mine.png')
 KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
 ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
 
-
 # Common classes
 class Button:
     def __init__(self, x, y, width, height, action):
