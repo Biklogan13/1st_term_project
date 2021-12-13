@@ -220,16 +220,6 @@ def init():
          buy_button_buy_enough_money, buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money)]
 
 
-def rot_center(image, angle):
-    orig_rect = image.get_rect() #width=min(WIDTH, HEIGHT), height=min(WIDTH, HEIGHT))
-    rot_image = pygame.transform.rotate(image, angle)
-    rot_rect = rot_image.get_rect()
-    rot_rect.center = rot_image.get_rect().center
-    #print(orig_rect, rot_rect)
-    rot_image = rot_image.subsurface(rot_rect).copy()
-    return rot_image
-
-
 def create_screen():
     global buttons, screen, items_ships, items_upgrades, items_cosmetics, section_indicator, current_items
     screen.blit(background, (0, 0))
