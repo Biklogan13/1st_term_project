@@ -1,8 +1,8 @@
 import pygame
 import os
+import math
 
 import settings
-import levels
 
 # Colors
 WHITE = (255, 255, 255)
@@ -17,6 +17,7 @@ buy_button_selected, buy_button_select, buy_button_select_hover, \
     buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
     buy_button_buy_not_enough_money = None, None, None, None, None, None
 section_indicator = 'ships'
+magnitude = 120
 current_items = None
 screen = None
 font, font_small = None, None
@@ -65,6 +66,7 @@ class Item:
         self.height = height
         self.button = ShopButton(self.x + self.width - 500, self.y + self.height // 2, 400, 100, purchase, cost)
         self.image = image
+        self.phase = 0
         self.cost = cost
         self.name = name
         self.capture = capture
@@ -88,7 +90,14 @@ class Item:
         screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
         screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
         # Image
-        screen.blit(self.image, (self.x + 100, self.y + 50))
+        rot_image = pygame.transform.rotate(self.image,
+                                            math.atan2(60, magnitude * math.cos(self.phase)) * 180 / math.pi - 90)
+        w, h = rot_image.get_rect().size
+        screen.blit(rot_image,
+                    (self.x + 150 + magnitude + magnitude * math.sin(self.phase) - w // 2, self.y + 100 - h // 2))
+        if self.button.hover or self.button.selected:
+            self.phase += 0.02
+            self.phase = self.phase % (2 * math.pi)
 
 
 class ShopButton(settings.Button):
@@ -136,7 +145,7 @@ class ShopButton(settings.Button):
 
 def init():
     global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, price_tag,\
-        buy_button_selected,buy_button_select, buy_button_select_hover, buy_button_buy_enough_money,\
+        buy_button_selected, buy_button_select, buy_button_select_hover, buy_button_buy_enough_money,\
         buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money, font, font_small
 
     settings.shop_section = 'ships'
@@ -156,10 +165,11 @@ def init():
     # Creating Items
 
     # Ships
-    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
-                            'Zuckerberg machine', 'Super is teleportation'))
-    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1],
+    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1],
                             'Standard spaceship', 'Super is lightring'))
+    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
+                            'Zuckerberg machine', 'Super is teleportation'))
+
 
     # Upgrades
     # Cosmetics
@@ -208,6 +218,16 @@ def init():
         pygame.transform.scale(image, button_size) for image in
         (buy_button_selected, buy_button_select, buy_button_select_hover,
          buy_button_buy_enough_money, buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money)]
+
+
+def rot_center(image, angle):
+    orig_rect = image.get_rect() #width=min(WIDTH, HEIGHT), height=min(WIDTH, HEIGHT))
+    rot_image = pygame.transform.rotate(image, angle)
+    rot_rect = rot_image.get_rect()
+    rot_rect.center = rot_image.get_rect().center
+    #print(orig_rect, rot_rect)
+    rot_image = rot_image.subsurface(rot_rect).copy()
+    return rot_image
 
 
 def create_screen():
