@@ -7,6 +7,8 @@ import shuttle
 import settings
 import ammunition
 
+pygame.init()
+
 buttons = []
 screen = None
 ammo_type = 0
