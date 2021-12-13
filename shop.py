@@ -45,6 +45,13 @@ plasma_icon_50 = pygame.image.load(plasma_icon_50_path)
 laser_icon_50_path = os.path.join('.', 'interface_elements', 'laser_icon_50.png')
 laser_icon_50 = pygame.image.load(laser_icon_50_path)
 
+gun_icon_150_path = os.path.join('.', 'interface_elements', 'gun_icon_150.png')
+gun_icon_150 = pygame.image.load(gun_icon_150_path)
+plasma_icon_150_path = os.path.join('.', 'interface_elements', 'plasma_icon_150.png')
+plasma_icon_150 = pygame.image.load(plasma_icon_150_path)
+laser_icon_150_path = os.path.join('.', 'interface_elements', 'laser_icon_150.png')
+laser_icon_150 = pygame.image.load(laser_icon_150_path)
+
 ships_button_image_path = os.path.join('.', 'interface_elements', 'ships_button.png')
 upgrades_button_image_path = os.path.join('.', 'interface_elements', 'upgrades_button.png')
 cosmetics_button_image_path = os.path.join('.', 'interface_elements', 'cosmetics_button.png')
@@ -87,7 +94,7 @@ class Item:
         # Plate
         screen.blit(left_side, (self.x, self.y))
         screen.blit(shop_plate, (self.x + 50, self.y))
-        screen.blit(right_side, (self.x + settings.WIDTH - 530, self.y))
+        screen.blit(right_side, (self.x + self.width - 50, self.y))
         # Button
         self.button.draw()
         # Cost
@@ -119,6 +126,7 @@ class ShopButton(settings.Button):
         self.selected = False
         self.enough_money = False
         self.purchase = purchase
+        self.upgrade = 0
 
     def act(self, event):
         if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
@@ -128,6 +136,8 @@ class ShopButton(settings.Button):
                 self.selected = True
                 if settings.shop_section == 'ships':
                     settings.current_skin = self.purchase
+                elif settings.shop_section == 'upgrades':
+                    self.purchase += self.upgrade
             elif self.cost <= settings.money:
                 self.bought = True
                 settings.money -= self.cost
@@ -170,15 +180,23 @@ def init():
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
     # Creating Items
-
     # Ships
     items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1],
                             'Standard spaceship', 'Super is lightring'))
     items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
                             'Zuckerberg machine', 'Super is teleportation'))
-
-
     # Upgrades
+    items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, gun_icon_150, 100, settings.bullet_damage,
+                            'Upgrade gun damage', 'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
+    items_upgrades[0].upgrade = 1
+    items_upgrades.append(Item(440, 380, settings.WIDTH - 480 // 2 - 20, 300, plasma_icon_150, 100, settings.bullet_damage,
+                               'Upgrade gun damage',
+                               'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
+    items_upgrades[1].upgrade = 1
+    items_upgrades.append(Item(440, 720, settings.WIDTH - 480 // 2 - 20, 300, laser_icon_150, 100, settings.bullet_damage,
+                               'Upgrade gun damage',
+                               'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
+    items_upgrades[2].upgrade = 1
     # Cosmetics
 
     # Creating Buttons
@@ -297,7 +315,7 @@ def create_screen():
                 i.button.hover_test(event)
 
     # Drawing and moving blocks
-    if (dy > 0 and items_ships[0].y < 40) or (dy < 0 and items_ships[len(items_ships) - 1].y > settings.HEIGHT - items_ships[len(items_ships) - 1].height + 40):
+    if (dy > 0 and current_items[0].y < 40) or (dy < 0 and current_items[len(current_items) - 1].y > settings.HEIGHT - current_items[len(current_items) - 1].height + 40):
         move = True
     else:
         move = False
