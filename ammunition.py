@@ -166,9 +166,9 @@ class Plasma_ball:
     def move(self):
         """Переместить шар по прошествии 1 кадра.
 
-        Метод описывает перемещение шара за один кадр перерисовки. То есть, обновляет значения
+        Метод описывает перемещение пули за один кадр перерисовки. То есть, обновляет значения
         self.x и self.y с учетом скоростей self.vx и self.vy, силы гравитации, действующей на шар,
-        и стен по краям окна (размер окна 800х600).
+        и стен по краям окна.
         """
         self.x += self.vx
         self.y += self.vy
@@ -210,6 +210,7 @@ class Lightring:
         self.surf = light_ring_animation[self.k]
         self.timer -= 1
         self.k += 1
+
     def draw(self):
         self.screen.blit(self.surf, (self.x - self.r / 2, self.y - self.r / 2))
 
@@ -289,12 +290,12 @@ def processing(screen, events):
 
     for event in events:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            if ult == 1:
+            if settings.current_skin.super == 0:
                 new_lightring = Lightring(levels.screen)
                 new_lightring.v = 30
                 lightrings.append(new_lightring)
                 light_ring_sound.play()
-            elif ult == 2:
+            elif settings.current_skin.super == 1:
                 settings.spaceship.x = pygame.mouse.get_pos()[0]
                 settings.spaceship.x = pygame.mouse.get_pos()[1]
                 #settings.spaceship.x += settings.dash_range * math.cos(
