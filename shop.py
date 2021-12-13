@@ -160,7 +160,7 @@ class ShopButton(settings.Button):
                 if settings.shop_section == 'upgrades':
                     delegate(self.purchase, self.upgrade)
                     self.bought = False
-                    self.cost += 10
+                    self.cost = int(self.cost*1.1)
 
     def draw(self):
         if settings.shop_section == 'upgrades':
@@ -194,7 +194,10 @@ def var_text(arr, plus):
     mult = 0
     for i in range(len(arr)):
         if type(arr[i]) is int:
-            ret += str(int(delegate(arr[i], 'return')) + mult * plus)
+            if plus > 0:
+                ret += str(int(delegate(arr[i], 'return')) + mult * plus)
+            else:
+                ret += str(round((60 / (int(delegate(arr[i], 'return')) + mult * plus)), 2))
             mult = 1
         else:
             ret += arr[i]
@@ -259,15 +262,15 @@ def init():
     items_upgrades[0].button.upgrade = 1
 
     items_upgrades.append(Item(440 + (settings.WIDTH - 480) // 2 + 20, 40, (settings.WIDTH - 480) // 2 - 20, 300, None,
-                               100, 1, 'Decrease gun FR', ['from ', 1, ' to ', 1]))
+                               100, 1, 'Increase gun FR', ['from ', 1, ' to ', 1]))
     items_upgrades[1].button.upgrade = -1
 
-    items_upgrades.append(Item(440, 380, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 2, 'Increase plasmaball DMG',
+    items_upgrades.append(Item(440, 380, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 2, 'Increase plasma DMG',
                                ['from ', 2, ' to ', 2]))
     items_upgrades[2].button.upgrade = 1
 
     items_upgrades.append(Item(440 + (settings.WIDTH - 480) // 2 + 20, 380, (settings.WIDTH - 480) // 2 - 20, 300, None,
-                               100, 3, 'Decrease plasmaball FR', ['from ', 3, ' to ', 3]))
+                               100, 3, 'Increase plasma FR', ['from ', 3, ' to ', 3]))
     items_upgrades[3].button.upgrade = -1
 
     items_upgrades.append(Item(440, 720, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 4, 'Increase laser DMG',
@@ -359,11 +362,13 @@ def create_screen():
     screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT / 2) + 50 + 45 // 2))
     # Gun stats
     screen.blit(gun_icon_50, (50, int(settings.HEIGHT / 2 + 175)))
-    screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' + str(settings.bullets_firerate),
+    screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' +
+                                  str(round(settings.bullets_firerate, 1)),
                                   True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 185))
     # Plasma stats
     screen.blit(plasma_icon_50, (50, int(settings.HEIGHT / 2 + 245)))
-    screen.blit(font_small.render('DMG: ' + str(settings.plasma_ball_damage) + ' FR: ' + str(settings.plasma_balls_firerate),
+    screen.blit(font_small.render('DMG: ' + str(settings.plasma_ball_damage) + ' FR: ' +
+                                  str(round(60 / settings.plasma_balls_firerate, 2)),
                                   True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 255))
     # Laser stats
     screen.blit(laser_icon_50, (50, int(settings.HEIGHT / 2 + 315)))
