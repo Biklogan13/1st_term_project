@@ -4,6 +4,7 @@ import pygame
 import levels
 import settings
 import random
+import os
 
 laser = None
 cannons = None
@@ -13,7 +14,13 @@ light_ring_animation = []
 
 
 def init():
-    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, light_ring_sound
+    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, light_ring_sound, blow, death, explosion_sound
+
+    death = []
+    blow = []
+    for i in range(1, 7):
+        blow.append(pygame.image.load(os.path.join('.', 'blow', 'blow' + str(i) + '.png')))
+    print(len(blow))
 
     plasma_ball_1 = pygame.image.load(settings.PLASMA_1_PATH)
     plasma_ball_1.set_colorkey((255, 255, 255))
@@ -32,6 +39,7 @@ def init():
     settings.plasma_ball_sprites = plasma_ball_sprites
 
     pygame.mixer.init()
+    explosion_sound = pygame.mixer.Sound(settings.EXPLOSION_SOUND)
     laser_sound = pygame.mixer.Sound(settings.LASER_SOUND_PATH)
     cannons = pygame.mixer.Sound(settings.CANNONS_SOUND_PATH)
     plasma_gun_sound = pygame.mixer.Sound(settings.PLASMAGUN_SOUND_PATH)
@@ -67,7 +75,7 @@ class Bullet:
         self.angle = math.atan2(self.vy, self.vx)
         self.bullet = settings.bullet_image
         self.timer = 150
-        self.damage = settings.standart_enemy_bullet_damage
+        self.damage = settings.bullet_damage
 
     def move(self):
         """Переместить пулю по прошествии единицы времени.
@@ -127,6 +135,7 @@ class Laser:
                                                         settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                             settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
                                             settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=2)
+
 
     def targetting(self):
         self.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y),
@@ -217,6 +226,19 @@ class Lightring:
     def hittest(self, obj):
         return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r - 500 + obj.r) ** 2
 
+class death_animation:
+    def __init__(self, x, y):
+        self.x = x - 150
+        self.y = y - 150
+        self.frame = 0
+        explosion_sound.play()
+
+    def play(self):
+        levels.screen.blit(blow[self.frame], (self.x, self.y))
+        if settings.tick_counter % 2 == 0:
+            self.frame += 1
+
+
 
 
 def rot_center(image, angle):
@@ -277,9 +299,7 @@ def processing(screen, events):
         laser.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y),
                                  (pygame.mouse.get_pos()[0] - settings.spaceship.x))
         laser.draw()
-        laser_sound.play()
     else:
-        laser_sound.stop()
         laser.fire_end()
 
     for b in lightrings:
@@ -307,13 +327,10 @@ def processing(screen, events):
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             settings.ammo = levels.ammo_type
             settings.seconds = 0
+            if  levels.ammo_type == 2:
+                laser_sound.play()
         elif event.type == pygame.MOUSEBUTTONUP:
             settings.ammo = None
+            laser_sound.stop()
 
-
-   # if pygame.mouse.get_pressed()[0]:
-    #    settings.ammo = levels.ammo_type
-    #else:
-     #   settings.ammo = 0
-      #  settings.seconds = 0
     settings.seconds += 1

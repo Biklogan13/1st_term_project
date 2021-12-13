@@ -61,8 +61,9 @@ class Enemy_standart:
                 self.x += self.Vx
                 self.y += self.Vy
 
-            if self.y >= settings.HEIGHT:
-                self.live = 0
+            #if self.y >= settings.HEIGHT:
+               # self.live = 0
+             #  settings.enemies.remove()
 
     def shoot(self):
         if self.phase == 2:
@@ -70,6 +71,7 @@ class Enemy_standart:
             if self.ticks % settings.standart_enemy_bullet_firerate == 0:
                 ammunition.cannons.play()
                 new_bullet = ammunition.Bullet(levels.screen)
+                new_bullet.damage = settings.standart_enemy_bullet_damage
                 new_bullet.angle = self.targetting + random.randint(-10, 10) * 0.008
                 new_bullet.x = self.x
                 new_bullet.y = self.y
@@ -85,6 +87,11 @@ class Enemy_standart:
             return True
         else:
             return False
+
+
+def death(self):
+     for i in range(0, 5):
+         levels.screen.blit(ammunition.blow[i], (self.x, self.y))
 
 
 class Enemy_heavy:
@@ -294,7 +301,7 @@ class Enemy_missile():
 
 
 def init():
-    global mine_image, kamikaze_image, enemy_image, heavy_image, missile_image, carrier_image
+    global mine_image, kamikaze_image, enemy_image, heavy_image, missile_image
     mine_image = pygame.image.load(settings.MINE_IMAGE_PATH).convert_alpha()
     mine_image = pygame.transform.scale(mine_image, (50, 50))
     kamikaze_image = pygame.image.load(settings.KAMIKADZE_IMAGE_PATH).convert_alpha()
@@ -311,6 +318,7 @@ def init():
 
 def processing(screen):
     global enemy_counter
+
     if settings.tick_counter % 60 == 0:
         new_mine = Mine()
         #nemy_counter += 1
@@ -321,6 +329,8 @@ def processing(screen):
 
     if settings.tick_counter % 120 == 0:
         new_kamikaze = Enemy_kamikaze()
+        #enemy_counter += 1
+        #if len(settings.enemies) < 100:
         settings.enemies.append(new_kamikaze)
         #else:
         #settings.enemies[enemy_counter % 99] = new_kamikaze
@@ -339,9 +349,16 @@ def processing(screen):
         new_carrier = Enemy_carrier()
         settings.enemies.append(new_carrier)
 
+    for d in ammunition.death:
+        if d.frame == 5:
+            ammunition.death.remove(d)
+        d.play()
+
 
     for k in settings.enemies:
         if k.live <= 0:
+            new_death = ammunition.death_animation(k.x, k.y)
+            ammunition.death.append(new_death)
             settings.enemies.remove(k)
         if k.hittest(settings.spaceship):
             k.live -= 50
@@ -361,8 +378,10 @@ def processing(screen):
     for k in settings.enemies:
         if k.live >= 1:
             k.move()
-            k.shoot()
             k.draw(screen)
+            k.shoot()
+            if k.y >= settings.HEIGHT:
+              settings.enemies.remove(k)
 
     for b in settings.enemy_bullets:
         b.draw()
