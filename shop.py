@@ -116,7 +116,11 @@ class Item:
         elif settings.shop_section == 'upgrades':
             # Cost
             screen.blit(price_tag, (self.x + 100, self.y + 45))
-            screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
+            screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + 170, self.y + 45))
+            # Text
+            screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
+            screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
+
 
 class ShopButton(settings.Button):
     def __init__(self, x, y, width, height, purchase, cost):
@@ -140,28 +144,33 @@ class ShopButton(settings.Button):
                 self.selected = True
                 if settings.shop_section == 'ships':
                     settings.current_skin = self.purchase
-                elif settings.shop_section == 'upgrades':
-                    self.purchase += self.upgrade
             elif self.cost <= settings.money:
                 self.bought = True
                 settings.money -= self.cost
+                if settings.shop_section == 'upgrades':
+                    self.purchase += self.upgrade
+                    self.bought = False
+                    self.cost += 10
 
     def draw(self):
-        if self.selected:
-            screen.blit(buy_button_selected, (self.x, self.y))
-        elif self.bought:
-            if self.hover:
-                screen.blit(buy_button_select_hover, (self.x, self.y))
-            else:
-                screen.blit(buy_button_select, (self.x, self.y))
+        if settings.shop_section == 'upgrades':
+            pass
         else:
-            if self.enough_money:
+            if self.selected:
+                screen.blit(buy_button_selected, (self.x, self.y))
+            elif self.bought:
                 if self.hover:
-                    screen.blit(buy_button_buy_enough_money_hover, (self.x, self.y))
+                    screen.blit(buy_button_select_hover, (self.x, self.y))
                 else:
-                    screen.blit(buy_button_buy_enough_money, (self.x, self.y))
+                    screen.blit(buy_button_select, (self.x, self.y))
             else:
-                screen.blit(buy_button_buy_not_enough_money, (self.x, self.y))
+                if self.enough_money:
+                    if self.hover:
+                        screen.blit(buy_button_buy_enough_money_hover, (self.x, self.y))
+                    else:
+                        screen.blit(buy_button_buy_enough_money, (self.x, self.y))
+                else:
+                    screen.blit(buy_button_buy_not_enough_money, (self.x, self.y))
 
 
 def init():
@@ -186,18 +195,21 @@ def init():
     # Ships
     items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1],
                             'Standard spaceship', 'Super is lightring'))
+
     items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
                             'Zuckerberg machine', 'Super is teleportation'))
     # Upgrades
     items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, gun_icon_150, 100, settings.bullet_damage,
-                            'Upgrade gun damage', 'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
+                            'Upgrade gun DMG', 'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
     items_upgrades[0].upgrade = 1
+
     items_upgrades.append(Item(440, 380, (settings.WIDTH - 480 // 2) - 20, 300, plasma_icon_150, 100, settings.bullet_damage,
-                               'Upgrade gun damage',
+                               'Upgrade gun DMG',
                                'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
     items_upgrades[1].upgrade = 1
+
     items_upgrades.append(Item(440, 720, (settings.WIDTH - 480 // 2) - 20, 300, laser_icon_150, 100, settings.bullet_damage,
-                               'Upgrade gun damage',
+                               'Upgrade gun DMG',
                                'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
     items_upgrades[2].upgrade = 1
     # Cosmetics
