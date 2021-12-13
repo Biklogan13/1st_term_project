@@ -301,7 +301,7 @@ class Enemy_missile():
 
 
 def init():
-    global mine_image, kamikaze_image, enemy_image, heavy_image, missile_image
+    global mine_image, kamikaze_image, enemy_image, heavy_image, missile_image, carrier_image
     mine_image = pygame.image.load(settings.MINE_IMAGE_PATH).convert_alpha()
     mine_image = pygame.transform.scale(mine_image, (50, 50))
     kamikaze_image = pygame.image.load(settings.KAMIKADZE_IMAGE_PATH).convert_alpha()
