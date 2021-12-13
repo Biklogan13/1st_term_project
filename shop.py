@@ -255,10 +255,10 @@ def init():
 
     # Creating Items
     # Ships
-    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1],
+    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[1].image, 2000, settings.skins[1],
                             'Standard spaceship', 'Super is lightring'))
 
-    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
+    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[0].image, 2000, settings.skins[0],
                             'Zuckerberg machine', 'Super is teleportation'))
     # Upgrades
     items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 0, 'Increase gun DMG',
@@ -266,10 +266,10 @@ def init():
     items_upgrades[0].button.upgrade = 1
 
     items_upgrades.append(Item(440 + (settings.WIDTH - 480) // 2 + 20, 40, (settings.WIDTH - 480) // 2 - 20, 300, None,
-                               100, 1, 'Increase gun FR', ['from ', 1, ' to ', 1]))
+                               1000, 1, 'Increase gun FR', ['from ', 1, ' to ', 1]))
     items_upgrades[1].button.upgrade = -1
 
-    items_upgrades.append(Item(440, 380, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 2, 'Increase plasma DMG',
+    items_upgrades.append(Item(440, 380, (settings.WIDTH - 480) // 2 - 20, 300, None, 20, 2, 'Increase plasma DMG',
                                ['from ', 2, ' to ', 2]))
     items_upgrades[2].button.upgrade = 1
 
@@ -277,7 +277,7 @@ def init():
                                100, 3, 'Increase plasma FR', ['from ', 3, ' to ', 3]))
     items_upgrades[3].button.upgrade = -1
 
-    items_upgrades.append(Item(440, 720, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 4, 'Increase laser DMG',
+    items_upgrades.append(Item(440, 720, (settings.WIDTH - 480) // 2 - 20, 300, None, 1000, 4, 'Increase laser DMG',
                                ['from ', 4, ' to ', 4]))
     items_upgrades[4].button.upgrade = 1
 
