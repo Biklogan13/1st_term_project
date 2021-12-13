@@ -39,7 +39,7 @@ class Shuttle:
         image = settings.current_skin.image
         if self.hit_timer > 0:
             image = levels.red_image(image)
-        self.surface.blit(rot_center(image, math.atan2(20 - self.Vy, self.Vx)*180/math.pi - 90), (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
+        self.surface.blit(rot_center_square(image, math.atan2(20 - self.Vy, self.Vx)*180/math.pi - 90), (self.x - settings.current_skin.x, self.y - settings.current_skin.y))
 
     def move(self):
         global speed_decay
@@ -112,7 +112,7 @@ def init():
     global screen
     settings.spaceship = Shuttle(screen)
     gunship = ShuttleSkins(50, 50, 100, 100, pygame.image.load('shuttle_skins/gunship.png').convert_alpha(), 0)
-    teleporter = ShuttleSkins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha(), 1)
+    teleporter = ShuttleSkins(55, 31, 100, 100, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha(), 1)
     settings.skins = [teleporter, gunship]
     settings.current_skin = settings.skins[1]
 
@@ -128,6 +128,17 @@ def rot_center(image, angle):
     orig_rect = image.get_rect() #width=min(WIDTH, HEIGHT), height=min(WIDTH, HEIGHT))
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = rot_image.get_rect()
+    rot_rect.center = rot_image.get_rect().center
+    #print(orig_rect, rot_rect)
+    rot_image = rot_image.subsurface(rot_rect).copy()
+    return rot_image
+
+def rot_center_square(image, angle):
+    WIDTH = image.get_width()
+    HEIGHT = image.get_height()
+    orig_rect = image.get_rect() #width=min(WIDTH, HEIGHT), height=min(WIDTH, HEIGHT))
+    rot_image = pygame.transform.rotate(image, angle)
+    rot_rect = orig_rect.copy()
     rot_rect.center = rot_image.get_rect().center
     #print(orig_rect, rot_rect)
     rot_image = rot_image.subsurface(rot_rect).copy()
