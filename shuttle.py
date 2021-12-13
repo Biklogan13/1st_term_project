@@ -9,12 +9,13 @@ speed_decay = 0
 
 
 class ShuttleSkins:
-    def __init__(self, x, y, width, height, image):
+    def __init__(self, x, y, width, height, image, super):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.image = pygame.transform.scale(image, (width, height))
+        self.super = super
 
 
 class Shuttle:
@@ -110,9 +111,9 @@ class Shuttle:
 def init():
     global screen
     settings.spaceship = Shuttle(screen)
-    skin_test = ShuttleSkins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha())
-    gunship = ShuttleSkins(50, 50, 100, 100, pygame.image.load('shuttle_skins/gunship.png').convert_alpha())
-    settings.skins = [skin_test, gunship]
+    gunship = ShuttleSkins(50, 50, 100, 100, pygame.image.load('shuttle_skins/gunship.png').convert_alpha(), 0)
+    teleporter = ShuttleSkins(55, 31, 109, 62, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha(), 1)
+    settings.skins = [teleporter, gunship]
     settings.current_skin = settings.skins[1]
 
 def processing(screen):
