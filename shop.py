@@ -6,7 +6,7 @@ import settings
 
 # Colors
 WHITE = (255, 255, 255)
-DARK_GREEN = (9, 44, 50)
+DARK_GREEN = (1, 31, 38)
 
 # Fonts
 font_path = os.path.join('.', 'interface_elements', 'Montserrat-Bold.ttf')
@@ -37,6 +37,13 @@ right_side_path = os.path.join('.', 'interface_elements', 'right_side.png')
 right_side = pygame.image.load(right_side_path)
 price_tag_path = os.path.join('.', 'interface_elements', 'price_tag.png')
 price_tag = pygame.image.load(price_tag_path)
+
+gun_icon_50_path = os.path.join('.', 'interface_elements', 'gun_icon_50.png')
+gun_icon_50 = pygame.image.load(gun_icon_50_path)
+plasma_icon_50_path = os.path.join('.', 'interface_elements', 'plasma_icon_50.png')
+plasma_icon_50 = pygame.image.load(plasma_icon_50_path)
+laser_icon_50_path = os.path.join('.', 'interface_elements', 'laser_icon_50.png')
+laser_icon_50 = pygame.image.load(laser_icon_50_path)
 
 ships_button_image_path = os.path.join('.', 'interface_elements', 'ships_button.png')
 upgrades_button_image_path = os.path.join('.', 'interface_elements', 'upgrades_button.png')
@@ -245,8 +252,19 @@ def create_screen():
 
     # Drawing left-sided menu
     screen.blit(section_indicator, (0, int(settings.HEIGHT/2 - 540)))
-    screen.blit(settings.current_skin.image, (50, int(settings.HEIGHT/2 + 225)))
-    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT/2) + 50 + 45 // 2))
+    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT / 2) + 50 + 45 // 2))
+    # Gun stats
+    screen.blit(gun_icon_50, (50, int(settings.HEIGHT / 2 + 175)))
+    screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' + str(settings.bullets_firerate),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 185))
+    # Plasma stats
+    screen.blit(plasma_icon_50, (50, int(settings.HEIGHT / 2 + 245)))
+    screen.blit(font_small.render('DMG: ' + str(settings.plasma_ball_damage) + ' FR: ' + str(settings.plasma_balls_firerate),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 255))
+    # Laser stats
+    screen.blit(laser_icon_50, (50, int(settings.HEIGHT / 2 + 315)))
+    screen.blit(font_small.render('TIC DMG: ' + str(settings.laser_damage),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 325))
 
     # Buttons in left-sided menu and blocks
     for event in events:
