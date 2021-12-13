@@ -136,6 +136,7 @@ class Laser:
                                             settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
                                             settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=2)
 
+
     def targetting(self):
         self.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y),
                                 (pygame.mouse.get_pos()[0] - settings.spaceship.x))
