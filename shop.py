@@ -124,12 +124,15 @@ class Item:
                 self.phase += 0.02
                 self.phase = self.phase % (2 * math.pi)
         elif settings.shop_section == 'upgrades':
-            # Cost
-            screen.blit(price_tag, (self.x + 250, self.y + 45))
-            screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + 320, self.y + 45))
-            # Text
-            screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
-            screen.blit(font_small.render(var_text(self.capture, self.button.upgrade), True, DARK_GREEN), (self.x + 100, self.y + 220))
+            if not self.button.bought:
+                # Cost
+                screen.blit(price_tag, (self.x + 250, self.y + 45))
+                screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + 320, self.y + 45))
+                # Text
+                screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
+                screen.blit(font_small.render(var_text(self.capture, self.button.upgrade), True, DARK_GREEN), (self.x + 100, self.y + 220))
+            else:
+                screen.blit(font.render('MAXED OUT', True, DARK_GREEN), (self.x + 100, self.y + 180))
 
 
 class ShopButton(settings.Button):
@@ -148,22 +151,23 @@ class ShopButton(settings.Button):
 
     def act(self, event):
         if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
-            if self.bought:
+            if self.bought and settings.shop_section != 'upgrades':
                 for i in current_items:
                     i.button.selected = False
                 self.selected = True
                 if settings.shop_section == 'ships':
                     settings.current_skin = self.purchase
-            elif self.cost <= settings.money:
+            elif self.cost <= settings.money and not self.bought:
                 self.bought = True
                 settings.money -= self.cost
                 if settings.shop_section == 'upgrades':
                     delegate(self.purchase, self.upgrade)
-                    self.bought = False
+                    if int(delegate(self.purchase, 'return')) > 1:
+                        self.bought = False
                     self.cost = int(self.cost*1.1)
 
     def draw(self):
-        if settings.shop_section == 'upgrades':
+        if settings.shop_section == 'upgrades' and not self.bought:
             if self.enough_money:
                 if self.hover:
                     screen.blit(upgrade_button_hover, (self.x, self.y))
@@ -171,7 +175,7 @@ class ShopButton(settings.Button):
                     screen.blit(upgrade_button_enough_money, (self.x, self.y))
             else:
                 screen.blit(upgrade_button_not_enough_money, (self.x, self.y))
-        else:
+        elif settings.shop_section != 'upgrades':
             if self.selected:
                 screen.blit(buy_button_selected, (self.x, self.y))
             elif self.bought:
@@ -363,7 +367,7 @@ def create_screen():
     # Gun stats
     screen.blit(gun_icon_50, (50, int(settings.HEIGHT / 2 + 175)))
     screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' +
-                                  str(round(settings.bullets_firerate, 1)),
+                                  str(round(60 / settings.bullets_firerate, 2)),
                                   True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 185))
     # Plasma stats
     screen.blit(plasma_icon_50, (50, int(settings.HEIGHT / 2 + 245)))
