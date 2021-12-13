@@ -69,6 +69,7 @@ class Enemy_standart:
             if self.ticks % settings.standart_enemy_bullet_firerate == 0:
                 ammunition.cannons.play()
                 new_bullet = ammunition.Bullet(levels.screen)
+                new_bullet.damage = settings.standart_enemy_bullet_damage
                 new_bullet.angle = self.targetting + random.randint(-10, 10) * 0.008
                 new_bullet.x = self.x
                 new_bullet.y = self.y
@@ -84,6 +85,11 @@ class Enemy_standart:
             return True
         else:
             return False
+
+
+def death(self):
+     for i in range(0, 5):
+         levels.screen.blit(ammunition.blow[i], (self.x, self.y))
 
 
 class Enemy_heavy:
@@ -257,6 +263,7 @@ def init():
 
 def processing(screen):
     global enemy_counter
+
     if settings.tick_counter % 60 == 0:
         new_mine = Mine()
         #nemy_counter += 1
@@ -279,13 +286,21 @@ def processing(screen):
             new_enemy = Enemy_standart(heading)
             settings.enemies.append(new_enemy)
 
+
     if settings.tick_counter % 600 == 0:
         new_heavy = Enemy_heavy()
         settings.enemies.append(new_heavy)
 
+    for d in ammunition.death:
+        if d.frame == 5:
+            ammunition.death.remove(d)
+        d.play()
+
 
     for k in settings.enemies:
         if k.live <= 0:
+            new_death = ammunition.death_animation(k.x, k.y)
+            ammunition.death.append(new_death)
             settings.enemies.remove(k)
         if k.hittest(settings.spaceship):
             k.live -= 50
