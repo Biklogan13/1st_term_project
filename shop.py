@@ -1,12 +1,12 @@
 import pygame
 import os
+import math
 
 import settings
-import levels
 
 # Colors
 WHITE = (255, 255, 255)
-DARK_GREEN = (9, 44, 50)
+DARK_GREEN = (1, 31, 38)
 
 # Fonts
 font_path = os.path.join('.', 'interface_elements', 'Montserrat-Bold.ttf')
@@ -17,6 +17,7 @@ buy_button_selected, buy_button_select, buy_button_select_hover, \
     buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
     buy_button_buy_not_enough_money = None, None, None, None, None, None
 section_indicator = 'ships'
+magnitude = 120
 current_items = None
 screen = None
 font, font_small = None, None
@@ -36,6 +37,20 @@ right_side_path = os.path.join('.', 'interface_elements', 'right_side.png')
 right_side = pygame.image.load(right_side_path)
 price_tag_path = os.path.join('.', 'interface_elements', 'price_tag.png')
 price_tag = pygame.image.load(price_tag_path)
+
+gun_icon_50_path = os.path.join('.', 'interface_elements', 'gun_icon_50.png')
+gun_icon_50 = pygame.image.load(gun_icon_50_path)
+plasma_icon_50_path = os.path.join('.', 'interface_elements', 'plasma_icon_50.png')
+plasma_icon_50 = pygame.image.load(plasma_icon_50_path)
+laser_icon_50_path = os.path.join('.', 'interface_elements', 'laser_icon_50.png')
+laser_icon_50 = pygame.image.load(laser_icon_50_path)
+
+gun_icon_150_path = os.path.join('.', 'interface_elements', 'gun_icon_150.png')
+gun_icon_150 = pygame.image.load(gun_icon_150_path)
+plasma_icon_150_path = os.path.join('.', 'interface_elements', 'plasma_icon_150.png')
+plasma_icon_150 = pygame.image.load(plasma_icon_150_path)
+laser_icon_150_path = os.path.join('.', 'interface_elements', 'laser_icon_150.png')
+laser_icon_150 = pygame.image.load(laser_icon_150_path)
 
 ships_button_image_path = os.path.join('.', 'interface_elements', 'ships_button.png')
 upgrades_button_image_path = os.path.join('.', 'interface_elements', 'upgrades_button.png')
@@ -65,6 +80,7 @@ class Item:
         self.height = height
         self.button = ShopButton(self.x + self.width - 500, self.y + self.height // 2, 400, 100, purchase, cost)
         self.image = image
+        self.phase = 0
         self.cost = cost
         self.name = name
         self.capture = capture
@@ -78,7 +94,7 @@ class Item:
         # Plate
         screen.blit(left_side, (self.x, self.y))
         screen.blit(shop_plate, (self.x + 50, self.y))
-        screen.blit(right_side, (self.x + settings.WIDTH - 530, self.y))
+        screen.blit(right_side, (self.x + self.width - 50, self.y))
         # Button
         self.button.draw()
         # Cost
@@ -88,7 +104,14 @@ class Item:
         screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
         screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
         # Image
-        screen.blit(self.image, (self.x + 100, self.y + 50))
+        rot_image = pygame.transform.rotate(self.image,
+                                            math.atan2(60, magnitude * math.cos(self.phase)) * 180 / math.pi - 90)
+        w, h = rot_image.get_rect().size
+        screen.blit(rot_image,
+                    (self.x + 150 + magnitude + magnitude * math.sin(self.phase) - w // 2, self.y + 100 - h // 2))
+        if self.button.hover or self.button.selected:
+            self.phase += 0.02
+            self.phase = self.phase % (2 * math.pi)
 
 
 class ShopButton(settings.Button):
@@ -103,6 +126,7 @@ class ShopButton(settings.Button):
         self.selected = False
         self.enough_money = False
         self.purchase = purchase
+        self.upgrade = 0
 
     def act(self, event):
         if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
@@ -112,6 +136,8 @@ class ShopButton(settings.Button):
                 self.selected = True
                 if settings.shop_section == 'ships':
                     settings.current_skin = self.purchase
+                elif settings.shop_section == 'upgrades':
+                    self.purchase += self.upgrade
             elif self.cost <= settings.money:
                 self.bought = True
                 settings.money -= self.cost
@@ -136,7 +162,7 @@ class ShopButton(settings.Button):
 
 def init():
     global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, price_tag,\
-        buy_button_selected,buy_button_select, buy_button_select_hover, buy_button_buy_enough_money,\
+        buy_button_selected, buy_button_select, buy_button_select_hover, buy_button_buy_enough_money,\
         buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money, font, font_small
 
     settings.shop_section = 'ships'
@@ -154,14 +180,23 @@ def init():
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
     # Creating Items
-
     # Ships
-    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
-                            'Zuckerberg machine', 'Super is teleportation'))
-    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1],
+    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[1].image, 100, settings.skins[1],
                             'Standard spaceship', 'Super is lightring'))
-
+    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
+                            'Zuckerberg machine', 'Super is teleportation'))
     # Upgrades
+    items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, gun_icon_150, 100, settings.bullet_damage,
+                            'Upgrade gun damage', 'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
+    items_upgrades[0].upgrade = 1
+    items_upgrades.append(Item(440, 380, settings.WIDTH - 480 // 2 - 20, 300, plasma_icon_150, 100, settings.bullet_damage,
+                               'Upgrade gun damage',
+                               'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
+    items_upgrades[1].upgrade = 1
+    items_upgrades.append(Item(440, 720, settings.WIDTH - 480 // 2 - 20, 300, laser_icon_150, 100, settings.bullet_damage,
+                               'Upgrade gun damage',
+                               'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
+    items_upgrades[2].upgrade = 1
     # Cosmetics
 
     # Creating Buttons
@@ -235,8 +270,19 @@ def create_screen():
 
     # Drawing left-sided menu
     screen.blit(section_indicator, (0, int(settings.HEIGHT/2 - 540)))
-    screen.blit(settings.current_skin.image, (50, int(settings.HEIGHT/2 + 225)))
-    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT/2) + 50 + 45 // 2))
+    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT / 2) + 50 + 45 // 2))
+    # Gun stats
+    screen.blit(gun_icon_50, (50, int(settings.HEIGHT / 2 + 175)))
+    screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' + str(settings.bullets_firerate),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 185))
+    # Plasma stats
+    screen.blit(plasma_icon_50, (50, int(settings.HEIGHT / 2 + 245)))
+    screen.blit(font_small.render('DMG: ' + str(settings.plasma_ball_damage) + ' FR: ' + str(settings.plasma_balls_firerate),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 255))
+    # Laser stats
+    screen.blit(laser_icon_50, (50, int(settings.HEIGHT / 2 + 315)))
+    screen.blit(font_small.render('TIC DMG: ' + str(settings.laser_damage),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 325))
 
     # Buttons in left-sided menu and blocks
     for event in events:
@@ -269,7 +315,7 @@ def create_screen():
                 i.button.hover_test(event)
 
     # Drawing and moving blocks
-    if (dy > 0 and items_ships[0].y < 40) or (dy < 0 and items_ships[len(items_ships) - 1].y > settings.HEIGHT - items_ships[len(items_ships) - 1].height + 40):
+    if (dy > 0 and current_items[0].y < 40) or (dy < 0 and current_items[len(current_items) - 1].y > settings.HEIGHT - current_items[len(current_items) - 1].height + 40):
         move = True
     else:
         move = False

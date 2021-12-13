@@ -228,7 +228,7 @@ class Enemy_missile():
         self.Vy = 15*math.cos(self.angle)
         self.live = 1
         self.timer = 150
-        self.damage = 50
+        self.damage = settings.enemy_missile_damage
 
     def move(self):
         self.angle += (math.atan2(settings.spaceship.x - self.x, settings.spaceship.y - self.y) - self.angle) / 20
