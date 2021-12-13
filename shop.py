@@ -85,10 +85,12 @@ class Item:
         self.y = y
         self.width = width
         self.height = height
-        self.button = ShopButton(self.x + self.width - 500, self.y + self.height // 2, 400, 100, purchase, cost)
+        if width == settings.WIDTH - 480:
+            self.button = ShopButton(self.x + self.width - 500, self.y + self.height // 2, 400, 100, purchase, cost)
+        else:
+            self.button = ShopButton(self.x + 100, self.y + 50, 100, 100, purchase, cost)
         self.image = image
         self.phase = 0
-        self.cost = cost
         self.name = name
         self.capture = capture
 
@@ -104,10 +106,11 @@ class Item:
         screen.blit(right_side, (self.x + self.width - 50, self.y))
         # Button
         self.button.draw()
+        # Content
         if settings.shop_section == 'ships':
             # Cost
             screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
-            screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
+            screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
             # Text
             screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
             screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
@@ -122,11 +125,11 @@ class Item:
                 self.phase = self.phase % (2 * math.pi)
         elif settings.shop_section == 'upgrades':
             # Cost
-            screen.blit(price_tag, (self.x + 100, self.y + 45))
-            screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + 170, self.y + 45))
+            screen.blit(price_tag, (self.x + 250, self.y + 45))
+            screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + 320, self.y + 45))
             # Text
             screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
-            screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
+            screen.blit(font_small.render(var_text(self.capture, self.button.upgrade), True, DARK_GREEN), (self.x + 100, self.y + 220))
 
 
 class ShopButton(settings.Button):
@@ -155,13 +158,19 @@ class ShopButton(settings.Button):
                 self.bought = True
                 settings.money -= self.cost
                 if settings.shop_section == 'upgrades':
-                    self.purchase += self.upgrade
+                    delegate(self.purchase, self.upgrade)
                     self.bought = False
                     self.cost += 10
 
     def draw(self):
         if settings.shop_section == 'upgrades':
-            pass
+            if self.enough_money:
+                if self.hover:
+                    screen.blit(upgrade_button_hover, (self.x, self.y))
+                else:
+                    screen.blit(upgrade_button_enough_money, (self.x, self.y))
+            else:
+                screen.blit(upgrade_button_not_enough_money, (self.x, self.y))
         else:
             if self.selected:
                 screen.blit(buy_button_selected, (self.x, self.y))
@@ -178,6 +187,45 @@ class ShopButton(settings.Button):
                         screen.blit(buy_button_buy_enough_money, (self.x, self.y))
                 else:
                     screen.blit(buy_button_buy_not_enough_money, (self.x, self.y))
+
+
+def var_text(arr, plus):
+    ret = ''
+    mult = 0
+    for i in range(len(arr)):
+        if type(arr[i]) is int:
+            ret += str(int(delegate(arr[i], 'return')) + mult * plus)
+            mult = 1
+        else:
+            ret += arr[i]
+    return ret
+
+
+def delegate(marker, value):
+    if value == 'return':
+        if marker == 0:
+            return str(settings.bullet_damage)
+        elif marker == 1:
+            return str(settings.bullets_firerate)
+        elif marker == 2:
+            return str(settings.plasma_ball_damage)
+        elif marker == 3:
+            return str(settings.plasma_balls_firerate)
+        elif marker == 4:
+            return str(settings.laser_damage)
+        else:
+            print('ERROR, invalid marker')
+    else:
+        if marker == 0:
+            settings.bullet_damage += value
+        elif marker == 1:
+            settings.bullets_firerate += value
+        elif marker == 2:
+            settings.plasma_ball_damage += value
+        elif marker == 3:
+            settings.plasma_balls_firerate += value
+        elif marker == 4:
+            settings.laser_damage += value
 
 
 def init():
@@ -206,19 +254,26 @@ def init():
     items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[0].image, 100, settings.skins[0],
                             'Zuckerberg machine', 'Super is teleportation'))
     # Upgrades
-    items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, gun_icon_150, 100, settings.bullet_damage,
-                            'Increase gun DMG', 'from ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
-    items_upgrades[0].upgrade = 1
+    items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 0, 'Increase gun DMG',
+                               ['from ', 0, ' to ', 0]))
+    items_upgrades[0].button.upgrade = 1
 
-    items_upgrades.append(Item(440, 380, (settings.WIDTH - 480 // 2) - 20, 300, plasma_icon_150, 100, settings.bullet_damage,
-                               'Upgrade gun DMG',
-                               'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
-    items_upgrades[1].upgrade = 1
+    items_upgrades.append(Item(440 + (settings.WIDTH - 480) // 2 + 20, 40, (settings.WIDTH - 480) // 2 - 20, 300, None,
+                               100, 1, 'Decrease gun FR', ['from ', 1, ' to ', 1]))
+    items_upgrades[1].button.upgrade = -1
 
-    items_upgrades.append(Item(440, 720, (settings.WIDTH - 480 // 2) - 20, 300, laser_icon_150, 100, settings.bullet_damage,
-                               'Upgrade gun DMG',
-                               'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
-    items_upgrades[2].upgrade = 1
+    items_upgrades.append(Item(440, 380, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 2, 'Increase plasmaball DMG',
+                               ['from ', 2, ' to ', 2]))
+    items_upgrades[2].button.upgrade = 1
+
+    items_upgrades.append(Item(440 + (settings.WIDTH - 480) // 2 + 20, 380, (settings.WIDTH - 480) // 2 - 20, 300, None,
+                               100, 3, 'Decrease plasmaball FR', ['from ', 3, ' to ', 3]))
+    items_upgrades[3].button.upgrade = -1
+
+    items_upgrades.append(Item(440, 720, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 4, 'Increase laser DMG',
+                               ['from ', 4, ' to ', 4]))
+    items_upgrades[4].button.upgrade = 1
+
     # Cosmetics
 
     # Creating Buttons
@@ -271,6 +326,19 @@ def create_screen():
     global buttons, screen, items_ships, items_upgrades, items_cosmetics, section_indicator, current_items
     screen.blit(background, (0, 0))
 
+    # Events
+    dy = 0
+    events = pygame.event.get()
+
+    # Buttons in left-sided menu and blocks
+    for event in events:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for b in buttons:
+                b.act(event)
+        elif event.type == pygame.MOUSEMOTION:
+            for b in buttons:
+                b.hover_test(event)
+
     # Selection of section
     if settings.shop_section == 'ships':
         current_items = items_ships
@@ -285,10 +353,6 @@ def create_screen():
             i.button.enough_money = True
         else:
             i.button.enough_money = False
-
-    # Events
-    dy = 0
-    events = pygame.event.get()
 
     # Drawing left-sided menu
     screen.blit(section_indicator, (0, int(settings.HEIGHT/2 - 540)))
@@ -305,15 +369,6 @@ def create_screen():
     screen.blit(laser_icon_50, (50, int(settings.HEIGHT / 2 + 315)))
     screen.blit(font_small.render('TIC DMG: ' + str(settings.laser_damage),
                                   True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 325))
-
-    # Buttons in left-sided menu and blocks
-    for event in events:
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for b in buttons:
-                b.act(event)
-        elif event.type == pygame.MOUSEMOTION:
-            for b in buttons:
-                b.hover_test(event)
 
     for b in buttons:
         if b.action == 'switch_to_'+settings.shop_section:
@@ -337,7 +392,7 @@ def create_screen():
                 i.button.hover_test(event)
 
     # Drawing and moving blocks
-    if (dy > 0 and current_items[0].y < 40) or (dy < 0 and current_items[len(current_items) - 1].y > settings.HEIGHT - current_items[len(current_items) - 1].height + 40):
+    if (dy > 0 and current_items[0].y < 40) or (dy < 0 and current_items[len(current_items) - 1].y > settings.HEIGHT - current_items[len(current_items) - 1].height - 40):
         move = True
     else:
         move = False
