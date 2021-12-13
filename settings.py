@@ -44,6 +44,7 @@ LASER_SOUND_PATH = os.path.join('.', 'Sounds', 'LaserLaserBeam EE136601_preview-
 CANNONS_SOUND_PATH = os.path.join('.', 'Sounds', 'ES_Cannon Blast 4.mp3')
 PLASMAGUN_SOUND_PATH = os.path.join('.', 'Sounds', 'plasma_gun_powerup_01.mp3')
 LIGHT_RING_SOUND_PATH = os.path.join('.', 'Sounds', 'Dio Brando - ZA WARUDO!.mp3')
+EXPLOSION_SOUND = os.path.join('.', 'Sounds', 'explosion.mp3')
 
 MINE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'mine.png')
 KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')

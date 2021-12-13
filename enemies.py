@@ -60,8 +60,9 @@ class Enemy_standart:
                 self.x += self.Vx
                 self.y += self.Vy
 
-            if self.y >= settings.HEIGHT:
-                self.live = 0
+            #if self.y >= settings.HEIGHT:
+               # self.live = 0
+             #  settings.enemies.remove()
 
     def shoot(self):
         if self.phase == 2:
@@ -322,6 +323,8 @@ def processing(screen):
             k.move()
             k.draw(screen)
             k.shoot()
+            if k.y >= settings.HEIGHT:
+              settings.enemies.remove(k)
 
     for b in settings.enemy_bullets:
         b.draw()

@@ -14,7 +14,7 @@ light_ring_animation = []
 
 
 def init():
-    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, light_ring_sound, blow, death
+    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, light_ring_sound, blow, death, explosion_sound
 
     death = []
     blow = []
@@ -39,6 +39,7 @@ def init():
     settings.plasma_ball_sprites = plasma_ball_sprites
 
     pygame.mixer.init()
+    explosion_sound = pygame.mixer.Sound(settings.EXPLOSION_SOUND)
     laser_sound = pygame.mixer.Sound(settings.LASER_SOUND_PATH)
     cannons = pygame.mixer.Sound(settings.CANNONS_SOUND_PATH)
     plasma_gun_sound = pygame.mixer.Sound(settings.PLASMAGUN_SOUND_PATH)
@@ -229,6 +230,7 @@ class death_animation:
         self.x = x - 150
         self.y = y - 150
         self.frame = 0
+        explosion_sound.play()
 
     def play(self):
         levels.screen.blit(blow[self.frame], (self.x, self.y))
@@ -296,9 +298,7 @@ def processing(screen, events):
         laser.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y),
                                  (pygame.mouse.get_pos()[0] - settings.spaceship.x))
         laser.draw()
-        laser_sound.play()
     else:
-        laser_sound.stop()
         laser.fire_end()
 
     for b in lightrings:
@@ -326,13 +326,10 @@ def processing(screen, events):
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             settings.ammo = levels.ammo_type
             settings.seconds = 0
+            if  levels.ammo_type == 2:
+                laser_sound.play()
         elif event.type == pygame.MOUSEBUTTONUP:
             settings.ammo = None
+            laser_sound.stop()
 
-
-   # if pygame.mouse.get_pressed()[0]:
-    #    settings.ammo = levels.ammo_type
-    #else:
-     #   settings.ammo = 0
-      #  settings.seconds = 0
     settings.seconds += 1
