@@ -50,6 +50,7 @@ KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
 ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
 HEAVY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'heavy.png')
 MISSILE_IMAGE_PATH = os.path.join('.', 'ammo_sprites', 'missile.png')
+CARRIER_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'carrier.png')
 
 # Common classes
 class Button:

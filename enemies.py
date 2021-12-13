@@ -10,6 +10,7 @@ mine_image = None
 enemy_image = None
 heavy_image = None
 missile_image = None
+carrier_image = None
 enemy_counter = 0
 
 
@@ -94,7 +95,7 @@ class Enemy_heavy:
         self.Vx = 0
         self.Vy = 0
         self.live = 200
-        self.image = None
+        self.image = heavy_image
         self.r = 60
         self.phase = 0
         self.angle = 0
@@ -105,7 +106,7 @@ class Enemy_heavy:
         if self.phase == 0:
             self.Vy = 5
             self.y += self. Vy
-            if self.y >= 100:
+            if self.y >= 300:
                 self.phase = 1
         if self.phase == 1:
             self.angle += (math.atan2(settings.spaceship.x - self.x, settings.spaceship.y - self.y) - self.angle) / 30
@@ -132,7 +133,58 @@ class Enemy_heavy:
                 settings.enemy_bullets.append(new_missile)
 
 
+class Enemy_carrier():
+    def __init__(self):
+        self.surface = None
+        self.x = settings.WIDTH + 300
+        self.y = 0
+        self.Vx = 0
+        self.Vy = 0
+        self.live = 300
+        self.image = carrier_image
+        self.a = 190
+        self.b = 300
+        self.r = 90
+        self.l = math.sqrt((settings.WIDTH/2 + 300)**2 + (3*settings.HEIGHT)**2)
+        self.angle = math.atan2(settings.WIDTH/2 + 300, 3*settings.HEIGHT)
+        self.phase = 1
+        self.ticks = 0
+        self.firing = 0
+        self.damage = 100
 
+    def move(self):
+        #print(self.x, self.y, self.angle, self.l)
+        if self.x >= -300:
+            self.x = settings.WIDTH/2 + self.l*math.sin(self.angle)
+            self.y = -3*settings.HEIGHT + self.l*math.cos(self.angle)
+            self.angle -= (0.1)*(2*math.pi/360)
+        if self.x < -300:
+            self.live = 0
+        #print(self.x, self.y, self.angle)
+        self.ticks += 1
+
+    def draw(self, screen):
+        if self.live > 0:
+            self.image = rot_center_square(carrier_image, self.angle*360/(2*math.pi) + 90)
+            screen.blit(self.image, (self.x - 150, self.y - 150))
+            #pygame.draw.circle(screen, (255, 255, 255), (self.x, self.y), self.r)
+
+    def shoot(self):
+        if self.x < settings.WIDTH and self.x > 0 and self.ticks%20 == 0:
+            i = random.random()
+            new_kamikaze = Enemy_kamikaze()
+            new_kamikaze.x = self.x + (i-0.5)*200*math.cos(self.angle)
+            new_kamikaze.y = self.y + (i-0.5)*200*math.sin(self.angle)
+            settings.enemies.append(new_kamikaze)
+
+    def hittest(self, obj):
+        if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
+            settings.spaceship.hp -= self.damage
+            settings.spaceship.hit_timer = 10
+            print('carrier hit'+str(settings.spaceship.hp))
+            return True
+        else:
+            return False
 
 class Enemy_kamikaze:
     def __init__(self):
@@ -242,7 +294,7 @@ class Enemy_missile():
 
 
 def init():
-    global mine_image, kamikaze_image, enemy_image, heavy_image, missile_image
+    global mine_image, kamikaze_image, enemy_image, heavy_image, missile_image, carrier_image
     mine_image = pygame.image.load(settings.MINE_IMAGE_PATH).convert_alpha()
     mine_image = pygame.transform.scale(mine_image, (50, 50))
     kamikaze_image = pygame.image.load(settings.KAMIKADZE_IMAGE_PATH).convert_alpha()
@@ -253,6 +305,8 @@ def init():
     heavy_image = pygame.transform.scale(heavy_image, (120, 120))
     missile_image = pygame.image.load(settings.MISSILE_IMAGE_PATH).convert_alpha()
     missile_image = pygame.transform.scale(missile_image, (60, 60))
+    carrier_image = pygame.image.load(settings.CARRIER_IMAGE_PATH).convert_alpha()
+    carrier_image = pygame.transform.scale(carrier_image, (300, 300))
 
 
 def processing(screen):
@@ -267,8 +321,6 @@ def processing(screen):
 
     if settings.tick_counter % 120 == 0:
         new_kamikaze = Enemy_kamikaze()
-        #enemy_counter += 1
-        #if len(settings.enemies) < 100:
         settings.enemies.append(new_kamikaze)
         #else:
         #settings.enemies[enemy_counter % 99] = new_kamikaze
@@ -282,6 +334,10 @@ def processing(screen):
     if settings.tick_counter % 600 == 0:
         new_heavy = Enemy_heavy()
         settings.enemies.append(new_heavy)
+
+    if settings.tick_counter % 1200 == 0:
+        new_carrier = Enemy_carrier()
+        settings.enemies.append(new_carrier)
 
 
     for k in settings.enemies:
@@ -305,8 +361,8 @@ def processing(screen):
     for k in settings.enemies:
         if k.live >= 1:
             k.move()
-            k.draw(screen)
             k.shoot()
+            k.draw(screen)
 
     for b in settings.enemy_bullets:
         b.draw()
