@@ -71,6 +71,13 @@ buy_button_buy_enough_money_path = os.path.join('.', 'interface_elements', 'buy_
 buy_button_buy_enough_money_hover_path = os.path.join('.', 'interface_elements', 'buy_button_buy_enough_money_hover.png')
 buy_button_buy_not_enough_money_path = os.path.join('.', 'interface_elements', 'buy_button_buy_not_enough_money.png')
 
+upgrade_button_not_enough_money_path = os.path.join('.', 'interface_elements', 'upgrade_button_not_enough_money.png')
+upgrade_button_not_enough_money = pygame.image.load(upgrade_button_not_enough_money_path)
+upgrade_button_enough_money_path = os.path.join('.', 'interface_elements', 'upgrade_button_enough_money.png')
+upgrade_button_enough_money = pygame.image.load(upgrade_button_enough_money_path)
+upgrade_button_hover_path = os.path.join('.', 'interface_elements', 'upgrade_button_hover.png')
+upgrade_button_hover = pygame.image.load(upgrade_button_hover_path)
+
 
 class Item:
     def __init__(self, x, y, width, height, image, cost, purchase, name, capture):
@@ -200,7 +207,7 @@ def init():
                             'Zuckerberg machine', 'Super is teleportation'))
     # Upgrades
     items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, gun_icon_150, 100, settings.bullet_damage,
-                            'Upgrade gun DMG', 'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
+                            'Increase gun DMG', 'from ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
     items_upgrades[0].upgrade = 1
 
     items_upgrades.append(Item(440, 380, (settings.WIDTH - 480 // 2) - 20, 300, plasma_icon_150, 100, settings.bullet_damage,
