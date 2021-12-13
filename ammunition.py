@@ -297,7 +297,7 @@ def processing(screen, events):
                 light_ring_sound.play()
             elif settings.current_skin.super == 1:
                 settings.spaceship.x = pygame.mouse.get_pos()[0]
-                settings.spaceship.x = pygame.mouse.get_pos()[1]
+                settings.spaceship.y = pygame.mouse.get_pos()[1]
                 #settings.spaceship.x += settings.dash_range * math.cos(
                  #   math.atan2(pygame.mouse.get_pos()[1] - settings.spaceship.y,
                   #             pygame.mouse.get_pos()[0] - settings.spaceship.x))
