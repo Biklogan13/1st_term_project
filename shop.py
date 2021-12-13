@@ -93,26 +93,30 @@ class Item:
     def draw(self):
         # Plate
         screen.blit(left_side, (self.x, self.y))
-        screen.blit(shop_plate, (self.x + 50, self.y))
+        screen.blit(pygame.transform.scale(shop_plate, (self.width - 100, self.height)), (self.x + 50, self.y))
         screen.blit(right_side, (self.x + self.width - 50, self.y))
         # Button
         self.button.draw()
-        # Cost
-        screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
-        screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
-        # Text
-        screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
-        screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
-        # Image
-        rot_image = pygame.transform.rotate(self.image,
+        if settings.shop_section == 'ships':
+            # Cost
+            screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
+            screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
+            # Text
+            screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
+            screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
+            # Image
+            rot_image = pygame.transform.rotate(self.image,
                                             math.atan2(60, magnitude * math.cos(self.phase)) * 180 / math.pi - 90)
-        w, h = rot_image.get_rect().size
-        screen.blit(rot_image,
+            w, h = rot_image.get_rect().size
+            screen.blit(rot_image,
                     (self.x + 150 + magnitude + magnitude * math.sin(self.phase) - w // 2, self.y + 100 - h // 2))
-        if self.button.hover or self.button.selected:
-            self.phase += 0.02
-            self.phase = self.phase % (2 * math.pi)
-
+            if self.button.hover or self.button.selected:
+                self.phase += 0.02
+                self.phase = self.phase % (2 * math.pi)
+        elif settings.shop_section == 'upgrades':
+            # Cost
+            screen.blit(price_tag, (self.x + 100, self.y + 45))
+            screen.blit(font.render(str(self.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
 
 class ShopButton(settings.Button):
     def __init__(self, x, y, width, height, purchase, cost):
@@ -175,7 +179,6 @@ def init():
     screen = pygame.Surface(settings.SIZE)
     background = pygame.transform.scale(background, settings.SIZE)
     left_side = pygame.transform.scale(left_side, (50, 300))
-    shop_plate = pygame.transform.scale(shop_plate, (settings.WIDTH - 580, 300))
     right_side = pygame.transform.scale(right_side, (50, 300))
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
@@ -189,11 +192,11 @@ def init():
     items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, gun_icon_150, 100, settings.bullet_damage,
                             'Upgrade gun damage', 'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
     items_upgrades[0].upgrade = 1
-    items_upgrades.append(Item(440, 380, settings.WIDTH - 480 // 2 - 20, 300, plasma_icon_150, 100, settings.bullet_damage,
+    items_upgrades.append(Item(440, 380, (settings.WIDTH - 480 // 2) - 20, 300, plasma_icon_150, 100, settings.bullet_damage,
                                'Upgrade gun damage',
                                'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
     items_upgrades[1].upgrade = 1
-    items_upgrades.append(Item(440, 720, settings.WIDTH - 480 // 2 - 20, 300, laser_icon_150, 100, settings.bullet_damage,
+    items_upgrades.append(Item(440, 720, (settings.WIDTH - 480 // 2) - 20, 300, laser_icon_150, 100, settings.bullet_damage,
                                'Upgrade gun damage',
                                'From ' + str(settings.bullet_damage) + ' to ' + str(settings.bullet_damage + 1)))
     items_upgrades[2].upgrade = 1
