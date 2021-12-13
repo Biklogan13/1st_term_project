@@ -115,15 +115,18 @@ class Laser:
         self.firing = 0
 
     def draw(self):
-        pygame.draw.line(self.screen, settings.RED, (settings.spaceship.x, settings.spaceship.y), (
-            settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
-            settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=20)
-        pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x, settings.spaceship.y), (
-            settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
-            settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=8)
-        pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x, settings.spaceship.y), (
-            settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
-            settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=2)
+        pygame.draw.line(self.screen, settings.RED, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                            settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
+                                            settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
+                                            settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=20)
+        pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                            settings.spaceship.y + 50 * math.sin(self.angle) + 20),
+                                            (settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
+                                            settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=8)
+        pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                        settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
+                                            settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
+                                            settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=2)
 
     def targetting(self):
         self.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y),
@@ -243,6 +246,8 @@ def processing(screen, events):
                 (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
             new_bullet.vx = 50 * math.cos(new_bullet.angle)
             new_bullet.vy = 50 * math.sin(new_bullet.angle)
+            new_bullet.x = settings.spaceship.x + 100 * math.cos(new_bullet.angle) - 20
+            new_bullet.y = settings.spaceship.y + 100 * math.sin(new_bullet.angle)
             settings.bullets.append(new_bullet)
             settings.seconds = 0
 
@@ -261,6 +266,8 @@ def processing(screen, events):
                 (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
             new_ball.vx = 10 * math.cos(new_ball.angle)
             new_ball.vy = 10 * math.sin(new_ball.angle)
+            new_ball.x = settings.spaceship.x + 100 * math.cos(new_ball.angle) - 20
+            new_ball.y = settings.spaceship.y + 100 * math.sin(new_ball.angle)
             settings.plasma_balls.append(new_ball)
             settings.seconds = 0
 
