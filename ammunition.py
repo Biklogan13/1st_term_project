@@ -11,7 +11,8 @@ cannons = None
 ult = 1
 lightrings = []
 light_ring_animation = []
-
+objects_hit_by_laser = []
+laser_min_hit = [3*settings.WIDTH, 0, 0, 0]
 
 def init():
     global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, light_ring_sound, blow, death, explosion_sound
@@ -115,6 +116,7 @@ class Laser:
         self.r = 50
         self.firing = 0
         self.color = settings.YELLOW
+        self.hitting = 0
 
     def fire_start(self):
         self.firing = 1
@@ -123,18 +125,39 @@ class Laser:
         self.firing = 0
 
     def draw(self):
-        pygame.draw.line(self.screen, settings.RED, (settings.spaceship.x + 50 * math.cos(self.angle),
+        if self.hitting == 0:
+            pygame.draw.line(self.screen, settings.RED, (settings.spaceship.x + 50 * math.cos(self.angle),
                                             settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                             settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
                                             settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=20)
-        pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
+            pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
                                             settings.spaceship.y + 50 * math.sin(self.angle) + 20),
                                             (settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
                                             settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=8)
-        pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
+            pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
                                                         settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                             settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
                                             settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=2)
+        if self.hitting == 1:
+            for obj in objects_hit_by_laser:
+                if math.sqrt((obj.x - settings.spaceship.x)**2 + (obj.y - settings.spaceship.y)**2) <= laser_min_hit[0] and obj.live > 0:
+                    laser_min_hit[0] = math.sqrt((obj.x - settings.spaceship.x)**2 + (obj.y - settings.spaceship.y)**2)
+                    laser_min_hit[1] = obj.x
+                    laser_min_hit[2] = obj.y
+                    laser_min_hit[3] = obj.r
+
+            pygame.draw.line(self.screen, settings.RED, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                         settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
+                                 settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
+                                 settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=20)
+            pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                            settings.spaceship.y + 50 * math.sin(self.angle) + 20),
+                             (settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
+                              settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=8)
+            pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                            settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
+                                 settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
+                                 settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=2) #FIXME после попадания в первую цель лазер не возвращается к исходной длине
 
 
     def targetting(self):
@@ -145,10 +168,16 @@ class Laser:
         if abs(math.sin(self.angle) * obj.x - math.cos(self.angle) * obj.y - math.sin(
                 self.angle) * settings.spaceship.x + math.cos(self.angle) * settings.spaceship.y) <= 15 + obj.r and (
                 pygame.mouse.get_pos()[0] - settings.spaceship.x) * (
-                obj.x - settings.spaceship.x) > 0 and self.firing == 1:
+                obj.x - settings.spaceship.x) > 0 and (
+                pygame.mouse.get_pos()[1] - settings.spaceship.y) * (
+                obj.y - settings.spaceship.y) > 0 and self.firing == 1:
+            objects_hit_by_laser.append(obj)
+            self.hitting = 1
             return True
         else:
             return False
+            laser_min_hit = 3*settings.WIDTH
+            self.hitting = 0
 
 
 class Plasma_ball:
