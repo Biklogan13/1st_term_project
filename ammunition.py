@@ -157,14 +157,20 @@ class Laser:
                                                          settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                  settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
                                  settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=20)
+            pygame.draw.circle(self.screen, settings.RED, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                           settings.spaceship.y + 50 * math.sin(self.angle) + 20), 12, 0)
             pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
                                                             settings.spaceship.y + 50 * math.sin(self.angle) + 20),
                              (settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
                               settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=8)
+            pygame.draw.circle(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                              settings.spaceship.y + 50 * math.sin(self.angle) + 20), 4, 0)
             pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
                                                             settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                  settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
                                  settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=2) #FIXME после попадания в первую цель лазер все еще не возвращается к исходной длине
+            pygame.draw.circle(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                              settings.spaceship.y + 50 * math.sin(self.angle) + 20), 1, 0)
 
 
     def targetting(self):
@@ -179,7 +185,7 @@ class Laser:
                 pygame.mouse.get_pos()[1] - settings.spaceship.y) * (
                 obj.y - settings.spaceship.y) > 0 and self.firing == 1:
             objects_hit_by_laser.append(obj)
-            self.hitting = 1
+            self.hitting = 0
             return True
         else:
             return False
