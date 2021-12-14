@@ -164,7 +164,7 @@ class Laser:
             pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
                                                             settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                  settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
-                                 settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=2) #FIXME после попадания в первую цель лазер не возвращается к исходной длине
+                                 settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=2) #FIXME после попадания в первую цель лазер все еще не возвращается к исходной длине
 
 
     def targetting(self):
