@@ -101,7 +101,7 @@ class Enemy_heavy:
         self.y = -70
         self.Vx = 0
         self.Vy = 0
-        self.live = 200
+        self.live = 300
         self.image = heavy_image
         self.r = 60
         self.phase = 0
@@ -147,7 +147,7 @@ class Enemy_carrier():
         self.y = 0
         self.Vx = 0
         self.Vy = 0
-        self.live = 300
+        self.live = 500
         self.image = carrier_image
         self.a = 190
         self.b = 300
@@ -367,8 +367,15 @@ def processing(screen):
                 settings.bullets.remove(b)
                 k.live -= settings.bullet_damage
         for p in settings.plasma_balls:
+            indicator = 0
             if p.hittest(k):
-                k.live -= settings.plasma_ball_damage
+                for i in range(len(p.hitted)):
+                    if p.hitted[i] == k:
+                        indicator += 1
+                if indicator == 0:
+                    k.live -= settings.plasma_ball_damage
+                    p.hitted.append(k)
+
         if ammunition.laser.hittest(k):
             k.live -= settings.laser_damage
         for b in ammunition.lightrings:

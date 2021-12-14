@@ -44,6 +44,7 @@ def init():
     cannons = pygame.mixer.Sound(settings.CANNONS_SOUND_PATH)
     plasma_gun_sound = pygame.mixer.Sound(settings.PLASMAGUN_SOUND_PATH)
     light_ring_sound = pygame.mixer.Sound(settings.LIGHT_RING_SOUND_PATH)
+    pygame.mixer.Sound.set_volume(light_ring_sound, 10000000)
     pygame.mixer.Sound.set_volume(cannons, 0.02)
     pygame.mixer.Sound.set_volume(laser_sound, 0.02)
     pygame.mixer.Sound.set_volume(plasma_gun_sound, 0.05)
@@ -127,14 +128,20 @@ class Laser:
                                             settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                             settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
                                             settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=20)
+        pygame.draw.circle(self.screen, settings.RED, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                       settings.spaceship.y + 50 * math.sin(self.angle) + 20), 12, 0)
         pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
                                             settings.spaceship.y + 50 * math.sin(self.angle) + 20),
                                             (settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
                                             settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=8)
+        pygame.draw.circle(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                       settings.spaceship.y + 50 * math.sin(self.angle) + 20), 4, 0)
         pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
                                                         settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                             settings.spaceship.x + math.cos(self.angle) * 2 * settings.WIDTH,
                                             settings.spaceship.y + math.sin(self.angle) * 2 * settings.WIDTH), width=2)
+        pygame.draw.circle(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
+                                                        settings.spaceship.y + 50 * math.sin(self.angle) + 20), 1, 0)
 
 
     def targetting(self):
@@ -171,6 +178,7 @@ class Plasma_ball:
         self.surf = pygame.transform.scale(settings.plasma_ball_sprites[1], (2 * self.r, 2 * self.r))
         self.angle = math.atan2(self.vy, self.vx)
         self.sprite_number = 1
+        self.hitted = []
 
     def move(self):
         """Переместить шар по прошествии 1 кадра.
