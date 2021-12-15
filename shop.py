@@ -114,7 +114,7 @@ class Item:
         # Button
         self.button.draw()
         # Content
-        if settings.shop_section == 'ships' or settings.shop_section == 'cosmetics':
+        if settings.shop_section == 'ships':
             # Cost
             screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
             screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
@@ -137,10 +137,19 @@ class Item:
                 screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + 320, self.y + 45))
                 # Text
                 screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
-                screen.blit(font_small.render(var_text(self.capture, self.button.upgrade), True, DARK_GREEN), (self.x + 100, self.y + 220))
+                screen.blit(font_small.render(var_text(self.capture, self.button.upgrade), True, DARK_GREEN),
+                            (self.x + 100, self.y + 220))
             else:
                 screen.blit(font.render('MAXED OUT', True, DARK_GREEN), (self.x + 100, self.y + 180))
-
+        elif settings.shop_section == 'cosmetics':
+            # Cost
+            screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
+            screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
+            # Text
+            screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
+            # Image
+            sc_image = pygame.transform.scale(self.image, (int(150 / settings.HEIGHT * settings.WIDTH), 150))
+            screen.blit(sc_image, (self.x + 100, self.y + 50))
 
 
 class ShopButton(settings.Button):
@@ -187,7 +196,7 @@ class ShopButton(settings.Button):
                     screen.blit(upgrade_button_enough_money, (self.x, self.y))
             else:
                 screen.blit(upgrade_button_not_enough_money, (self.x, self.y))
-        else:
+        elif settings.shop_section != 'upgrades':
             if self.selected:
                 screen.blit(buy_button_selected, (self.x, self.y))
             elif self.bought:
