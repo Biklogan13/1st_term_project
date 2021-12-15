@@ -4,7 +4,9 @@ import os
 # Global variables which needed in many files
 
 # Flags and screen characteristics
-SIZE, WIDTH, HEIGHT, flag, shop_section, running = 0, 0, 0, 'menu', 'ships', True
+SIZE, WIDTH, HEIGHT = 0, 0, 0
+flag, shop_section, running = 'menu', 'ships', True
+menu_background = None
 
 # Objects needed in various modules
 current_skin, spaceship, enemies, tick_counter, enemy_bullets = None, None, [], 0, []

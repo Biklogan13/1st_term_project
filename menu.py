@@ -5,20 +5,19 @@ import settings
 buttons = []
 screen = None
 background = None
+name, plate = None, None
 
 
 def init():
-    global buttons, screen, background
+    global buttons, screen, background, name, plate
     screen = pygame.Surface(settings.SIZE)
 
-    name = pygame.image.load('interface_elements/name_white.png')
+    name = pygame.image.load('interface_elements/name_white.png').convert_alpha()
     name = pygame.transform.scale(name, (settings.WIDTH, int(800 * settings.WIDTH / 3840)))
-    background = pygame.image.load('backgrounds/menu_background_2.jpg').convert()
-    background = pygame.transform.scale(background, settings.SIZE)
+    settings.menu_background = pygame.image.load('backgrounds/menu_background.png').convert_alpha()
+    settings.menu_background = pygame.transform.scale(settings.menu_background, settings.SIZE)
     plate = pygame.image.load('interface_elements/plate.png').convert_alpha()
     plate = pygame.transform.scale(plate, (500, 500))
-    background.blit(name, (0, 0))
-    background.blit(plate, (settings.WIDTH // 2 - 250, settings.HEIGHT // 2 - 150))
 
     play_image = pygame.image.load('interface_elements/play_button.png').convert_alpha()
     shop_image = pygame.image.load('interface_elements/shop_button.png').convert_alpha()
@@ -43,8 +42,10 @@ def init():
 
 
 def create_screen():
-    global buttons, screen, background
-    screen.blit(background, (0, 0))
+    global buttons, screen, name, plate
+    screen.blit(settings.menu_background, (0, 0))
+    screen.blit(name, (0, 0))
+    screen.blit(plate, (settings.WIDTH // 2 - 250, settings.HEIGHT // 2 - 150))
     for b in buttons:
         b.draw(screen)
     for event in pygame.event.get():

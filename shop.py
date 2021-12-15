@@ -26,6 +26,13 @@ font, font_small = None, None
 background_path = os.path.join('.', 'backgrounds', 'shop_background.jpg')
 background = pygame.image.load(background_path)
 
+menu_background_1_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
+menu_background_1 = pygame.image.load(menu_background_1_path)
+menu_background_2_path = os.path.join('.', 'backgrounds', 'menu_background_2.jpg')
+menu_background_2 = pygame.image.load(menu_background_2_path)
+menu_background_3_path = os.path.join('.', 'backgrounds', 'menu_background_2.jpg')
+menu_background_3 = pygame.image.load(menu_background_3_path)
+
 section_indicator_path = os.path.join('.', 'interface_elements', 'section_indicator.png')
 section_indicator = pygame.image.load(section_indicator_path)
 
@@ -107,7 +114,7 @@ class Item:
         # Button
         self.button.draw()
         # Content
-        if settings.shop_section == 'ships':
+        if settings.shop_section == 'ships' or settings.shop_section == 'cosmetics':
             # Cost
             screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
             screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
@@ -135,6 +142,7 @@ class Item:
                 screen.blit(font.render('MAXED OUT', True, DARK_GREEN), (self.x + 100, self.y + 180))
 
 
+
 class ShopButton(settings.Button):
     def __init__(self, x, y, width, height, purchase, cost):
         self.x = x
@@ -151,12 +159,16 @@ class ShopButton(settings.Button):
 
     def act(self, event):
         if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
-            if self.bought and settings.shop_section != 'upgrades':
+            if self.bought and settings.shop_section == 'ships':
                 for i in current_items:
                     i.button.selected = False
                 self.selected = True
-                if settings.shop_section == 'ships':
-                    settings.current_skin = self.purchase
+                settings.current_skin = self.purchase
+            elif self.bought and settings.shop_section == 'cosmetics':
+                for i in current_items:
+                    i.button.selected = False
+                self.selected = True
+                settings.menu_background = self.purchase
             elif self.cost <= settings.money and not self.bought:
                 self.bought = True
                 settings.money -= self.cost
@@ -175,7 +187,7 @@ class ShopButton(settings.Button):
                     screen.blit(upgrade_button_enough_money, (self.x, self.y))
             else:
                 screen.blit(upgrade_button_not_enough_money, (self.x, self.y))
-        elif settings.shop_section != 'upgrades':
+        else:
             if self.selected:
                 screen.blit(buy_button_selected, (self.x, self.y))
             elif self.bought:
@@ -238,7 +250,8 @@ def delegate(marker, value):
 def init():
     global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, price_tag,\
         buy_button_selected, buy_button_select, buy_button_select_hover, buy_button_buy_enough_money,\
-        buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money, font, font_small
+        buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money, font, font_small, menu_background_1,\
+        menu_background_2, menu_background_3
 
     settings.shop_section = 'ships'
 
@@ -252,6 +265,10 @@ def init():
     left_side = pygame.transform.scale(left_side, (50, 300))
     right_side = pygame.transform.scale(right_side, (50, 300))
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
+
+    menu_background_1 = pygame.transform.scale(menu_background_1, settings.SIZE)
+    menu_background_2 = pygame.transform.scale(menu_background_2, settings.SIZE)
+    menu_background_3 = pygame.transform.scale(menu_background_3, settings.SIZE)
 
     # Creating Items
     # Ships
@@ -282,6 +299,14 @@ def init():
     items_upgrades[4].button.upgrade = 1
 
     # Cosmetics
+    items_cosmetics.append(Item(440, 40, settings.WIDTH - 480, 300, menu_background_1, 200, menu_background_1,
+                                '', 'Super is lightring'))
+
+    items_cosmetics.append(Item(440, 380, settings.WIDTH - 480, 300, menu_background_2, 200, menu_background_2,
+                                '', 'Super is teleportation'))
+
+    items_cosmetics.append(Item(440, 720, settings.WIDTH - 480, 300, menu_background_3, 200, menu_background_3,
+                                '', 'Super is teleportation'))
 
     # Creating Buttons
     ships_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')
@@ -401,7 +426,8 @@ def create_screen():
                 i.button.hover_test(event)
 
     # Drawing and moving blocks
-    if (dy > 0 and current_items[0].y < 40) or (dy < 0 and current_items[len(current_items) - 1].y > settings.HEIGHT - current_items[len(current_items) - 1].height - 40):
+    if (dy > 0 and current_items[0].y < 40) or (dy < 0 and current_items[len(current_items) - 1].y >
+                                                settings.HEIGHT - current_items[len(current_items) - 1].height - 40):
         move = True
     else:
         move = False

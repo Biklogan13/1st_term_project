@@ -1,6 +1,5 @@
-import pygame.mixer
-
 import pygame
+import pygame.mixer
 
 
 import menu
@@ -15,7 +14,7 @@ FPS = 60
 
 pygame.init()
 
-thickarrow_strings = (               #sized 24x24
+arrow_strings = (  # sized 24x24
   "XX                      ",
   "XXX                     ",
   "XXXX                    ",
@@ -41,7 +40,7 @@ thickarrow_strings = (               #sized 24x24
   "                        ",
   "                        ")
 
-cursor, mask = pygame.cursors.compile(thickarrow_strings, "X", ".")
+cursor, mask = pygame.cursors.compile(arrow_strings, "X", ".")
 cursor_sizer = ((24, 24), (7, 11), cursor, mask)
 pygame.mouse.set_cursor(*cursor_sizer)
 
