@@ -17,7 +17,7 @@ bullets_indicator, plasma_indicator, laser_indicator = None, None, None
 super_and_hp_indicator, super_and_hp_indicator_edges, hp_bar, super_bar, super_bar_ready = None, None, None, None, None
 
 # Images paths
-level_background_path = os.path.join('backgrounds/menu_background.png')
+level_background_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
 
 bullets_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_bullets.png')
 plasma_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_plasma.png')

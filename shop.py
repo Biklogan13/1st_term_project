@@ -32,6 +32,14 @@ menu_background_2_path = os.path.join('.', 'backgrounds', 'menu_background_2.jpg
 menu_background_2 = pygame.image.load(menu_background_2_path)
 menu_background_3_path = os.path.join('.', 'backgrounds', 'menu_background_2.jpg')
 menu_background_3 = pygame.image.load(menu_background_3_path)
+menu_background_4_path = os.path.join('.', 'backgrounds', 'menu_background_4.png')
+menu_background_4 = pygame.image.load(menu_background_4_path)
+menu_background_5_path = os.path.join('.', 'backgrounds', 'menu_background_5.png')
+menu_background_5 = pygame.image.load(menu_background_5_path)
+menu_background_6_path = os.path.join('.', 'backgrounds', 'menu_background_6.png')
+menu_background_6 = pygame.image.load(menu_background_6_path)
+menu_backgrounds = [menu_background_1, menu_background_2, menu_background_3,
+                    menu_background_4, menu_background_5, menu_background_6]
 
 section_indicator_path = os.path.join('.', 'interface_elements', 'section_indicator.png')
 section_indicator = pygame.image.load(section_indicator_path)
@@ -259,8 +267,7 @@ def delegate(marker, value):
 def init():
     global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, price_tag,\
         buy_button_selected, buy_button_select, buy_button_select_hover, buy_button_buy_enough_money,\
-        buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money, font, font_small, menu_background_1,\
-        menu_background_2, menu_background_3
+        buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money, font, font_small, menu_backgrounds
 
     settings.shop_section = 'ships'
 
@@ -275,9 +282,8 @@ def init():
     right_side = pygame.transform.scale(right_side, (50, 300))
     section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
-    menu_background_1 = pygame.transform.scale(menu_background_1, settings.SIZE)
-    menu_background_2 = pygame.transform.scale(menu_background_2, settings.SIZE)
-    menu_background_3 = pygame.transform.scale(menu_background_3, settings.SIZE)
+    for i in range(len(menu_backgrounds)):
+        menu_backgrounds[i] = pygame.transform.scale(menu_backgrounds[i], settings.SIZE)
 
     # Creating Items
     # Ships
@@ -308,14 +314,23 @@ def init():
     items_upgrades[4].button.upgrade = 1
 
     # Cosmetics
-    items_cosmetics.append(Item(440, 40, settings.WIDTH - 480, 300, menu_background_1, 200, menu_background_1,
-                                '', 'Super is lightring'))
+    items_cosmetics.append(Item(440, 40, settings.WIDTH - 480, 300, menu_backgrounds[0], 200, menu_backgrounds[0],
+                                '', 'Standard menu background'))
 
-    items_cosmetics.append(Item(440, 380, settings.WIDTH - 480, 300, menu_background_2, 200, menu_background_2,
-                                '', 'Super is teleportation'))
+    items_cosmetics.append(Item(440, 380, settings.WIDTH - 480, 300, menu_backgrounds[1], 200, menu_backgrounds[1],
+                                '', 'Green nebula'))
 
-    items_cosmetics.append(Item(440, 720, settings.WIDTH - 480, 300, menu_background_3, 200, menu_background_3,
-                                '', 'Super is teleportation'))
+    items_cosmetics.append(Item(440, 720, settings.WIDTH - 480, 300, menu_backgrounds[2], 200, menu_backgrounds[2],
+                                '', 'Planet'))
+
+    items_cosmetics.append(Item(440, 1060, settings.WIDTH - 480, 300, menu_backgrounds[3], 200, menu_backgrounds[3],
+                                '', 'Purple nebula'))
+
+    items_cosmetics.append(Item(440, 1400, settings.WIDTH - 480, 300, menu_backgrounds[4], 200, menu_backgrounds[4],
+                                '', 'Planet and rockets'))
+
+    items_cosmetics.append(Item(440, 1740, settings.WIDTH - 480, 300, menu_backgrounds[5], 200, menu_backgrounds[5],
+                                '', 'Landscape'))
 
     # Creating Buttons
     ships_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')

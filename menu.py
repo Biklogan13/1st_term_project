@@ -1,4 +1,5 @@
 import pygame
+import os
 
 import settings
 
@@ -7,6 +8,8 @@ screen = None
 background = None
 name, plate = None, None
 
+menu_background_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
+
 
 def init():
     global buttons, screen, background, name, plate
@@ -14,7 +17,7 @@ def init():
 
     name = pygame.image.load('interface_elements/name_white.png').convert_alpha()
     name = pygame.transform.scale(name, (settings.WIDTH, int(800 * settings.WIDTH / 3840)))
-    settings.menu_background = pygame.image.load('backgrounds/menu_background.png').convert_alpha()
+    settings.menu_background = pygame.image.load(menu_background_path)
     settings.menu_background = pygame.transform.scale(settings.menu_background, settings.SIZE)
     plate = pygame.image.load('interface_elements/plate.png').convert_alpha()
     plate = pygame.transform.scale(plate, (500, 500))
