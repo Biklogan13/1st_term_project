@@ -269,6 +269,7 @@ class Lightring:
     def hittest(self, obj):
         return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r - 500 + obj.r) ** 2
 
+
 class death_animation:
     def __init__(self, x, y):
         self.x = x - 150
@@ -280,8 +281,6 @@ class death_animation:
         levels.screen.blit(blow[self.frame], (self.x, self.y))
         if settings.tick_counter % 2 == 0:
             self.frame += 1
-
-
 
 
 def rot_center(image, angle):

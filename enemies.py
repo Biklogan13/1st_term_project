@@ -14,6 +14,30 @@ carrier_image = None
 enemy_counter = 0
 
 
+class Coin:
+    def __init__(self, x, y, denomination):
+        self.x = x
+        self.y = y
+        self.r = 10
+        self.denomination = denomination
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, (255, 255, 255), (self.x, self.y), self.r)
+
+    def move(self):
+        dist = ((settings.spaceship.x - self.x)**2 + (settings.spaceship.y - self.y)**2)**0.5
+        if dist <= 200:
+            self.x += int((settings.spaceship.x - self.x) * 0.1)
+            self.y += int((settings.spaceship.y - self.y) * 0.1)
+
+    def hittest(self):
+        if (self.x - settings.spaceship.x)**2 + (self.y - settings.spaceship.y)**2\
+               <= (self.r + settings.spaceship.r)**2:
+            settings.money += self.denomination
+            settings.super_charge += 10
+            settings.coins.remove(self)
+
+
 class Enemy_standart:
     def __init__(self, heading):
         self.surface = None
@@ -89,10 +113,10 @@ class Enemy_standart:
             return False
 
 
+# FIXIT what do this function does??
 def death(self):
      for i in range(0, 5):
          levels.screen.blit(ammunition.blow[i], (self.x, self.y))
-
 
 class Enemy_heavy:
     def __init__(self):
@@ -192,6 +216,7 @@ class Enemy_carrier():
             return True
         else:
             return False
+
 
 class Enemy_kamikaze:
     def __init__(self):
@@ -354,12 +379,12 @@ def processing(screen):
             ammunition.death.remove(d)
         d.play()
 
-
     for k in settings.enemies:
         if k.live <= 0:
             new_death = ammunition.death_animation(k.x, k.y)
             ammunition.death.append(new_death)
             settings.enemies.remove(k)
+            settings.coins.append(Coin(k.x, k.y, 100))
         if k.hittest(settings.spaceship):
             k.live -= 50
         for b in settings.bullets:
@@ -399,6 +424,11 @@ def processing(screen):
             settings.spaceship.hit_timer = 10
         if b.timer <= 0:
             settings.enemy_bullets.remove(b)
+
+    for c in settings.coins:
+        c.move()
+        c.draw(screen)
+        c.hittest()
 
 
 def rot_center(image, angle):

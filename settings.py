@@ -9,7 +9,9 @@ flag, shop_section, running = 'menu', 'ships', True
 menu_background = None
 
 # Objects needed in various modules
-current_skin, spaceship, enemies, tick_counter, enemy_bullets = None, None, [], 0, []
+current_skin, spaceship = None, None
+enemies, enemy_bullets, coins = [], [], []
+tick_counter = 0
 light_rings, bullets, laser, plasma_balls, ammo, = [], [], None, [], 0
 
 # FIXME REMOVE from here!
