@@ -5,7 +5,8 @@ import os
 
 # Flags and screen characteristics
 SIZE, WIDTH, HEIGHT = 0, 0, 0
-flag, running = 'menu', True
+flag = 'menu'
+running = True
 menu_background = None
 
 # Objects needed in various modules

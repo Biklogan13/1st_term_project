@@ -45,21 +45,34 @@ item_plate = dict.fromkeys(['left_side', 'right_side', 'plate', 'price_tag'])
 
 
 def var_text(arr, plus):
+    """
+    Transforms array into string with integers responding to variables replaced with variables value.
+    When variable is placed in array 2-nd time, replaces int with variables value + plus variable
+    :param arr: array which contains integers and strings
+    :param plus: value which added to variable if is=t shows up second time
+    :return:
+    """
     ret = ''
-    mult = 0
+    multiplier = 0
     for i in range(len(arr)):
         if type(arr[i]) is int:
             if plus > 0:
-                ret += str(int(delegate(arr[i], 'return')) + mult * plus)
+                ret += str(int(delegate(arr[i], 'return')) + multiplier * plus)
             else:
-                ret += str(round((60 / (int(delegate(arr[i], 'return')) + mult * plus)), 2))
-            mult = 1
+                ret += str(round((60 / (int(delegate(arr[i], 'return')) + multiplier * plus)), 2))
+            multiplier = 1
         else:
             ret += arr[i]
     return ret
 
 
 def delegate(marker, value):
+    """
+    Function which allows shop objects to interact with settings variables.
+    :param marker: value which shows which variable to modify
+    :param value: value which is added to variable from settings
+    :return: str of a variable from settings
+    """
     if value == 'return':
         if marker == 0:
             return str(settings.bullet_damage)
@@ -142,6 +155,14 @@ class ShopMenuButton(settings.Button):
 
 class ShopBuyButton(settings.Button):
     def __init__(self, x, y, purchase, cost, section):
+        """
+        Initializes button specified for buying items in shop.
+        :param x: x coordinate of the button
+        :param y: y coordinate of the button
+        :param purchase: object to buy with this button
+        :param cost: cost of the item
+        :param section: section in which item is placed
+        """
         self.x = x
         self.y = y
         self.width = 400
@@ -155,21 +176,29 @@ class ShopBuyButton(settings.Button):
         self.enough_money = False
 
     def act(self, event):
-        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+        """
+        Detects if player pressed the button and acts based on its act parameter.
+        :param event: pygame.MOUSEBUTTONDOWN event
+        """
+        if self.check_mouse(event):
             if self.bought:
                 if self.section == 'ships':
                     items = items_ships
+                    settings.current_skin = self.purchase
                 else:
                     items = items_cosmetics
+                    settings.menu_background = self.purchase
                 for i in items:
                     i.button.selected = False
                 self.selected = True
-                settings.menu_background = self.purchase
             elif self.cost <= settings.money and not self.bought:
                 self.bought = True
                 settings.money -= self.cost
 
     def draw(self):
+        """
+        Draws button on a current section screen, taking into account current button state.
+        """
         if self.selected:
             screen.blit(buy_button_elements['selected'], (self.x, self.y))
         elif self.bought:
@@ -189,6 +218,14 @@ class ShopBuyButton(settings.Button):
 
 class ShopUpgradeButton(settings.Button):
     def __init__(self, x, y, purchase, cost, upgrade):
+        """
+        Initializes button specified for upgrading items in shop.
+        :param x: x coordinate of the button
+        :param y: y coordinate of the button
+        :param purchase: x coordinate of the button
+        :param cost: cost of the item
+        :param upgrade: value added to upgraded variable when button pressed
+        """
         self.x = x
         self.y = y
         self.width = 100
@@ -201,6 +238,10 @@ class ShopUpgradeButton(settings.Button):
         self.upgrade = upgrade
 
     def act(self, event):
+        """
+        Detects if player pressed the button and acts based on its act parameter.
+        :param event: pygame.MOUSEBUTTON event
+        """
         if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
             if self.cost <= settings.money and not self.maxed_out:
                 settings.money -= self.cost
@@ -210,6 +251,9 @@ class ShopUpgradeButton(settings.Button):
                 self.cost = int(self.cost*1.1)
 
     def draw(self):
+        """
+        Draws button on a current section screen, taking into account current button state.
+        """
         if not self.maxed_out:
             if self.enough_money:
                 if self.hover:
@@ -222,12 +266,20 @@ class ShopUpgradeButton(settings.Button):
 
 class Item:
     def __init__(self, y, image, cost, purchase, name, capture):
+        """
+        Initialization of a block on which item is displayed.
+        :param y: y coordinate of the block
+        :param image: image which will be displayed on the block
+        :param cost: cost of the item
+        :param purchase: item which is displayed on the block for bying
+        :param name: name of the item
+        :param capture: caption of the item
+        """
         self.x = 440
         self.y = y
         self.width = settings.WIDTH - 480
         self.height = 300
-        self.button = ShopBuyButton(self.x + self.width - 500, self.y + self.height // 2,
-                                    purchase, cost, 'ships')
+        self.button = ShopBuyButton(self.x + self.width - 500, self.y + self.height // 2, purchase, cost, 'ships')
         self.image = image
         self.phase = 0
         self.magnitude = 120
@@ -235,11 +287,19 @@ class Item:
         self.capture = capture
 
     def move(self, y, move):
+        """
+        Moves block based on the y parameter which corresponds to the rotation of the mouse wheel.
+        :param y: value by which item is moved
+        :param move: boolean value which shows blocks can move or not
+        """
         if move:
             self.y += y
             self.button.y += y
 
     def draw_plate_and_button(self):
+        """
+        Draws plate on which all pictures and text is displayed.
+        """
         screen.blit(item_plate['left_side'], (self.x, self.y))
         screen.blit(pygame.transform.scale(item_plate['plate'], (self.width - 100, self.height)), (self.x + 50, self.y))
         screen.blit(item_plate['right_side'], (self.x + self.width - 50, self.y))
