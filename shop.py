@@ -470,6 +470,9 @@ def load_fonts():
 
 
 def load_buy_button_images():
+    """
+    Loading images for different states of the buy button.
+    """
     # Loading images for buttons
     button_size = (400, 100)
 
@@ -501,6 +504,9 @@ def load_buy_button_images():
 
 
 def load_upgrade_button_images():
+    """
+    Loading images for different states of the upgrades button.
+    """
     # Loading images for buttons
     upgrade_button_not_enough_money_path = os.path.join('.', 'interface_elements',
                                                         'upgrade_button_not_enough_money.png')
@@ -514,6 +520,9 @@ def load_upgrade_button_images():
 
 
 def create_shop_menu_buttons():
+    """
+    Creates ShopMenuButton objects.
+    """
     global buttons
 
     # Loading images for buttons
@@ -561,6 +570,9 @@ def create_shop_menu_buttons():
 
 
 def create_ships_items():
+    """
+    Creates ships items which are displayed in the shop.
+    """
     # Creating ItemsShips objects
     items_ships.append(ShipsItem(40, settings.skins[1].image, 2000, settings.skins[1],
                                  'Standard spaceship', 'Super is light ring'))
@@ -570,6 +582,9 @@ def create_ships_items():
 
 
 def create_upgrades_items():
+    """
+    Creates upgrades items which are displayed in the shop.
+    """
     # Creating ItemsUpgrades objects
     items_upgrades.append(UpgradesItem(440, 40, 100, 0, 1, 'Increase gun DMG', ['from ', 0, ' to ', 0]))
 
@@ -585,6 +600,9 @@ def create_upgrades_items():
 
 
 def create_cosmetics_items():
+    """
+    Creates cosmetics items (backgrounds) which are displayed in the shop.
+    """
     # Loading backgrounds for purchasing
     menu_background_1_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
     menu_background_1 = pygame.image.load(menu_background_1_path)
@@ -626,6 +644,9 @@ def create_cosmetics_items():
 
 
 def init():
+    """
+    Loads all data and creates all objects necessary for displaying shop.
+    """
     global screen
     screen = pygame.Surface(settings.SIZE)
 
@@ -645,7 +666,37 @@ def init():
 # ----------------- functions which create screen -----------------
 
 
+def blit_menu():
+    """
+    Draws shop menu on the screen.
+    """
+    # Plate
+    screen.blit(left_block['menu_plate'], (0, int(settings.HEIGHT / 2 - 540)))
+    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT / 2) + 50 + 45 // 2))
+
+    # Gun stats
+    screen.blit(weapon_icons['gun'], (50, int(settings.HEIGHT / 2 + 175)))
+    screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' +
+                                  str(round(60 / settings.bullets_firerate, 2)),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 185))
+
+    # Plasma stats
+    screen.blit(weapon_icons['plasma'], (50, int(settings.HEIGHT / 2 + 245)))
+    screen.blit(font_small.render('DMG: ' + str(settings.plasma_ball_damage) + ' FR: ' +
+                                  str(round(60 / settings.plasma_balls_firerate, 2)),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 255))
+
+    # Laser stats
+    screen.blit(weapon_icons['laser'], (50, int(settings.HEIGHT / 2 + 315)))
+    screen.blit(font_small.render('TIC DMG: ' + str(settings.laser_damage),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 325))
+
+
 def create_screen():
+    """
+    Defines the appearance and event processing of the game when player is in the menu (settings.flag == 'menu').
+    :return: pygame.surface with the size of screen
+    """
     global screen, shop_section
     screen.blit(background, (0, 0))
 
@@ -678,23 +729,6 @@ def create_screen():
             i.button.enough_money = False
 
     # Drawing left-sided menu
-    screen.blit(left_block['menu_plate'], (0, int(settings.HEIGHT/2 - 540)))
-    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT / 2) + 50 + 45 // 2))
-    # Gun stats
-    screen.blit(weapon_icons['gun'], (50, int(settings.HEIGHT / 2 + 175)))
-    screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' +
-                                  str(round(60 / settings.bullets_firerate, 2)),
-                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 185))
-    # Plasma stats
-    screen.blit(weapon_icons['plasma'], (50, int(settings.HEIGHT / 2 + 245)))
-    screen.blit(font_small.render('DMG: ' + str(settings.plasma_ball_damage) + ' FR: ' +
-                                  str(round(60 / settings.plasma_balls_firerate, 2)),
-                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 255))
-    # Laser stats
-    screen.blit(weapon_icons['laser'], (50, int(settings.HEIGHT / 2 + 315)))
-    screen.blit(font_small.render('TIC DMG: ' + str(settings.laser_damage),
-                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 325))
-
     for b in buttons:
         if b.action == 'switch_to_' + shop_section:
             b.pressed = True
@@ -732,5 +766,6 @@ def create_screen():
     if keys[pygame.K_ESCAPE]:
         settings.flag = 'menu'
 
+    # Returning the screen which will be displayed
     return screen
 

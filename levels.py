@@ -182,6 +182,7 @@ def create_screen():
     # Drawing indicators
     blit_indicators()
 
+    # Returning the screen which will be displayed
     return screen
 
 
