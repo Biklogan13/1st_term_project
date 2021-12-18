@@ -60,14 +60,17 @@ def load_images():
     """
     Loads all images which are going to be blit directly on screen.
     """
+    # Background
     menu_background_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
     menu_background = pygame.image.load(menu_background_path).convert_alpha()
     settings.menu_background = pygame.transform.scale(menu_background, settings.SIZE)
 
+    # Name
     name_path = os.path.join('.', 'interface_elements', 'name_white.png')
     name = pygame.image.load(name_path).convert_alpha()
     images['name'] = pygame.transform.scale(name, (settings.WIDTH, int(800 * settings.WIDTH / 3840)))
 
+    # Plate for buttons
     plate_path = os.path.join('.', 'interface_elements', 'plate.png')
     plate = pygame.image.load(plate_path).convert_alpha()
     images['plate'] = pygame.transform.scale(plate, (500, 500))

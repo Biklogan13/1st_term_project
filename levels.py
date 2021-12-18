@@ -9,25 +9,61 @@ import ammunition
 
 pygame.init()
 
-buttons = []
+# Global variables of levels section
+# Surface on which levels elements will be drown
 screen = None
-ammo_type = 0
+# An array which contains all Buttons objects
+buttons = []
+# Background of the levels section
 level_background = None
-bullets_indicator, plasma_indicator, laser_indicator = None, None, None
-super_and_hp_indicator, super_and_hp_indicator_edges, hp_bar, super_bar, super_bar_ready = None, None, None, None, None
+# Type of selected ammo
+ammo_type = 0
+# Arrays which contain all images which will be displayed directly on screen
+left_indicator = dict.fromkeys(['bullets', 'plasma', 'laser'])
+right_indicator = dict.fromkeys(['plate', 'bar_edges', 'super_bar', 'super_bar_ready', 'hp_bar'])
 
-# Images paths
-level_background_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
 
-bullets_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_bullets.png')
-plasma_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_plasma.png')
-laser_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_laser.png')
+def load_images():
+    global level_background
 
-super_and_hp_indicator_path = os.path.join('.', 'interface_elements', 'super_and_hp_indicator.png')
-super_and_hp_indicator_edges_path = os.path.join('.', 'interface_elements', 'super_and_hp_indicator_edges.png')
-hp_bar_path = os.path.join('.', 'interface_elements', 'hp_bar.png')
-super_bar_path = os.path.join('.', 'interface_elements', 'super_bar.png')
-super_bar_ready_path = os.path.join('.', 'interface_elements', 'super_bar_ready.png')
+    level_background_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
+    level_background = pygame.image.load(level_background_path).convert_alpha()
+
+    indicator_size = (350, 100)
+
+    # Loading images for left indicator
+    bullets_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_bullets.png')
+    bullets_indicator = pygame.image.load(bullets_indicator_path).convert_alpha()
+    left_indicator['bullets'] = pygame.transform.scale(bullets_indicator, indicator_size)
+
+    plasma_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_plasma.png')
+    plasma_indicator = pygame.image.load(plasma_indicator_path).convert_alpha()
+    left_indicator['plasma'] = pygame.transform.scale(plasma_indicator, indicator_size)
+
+    laser_indicator_path = os.path.join('.', 'interface_elements', 'weapon_indicator_laser.png')
+    laser_indicator = pygame.image.load(laser_indicator_path).convert_alpha()
+    left_indicator['laser'] = pygame.transform.scale(laser_indicator, indicator_size)
+
+    # Loading images for right indicator
+    indicator_plate_path = os.path.join('.', 'interface_elements', 'super_and_hp_indicator.png')
+    indicator_plate = pygame.image.load(indicator_plate_path).convert_alpha()
+    right_indicator['plate'] = indicator_plate
+
+    indicator_edges_path = os.path.join('.', 'interface_elements', 'super_and_hp_indicator_edges.png')
+    indicator_edges = pygame.image.load(indicator_edges_path).convert_alpha()
+    right_indicator['bar_edges'] = indicator_edges
+
+    super_bar_ready_path = os.path.join('.', 'interface_elements', 'super_bar_ready.png')
+    super_bar_ready = pygame.image.load(super_bar_ready_path).convert_alpha()
+    right_indicator['super_bar_ready'] = super_bar_ready
+
+    super_bar_path = os.path.join('.', 'interface_elements', 'super_bar.png')
+    super_bar = pygame.image.load(super_bar_path).convert_alpha()
+    right_indicator['super_bar'] = super_bar
+
+    hp_bar_path = os.path.join('.', 'interface_elements', 'hp_bar.png')
+    hp_bar = pygame.image.load(hp_bar_path).convert_alpha()
+    right_indicator['hp_bar'] = hp_bar
 
 
 def red_image(image_original):
@@ -49,23 +85,10 @@ def red_image(image_original):
 
 
 def init():
-    global buttons, screen, level_background, bullets_indicator, plasma_indicator, laser_indicator,\
-        super_and_hp_indicator, super_and_hp_indicator_edges, hp_bar, super_bar, super_bar_ready
+    global screen
 
     # Creating screen and transforming images
     screen = pygame.Surface(settings.SIZE)
-
-    level_background = pygame.image.load(level_background_path).convert_alpha()
-    level_background = pygame.transform.scale(level_background, settings.SIZE)
-
-    indicator_size = (350, 100)
-
-    bullets_indicator = pygame.image.load(bullets_indicator_path).convert_alpha()
-    plasma_indicator = pygame.image.load(plasma_indicator_path).convert_alpha()
-    laser_indicator = pygame.image.load(laser_indicator_path).convert_alpha()
-    bullets_indicator = pygame.transform.scale(bullets_indicator, indicator_size)
-    plasma_indicator = pygame.transform.scale(plasma_indicator, indicator_size)
-    laser_indicator = pygame.transform.scale(laser_indicator, indicator_size)
 
     super_and_hp_indicator = pygame.image.load(super_and_hp_indicator_path).convert_alpha()
     super_and_hp_indicator = pygame.transform.scale(super_and_hp_indicator, indicator_size)
