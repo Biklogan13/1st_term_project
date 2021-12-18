@@ -248,7 +248,7 @@ class ShopUpgradeButton(settings.Button):
                 delegate(self.purchase, self.upgrade)
                 if int(delegate(self.purchase, 'return')) <= 1:
                     self.maxed_out = True
-                self.cost = int(self.cost*1.1)
+                self.cost = int(self.cost * 1.1)
 
     def draw(self):
         """
@@ -308,6 +308,9 @@ class Item:
 
 class ShipsItem(Item):
     def draw(self):
+        """
+        Draws a block with a ship, text and ShopBuyButton on it.
+        """
         self.draw_plate_and_button()
 
         # Cost
@@ -331,16 +334,29 @@ class ShipsItem(Item):
 
 
 class UpgradesItem(Item):
-    def __init__(self, x, y, height, cost, purchase, upgrade, name, capture):
+    def __init__(self, x, y, cost, purchase, upgrade, name, capture):
+        """
+        Initialization of a block on which item is displayed.
+        :param x: x coordinate of the block
+        :param y: y coordinate of the block
+        :param cost: cost of the item
+        :param purchase: item for purchase
+        :param upgrade: value by which purchase will be upgraded
+        :param name: name of the item
+        :param capture: capture of the item
+        """
         self.x = x
         self.y = y
         self.width = (settings.WIDTH - 480) // 2 - 20
-        self.height = height
+        self.height = 300
         self.button = ShopUpgradeButton(self.x + 100, self.y + 50, purchase, cost, upgrade)
         self.name = name
         self.capture = capture
 
     def draw(self):
+        """
+        Draws a block with text and ShopUpgradeButton on it.
+        """
         self.draw_plate_and_button()
 
         if not self.button.maxed_out:
@@ -358,6 +374,14 @@ class UpgradesItem(Item):
 
 class CosmeticsItem(Item):
     def __init__(self, y, image, cost, purchase, capture):
+        """
+        Initialization of a block on which item is displayed.
+        :param y: y coordinate of the block
+        :param image: image which will be displayed on the block
+        :param cost: cost of the item
+        :param purchase: item for purchase
+        :param capture: capture of the item
+        """
         self.x = 440
         self.y = y
         self.width = settings.WIDTH - 480
@@ -367,6 +391,9 @@ class CosmeticsItem(Item):
         self.capture = capture
 
     def draw(self):
+        """
+        Draws a block with text, picture and ShopBuyButton on it.
+        """
         self.draw_plate_and_button()
 
         # Cost
@@ -432,6 +459,9 @@ def load_images():
 
 
 def load_fonts():
+    """
+    Loads all needed fonts.
+    """
     global font, font_small
 
     font_path = os.path.join('.', 'interface_elements', 'Montserrat-Bold.ttf')
@@ -541,17 +571,17 @@ def create_ships_items():
 
 def create_upgrades_items():
     # Creating ItemsUpgrades objects
-    items_upgrades.append(UpgradesItem(440, 40, 300, 100, 0, 1, 'Increase gun DMG', ['from ', 0, ' to ', 0]))
+    items_upgrades.append(UpgradesItem(440, 40, 100, 0, 1, 'Increase gun DMG', ['from ', 0, ' to ', 0]))
 
-    items_upgrades.append(UpgradesItem(440 + (settings.WIDTH - 480) // 2 + 20, 40, 300, 1000, 1, -1,
+    items_upgrades.append(UpgradesItem(440 + (settings.WIDTH - 480) // 2 + 20, 40, 1000, 1, -1,
                                        'Increase gun FR', ['from ', 1, ' to ', 1]))
 
-    items_upgrades.append(UpgradesItem(440, 380, 300, 20, 2, 1, 'Increase plasma DMG', ['from ', 2, ' to ', 2]))
+    items_upgrades.append(UpgradesItem(440, 380, 20, 2, 1, 'Increase plasma DMG', ['from ', 2, ' to ', 2]))
 
-    items_upgrades.append(UpgradesItem(440 + (settings.WIDTH - 480) // 2 + 20, 380, 300, 100, 3, -1,
+    items_upgrades.append(UpgradesItem(440 + (settings.WIDTH - 480) // 2 + 20, 380, 100, 3, -1,
                                        'Increase plasma FR', ['from ', 3, ' to ', 3]))
 
-    items_upgrades.append(UpgradesItem(440, 720, 300, 1000, 4, 1, 'Increase laser DMG', ['from ', 4, ' to ', 4]))
+    items_upgrades.append(UpgradesItem(440, 720, 1000, 4, 1, 'Increase laser DMG', ['from ', 4, ' to ', 4]))
 
 
 def create_cosmetics_items():
