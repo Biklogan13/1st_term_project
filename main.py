@@ -1,6 +1,4 @@
 import pygame
-import pygame.mixer
-
 
 import menu
 import shop
@@ -10,10 +8,12 @@ import ammunition
 import enemies
 import settings
 
-FPS = 60
-
+# Initializing libraries
 pygame.init()
+pygame.font.init()
+pygame.mixer.init()
 
+# Setting a cursor
 arrow_strings = (  # sized 24x24
   "XX                      ",
   "XXX                     ",
@@ -44,16 +44,16 @@ cursor, mask = pygame.cursors.compile(arrow_strings, "X", ".")
 cursor_sizer = ((24, 24), (7, 11), cursor, mask)
 pygame.mouse.set_cursor(*cursor_sizer)
 
-pygame.font.init()
-pygame.mixer.init()
-
+# Setting a display
 info = pygame.display.Info()
 settings.SIZE = settings.WIDTH, settings.HEIGHT = info.current_w, info.current_h
 main_surface = pygame.display.set_mode(settings.SIZE, pygame.FULLSCREEN | pygame.NOFRAME)
 pygame.display.toggle_fullscreen()
 
+FPS = 60
 clock = pygame.time.Clock()
 
+# Initializing modules
 menu.init()
 shuttle.init()
 levels.init()
@@ -61,7 +61,7 @@ shop.init()
 enemies.init()
 ammunition.init()
 
-
+# Circle which crates output every frame
 while settings.running:
     clock.tick(FPS)
     if settings.flag == 'menu':
