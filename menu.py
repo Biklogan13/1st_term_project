@@ -33,12 +33,19 @@ class MenuButton(settings.Button):
         self.image_hover = image_hover
 
     def draw(self):
+        """
+        Draws button on a current section screen, taking into account current button state.
+        """
         if self.hover:
             screen.blit(self.image_hover, (self.x, self.y))
         else:
             screen.blit(self.image, (self.x, self.y))
 
     def act(self, event):
+        """
+        Detects if player pressed the button and acts based on its act parameter.
+        :param event: pygame.MOUSEBUTTONDOWN event
+        """
         if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
             if self.action == 'exit':
                 pygame.quit()
