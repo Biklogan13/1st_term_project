@@ -3,7 +3,9 @@ import os
 
 import settings
 
-# Global variables of menu section
+# ---------------- Global variables of menu section ----------------
+
+
 # Surface on which menu elements will be drown
 screen = None
 
@@ -12,6 +14,9 @@ buttons = []
 
 # Array which contains all images which will be displayed directly on screen
 images = dict.fromkeys(['name', 'plate'])
+
+
+# ---------------------------- Classes ----------------------------
 
 
 class MenuButton(settings.Button):
@@ -56,6 +61,9 @@ class MenuButton(settings.Button):
                 settings.flag = 'levels'
             elif self.action == 'switch_to_shop':
                 settings.flag = 'shop'
+
+
+# -------------------- Initialization functions --------------------
 
 
 def load_images():
@@ -124,6 +132,9 @@ def init():
 
     load_images()
     create_buttons()
+
+
+# ----------------- functions which create screen -----------------
 
 
 def create_screen():
