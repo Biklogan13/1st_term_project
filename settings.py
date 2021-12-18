@@ -57,6 +57,7 @@ HEAVY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'heavy.png')
 MISSILE_IMAGE_PATH = os.path.join('.', 'ammo_sprites', 'missile.png')
 CARRIER_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'carrier.png')
 
+
 # Common classes
 class Button:
     def __init__(self, x, y, width, height, action):
@@ -64,12 +65,12 @@ class Button:
         self.y = y
         self.width = width
         self.height = height
-        self.action = action
         self.hover = False
         self.pressed = False
         self.image = None
         self.image_hover = None
         self.image_pressed = None
+        self.action = action
 
     def act(self, event):
         global running, flag, shop_section
