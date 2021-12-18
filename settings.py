@@ -14,11 +14,7 @@ enemies, enemy_bullets, coins = [], [], []
 tick_counter = 0
 light_rings, bullets, laser, plasma_balls, ammo, = [], [], None, [], 0
 
-# FIXME REMOVE from here!
-bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
-
 # Game settings
-# FIXME split enemies and hero firerate and damage!
 seconds, bullets_firerate, plasma_balls_firerate, bullet_damage, plasma_ball_damage, laser_damage = 0, 10, 60, 20, 100, 1
 standart_enemy_bullet_damage, standart_enemy_bullet_firerate, enemy_missile_damage = 20, 10, 10
 
@@ -35,28 +31,6 @@ money = 200000
 RED = 0xFF0000
 YELLOW = 0xFFC91F
 ORANGE = (255, 165, 0)
-
-# FIXME REMOVE from here!
-PLASMA_1_PATH = os.path.join('.', 'ammo_sprites', 'plasma_1.png')
-PLASMA_2_PATH = os.path.join('.', 'ammo_sprites', 'plasma_2.png')
-PLASMA_3_PATH = os.path.join('.', 'ammo_sprites', 'plasma_3.png')
-
-PLASMA_BULLET_PATH = os.path.join('.', 'ammo_sprites', 'plasma_bullet.png')
-LIGHT_RING_PATH = os.path.join('.', 'ammo_sprites', 'lightring.png')
-
-LASER_SOUND_PATH = os.path.join('.', 'Sounds', 'LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
-CANNONS_SOUND_PATH = os.path.join('.', 'Sounds', 'ES_Cannon Blast 4.mp3')
-PLASMAGUN_SOUND_PATH = os.path.join('.', 'Sounds', 'plasma_gun_powerup_01.mp3')
-LIGHT_RING_SOUND_PATH = os.path.join('.', 'Sounds', 'Dio Brando - ZA WARUDO!.mp3')
-EXPLOSION_SOUND = os.path.join('.', 'Sounds', 'explosion.mp3')
-
-MINE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'mine.png')
-KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
-ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
-HEAVY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'heavy.png')
-MISSILE_IMAGE_PATH = os.path.join('.', 'ammo_sprites', 'missile.png')
-CARRIER_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'carrier.png')
-
 
 # Common classes
 class Button:
