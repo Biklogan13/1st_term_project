@@ -12,8 +12,8 @@ class ShuttleSkins:
     def __init__(self, x, y, width, height, image, super):
         """
         Initialization function for the shuttle skin class
-        :param x: x-offset of the skin
-        :param y: y-offset if the skin
+        :param x: x-offset of the skin to the left
+        :param y: y-offset if the skin to the top
         :param width: width of the skin
         :param height: height if the skin
         :param image: skin sprite
@@ -150,7 +150,7 @@ def init():
 def processing(screen):
     """
     A function which processes shuttle actions
-    :param screen:
+    :param screen: a surface which shuttle will be drawn on
     :return:
     """
     if settings.spaceship.hit_timer > 0:
@@ -166,8 +166,6 @@ def rot_center(image, angle):
     :param angle: an angle to rotate
     :return:
     """
-    WIDTH = image.get_width()
-    HEIGHT = image.get_height()
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = rot_image.get_rect()
@@ -183,8 +181,6 @@ def rot_center_square(image, angle):
     :param angle: an angle to rotate
     :return:
     """
-    WIDTH = image.get_width()
-    HEIGHT = image.get_height()
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = orig_rect.copy()
