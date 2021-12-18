@@ -36,7 +36,7 @@ def red_image(image_original):
     mask_inv.fill((255, 255, 255, 255))
     mask_inv.blit(mask, (0, 0), None, pygame.BLEND_RGB_SUB)
 
-    # Pouring image with red
+    # Filling image with red
     red = pygame.Surface(image.get_size()).convert_alpha()
     red.fill((255, 0, 0, 100))
     image.blit(red, (0, 0))
