@@ -61,7 +61,7 @@ shop.init()
 enemies.init()
 ammunition.init()
 
-# Circle which crates output every frame
+# A cycle which blits game surfaces onto the main screen
 while settings.running:
     clock.tick(FPS)
     if settings.flag == 'menu':
