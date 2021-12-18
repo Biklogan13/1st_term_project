@@ -738,6 +738,7 @@ def create_screen():
     for b in buttons:
         b.draw()
 
+    # Checking blocks movement
     for event in events:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for i in current_items:
