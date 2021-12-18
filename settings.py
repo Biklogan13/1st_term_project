@@ -5,7 +5,7 @@ import os
 
 # Flags and screen characteristics
 SIZE, WIDTH, HEIGHT = 0, 0, 0
-flag, shop_section, running = 'menu', 'ships', True
+flag, running = 'menu', True
 menu_background = None
 
 # Objects needed in various modules
@@ -72,34 +72,10 @@ class Button:
         self.image_pressed = None
         self.action = action
 
-    def act(self, event):
-        global running, flag, shop_section
-        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
-            if self.action == 'exit':
-                pygame.quit()
-                running = False
-            elif self.action == 'switch_to_menu':
-                flag = 'menu'
-            elif self.action == 'switch_to_levels':
-                flag = 'levels'
-            elif self.action == 'switch_to_shop':
-                flag = 'shop'
-            elif self.action == 'switch_to_ships':
-                shop_section = 'ships'
-            elif self.action == 'switch_to_upgrades':
-                shop_section = 'upgrades'
-            elif self.action == 'switch_to_cosmetics':
-                shop_section = 'cosmetics'
-
-    def draw(self, screen):
-        if self.image is None:
-            pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
-        elif self.pressed:
-            screen.blit(self.image_pressed, (self.x, self.y))
-        elif self.hover:
-            screen.blit(self.image_hover, (self.x, self.y))
-        else:
-            screen.blit(self.image, (self.x, self.y))
+    def check_mouse(self, event):
+        return event.button == 1 and\
+               0 <= event.pos[0] - self.x <= self.width and\
+               0 <= event.pos[1] - self.y <= self.height
 
     def hover_test(self, event):
         if 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:

@@ -12,10 +12,13 @@ pygame.init()
 # Global variables of levels section
 # Surface on which levels elements will be drown
 screen = None
+
 # Background of the levels section
 level_background = None
+
 # Type of selected ammo
 ammo_type = 0
+
 # Arrays which contain all images which will be displayed directly on screen
 left_indicator = dict.fromkeys(['bullets', 'plasma', 'laser'])
 right_indicator = dict.fromkeys(['plate', 'bar_edges', 'super_bar', 'super_bar_ready', 'hp_bar'])
