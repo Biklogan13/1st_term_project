@@ -13,6 +13,20 @@ lightrings = []
 light_ring_animation = []
 objects_hit_by_laser = []
 laser_min_hit = [3*settings.WIDTH, 0, 0, 0]
+bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
+
+PLASMA_1_PATH = os.path.join('.', 'ammo_sprites', 'plasma_1.png')
+PLASMA_2_PATH = os.path.join('.', 'ammo_sprites', 'plasma_2.png')
+PLASMA_3_PATH = os.path.join('.', 'ammo_sprites', 'plasma_3.png')
+
+PLASMA_BULLET_PATH = os.path.join('.', 'ammo_sprites', 'plasma_bullet.png')
+LIGHT_RING_PATH = os.path.join('.', 'ammo_sprites', 'lightring.png')
+
+LASER_SOUND_PATH = os.path.join('.', 'Sounds', 'LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
+CANNONS_SOUND_PATH = os.path.join('.', 'Sounds', 'ES_Cannon Blast 4.mp3')
+PLASMAGUN_SOUND_PATH = os.path.join('.', 'Sounds', 'plasma_gun_powerup_01.mp3')
+LIGHT_RING_SOUND_PATH = os.path.join('.', 'Sounds', 'Dio Brando - ZA WARUDO!.mp3')
+EXPLOSION_SOUND = os.path.join('.', 'Sounds', 'explosion.mp3')
 
 def init():
     global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, light_ring_sound, blow, death, explosion_sound
@@ -23,28 +37,28 @@ def init():
         blow.append(pygame.image.load(os.path.join('.', 'blow', 'blow' + str(i) + '.png')))
     print(len(blow))
 
-    plasma_ball_1 = pygame.image.load(settings.PLASMA_1_PATH)
+    plasma_ball_1 = pygame.image.load(PLASMA_1_PATH)
     plasma_ball_1.set_colorkey((255, 255, 255))
-    plasma_ball_2 = pygame.image.load(settings.PLASMA_2_PATH)
+    plasma_ball_2 = pygame.image.load(PLASMA_2_PATH)
     plasma_ball_2.set_colorkey((255, 255, 255))
-    plasma_ball_3 = pygame.image.load(settings.PLASMA_3_PATH)
+    plasma_ball_3 = pygame.image.load(PLASMA_3_PATH)
     plasma_ball_3.set_colorkey((255, 255, 255))
     plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
 
-    bullet_image = pygame.image.load(settings.PLASMA_BULLET_PATH)
+    bullet_image = pygame.image.load(PLASMA_BULLET_PATH)
     bullet_image = pygame.transform.scale(bullet_image, (80, 40))
     settings.bullet_image = bullet_image
 
-    light_ring_image = pygame.image.load(settings.LIGHT_RING_PATH)
+    light_ring_image = pygame.image.load(LIGHT_RING_PATH)
     light_ring_image.set_colorkey((255, 255, 255))
     settings.plasma_ball_sprites = plasma_ball_sprites
 
     pygame.mixer.init()
-    explosion_sound = pygame.mixer.Sound(settings.EXPLOSION_SOUND)
-    laser_sound = pygame.mixer.Sound(settings.LASER_SOUND_PATH)
-    cannons = pygame.mixer.Sound(settings.CANNONS_SOUND_PATH)
-    plasma_gun_sound = pygame.mixer.Sound(settings.PLASMAGUN_SOUND_PATH)
-    light_ring_sound = pygame.mixer.Sound(settings.LIGHT_RING_SOUND_PATH)
+    explosion_sound = pygame.mixer.Sound(EXPLOSION_SOUND)
+    laser_sound = pygame.mixer.Sound(LASER_SOUND_PATH)
+    cannons = pygame.mixer.Sound(CANNONS_SOUND_PATH)
+    plasma_gun_sound = pygame.mixer.Sound(PLASMAGUN_SOUND_PATH)
+    light_ring_sound = pygame.mixer.Sound(LIGHT_RING_SOUND_PATH)
     pygame.mixer.Sound.set_volume(light_ring_sound, 10000000)
     pygame.mixer.Sound.set_volume(cannons, 0.02)
     pygame.mixer.Sound.set_volume(laser_sound, 0.02)

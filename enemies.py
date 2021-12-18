@@ -4,6 +4,7 @@ import settings
 import ammunition
 import math
 import levels
+import os
 
 kamikaze_image = None
 mine_image = None
@@ -12,6 +13,13 @@ heavy_image = None
 missile_image = None
 carrier_image = None
 enemy_counter = 0
+
+MINE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'mine.png')
+KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
+ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
+HEAVY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'heavy.png')
+MISSILE_IMAGE_PATH = os.path.join('.', 'ammo_sprites', 'missile.png')
+CARRIER_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'carrier.png')
 
 
 class Coin:
@@ -327,17 +335,17 @@ class Enemy_missile():
 
 def init():
     global mine_image, kamikaze_image, enemy_image, heavy_image, missile_image, carrier_image
-    mine_image = pygame.image.load(settings.MINE_IMAGE_PATH).convert_alpha()
+    mine_image = pygame.image.load(MINE_IMAGE_PATH).convert_alpha()
     mine_image = pygame.transform.scale(mine_image, (50, 50))
-    kamikaze_image = pygame.image.load(settings.KAMIKADZE_IMAGE_PATH).convert_alpha()
+    kamikaze_image = pygame.image.load(KAMIKADZE_IMAGE_PATH).convert_alpha()
     kamikaze_image = pygame.transform.scale(kamikaze_image, (30, 45))
-    enemy_image = pygame.image.load(settings.ENEMY_IMAGE_PATH).convert_alpha()
+    enemy_image = pygame.image.load(ENEMY_IMAGE_PATH).convert_alpha()
     enemy_image = pygame.transform.scale(enemy_image, (100, 80))
-    heavy_image = pygame.image.load(settings.HEAVY_IMAGE_PATH).convert_alpha()
+    heavy_image = pygame.image.load(HEAVY_IMAGE_PATH).convert_alpha()
     heavy_image = pygame.transform.scale(heavy_image, (120, 120))
-    missile_image = pygame.image.load(settings.MISSILE_IMAGE_PATH).convert_alpha()
+    missile_image = pygame.image.load(MISSILE_IMAGE_PATH).convert_alpha()
     missile_image = pygame.transform.scale(missile_image, (60, 60))
-    carrier_image = pygame.image.load(settings.CARRIER_IMAGE_PATH).convert_alpha()
+    carrier_image = pygame.image.load(CARRIER_IMAGE_PATH).convert_alpha()
     carrier_image = pygame.transform.scale(carrier_image, (300, 300))
 
 
