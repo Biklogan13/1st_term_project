@@ -41,8 +41,8 @@ class Shuttle:
         self.ax = 0
         self.ay = 0
         self.r = 0
-        self.hp = 10000
-        self.max_hp = 10000
+        self.hp = 100
+        self.max_hp = 1000
         self.hit_timer = 0
 
     def draw(self, surface):

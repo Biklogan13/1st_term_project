@@ -164,13 +164,6 @@ class EnemyStandart:
         else:
             return False
 
-    def death(self):
-        """
-        A function which displays an explosion after a standart enemy's death
-        :return: None
-        """
-        for i in range(0, 5):
-            levels.screen.blit(ammunition.blow[i], (self.x, self.y))
 
 
 class EnemyHeavy:
