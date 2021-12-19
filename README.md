@@ -1,5 +1,7 @@
-# 1st_term_project 
+# Deep Space Pylots
 By Krylovskiy Ilia, Kozyrev Ivan and Kozlov Nikolai
+
+&nbsp;
 
 A documentation for the Deep Space Pylots game.
 
