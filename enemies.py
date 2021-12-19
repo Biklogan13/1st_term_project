@@ -165,7 +165,6 @@ class EnemyStandart:
             return False
 
 
-
 class EnemyHeavy:
     def __init__(self):
         """
@@ -498,6 +497,7 @@ class EnemyMissile:
         :return:  None
         """
         pass
+
 
 def init():
     """

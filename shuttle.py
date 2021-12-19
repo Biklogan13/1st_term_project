@@ -1,4 +1,5 @@
 import math
+import os
 import pygame
 
 import levels
@@ -121,10 +122,19 @@ def init():
     """
     global screen
     settings.spaceship = Shuttle(screen)
-    gunship = ShuttleSkins(50, 50, 100, 100, pygame.image.load('shuttle_skins/gunship.png').convert_alpha(), 0)
-    teleporter = ShuttleSkins(55, 31, 110, 110, pygame.image.load('shuttle_skins/pngegg.png').convert_alpha(), 1)
-    lasership = ShuttleSkins(50, 50, 100, 100, pygame.image.load('shuttle_skins/lasership.png').convert_alpha(), 2)
-    rocketship = ShuttleSkins(50, 50, 100, 100, pygame.image.load('shuttle_skins/rocketship.png').convert_alpha(), 3)
+
+    gunship_path = os.path.join('.', 'shuttle_skins', 'gunship.png')
+    gunship = ShuttleSkins(50, 50, 100, 100, pygame.image.load(gunship_path).convert_alpha(), 0)
+
+    teleporter_path = os.path.join('.', 'shuttle_skins', 'pngegg.png')
+    teleporter = ShuttleSkins(55, 31, 110, 110, pygame.image.load(teleporter_path).convert_alpha(), 1)
+
+    lasership_path = os.path.join('.', 'shuttle_skins', 'lasership.png')
+    lasership = ShuttleSkins(50, 50, 100, 100, pygame.image.load(lasership_path).convert_alpha(), 2)
+
+    rocketship_path = os.path.join('.', 'shuttle_skins', 'rocketship.png')
+    rocketship = ShuttleSkins(50, 50, 100, 100, pygame.image.load(rocketship_path).convert_alpha(), 3)
+
     settings.skins = [teleporter, gunship, lasership, rocketship]
     settings.current_skin = settings.skins[1]
 
