@@ -4,8 +4,8 @@ import pygame
 import levels
 import settings
 
+# Global variables of shuttle section
 screen = None
-speed_decay = 0
 
 
 class ShuttleSkins:
@@ -64,8 +64,6 @@ class Shuttle:
         A function which moves the shuttle
         :return:
         """
-        global speed_decay
-
         if pygame.key.get_pressed()[pygame.K_w]:
             self.ay = -1
         elif pygame.key.get_pressed()[pygame.K_s]:
@@ -73,28 +71,12 @@ class Shuttle:
         else:
             self.ay = 0
 
-        if self.ay == 0:
-            if self.Vy > 0:
-                self.Vy -= speed_decay
-            if self.Vy < 0:
-                self.Vy += speed_decay
-            if self.Vy < speed_decay * 2 and self.Vy > -speed_decay * 2:
-                self.Vy = 0
-
         if pygame.key.get_pressed()[pygame.K_a]:
             self.ax = -1
         elif pygame.key.get_pressed()[pygame.K_d]:
             self.ax = 1
         else:
             self.ax = 0
-
-        if self.ax == 0:
-            if self.Vx > 0:
-                self.Vx -= speed_decay
-            if self.Vx < 0:
-                self.Vx += speed_decay
-            if self.Vx < speed_decay * 2 and self.Vx > -speed_decay * 2:
-                self.Vx = 0
 
         if self.ax >= 0 and self.Vx < 10:
             self.Vx += self.ax

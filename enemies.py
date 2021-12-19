@@ -14,9 +14,8 @@ enemy_image = None
 heavy_image = None
 missile_image = None
 carrier_image = None
-enemy_counter = 0
 
-# Setting pathes for enemy sprites
+# Setting paths for enemy sprites
 MINE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'mine.png')
 KAMIKADZE_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'kamikaze.PNG')
 ENEMY_IMAGE_PATH = os.path.join('.', 'enemy_skins', 'enemy.PNG')
@@ -68,7 +67,7 @@ class Coin:
             settings.coins.remove(self)
 
 
-class Enemy_standart:
+class EnemyStandart:
     def __init__(self, heading):
         """
         Initialization function for the standart enemy class
@@ -170,7 +169,7 @@ class Enemy_standart:
             levels.screen.blit(ammunition.blow[i], (self.x, self.y))
 
 
-class Enemy_heavy:
+class EnemyHeavy:
     def __init__(self):
         """
         Initialization function for the heavy enemy class
@@ -233,11 +232,11 @@ class Enemy_heavy:
         """
         if self.ticks % 180 == 0:
             for i in (-2, -1, 0, 1, 2):
-                new_missile = Enemy_missile(self.x, self.y, self.angle + math.pi * i / 12)
+                new_missile = EnemyMissile(self.x, self.y, self.angle + math.pi * i / 12)
                 settings.enemy_bullets.append(new_missile)
 
 
-class Enemy_carrier():
+class EnemyCarrier:
     def __init__(self):
         """
         Initialization function for the enemy carrier class
@@ -290,7 +289,7 @@ class Enemy_carrier():
         """
         if self.x < settings.WIDTH and self.x > 0 and self.ticks % 20 == 0:
             i = random.random()
-            new_kamikaze = Enemy_kamikaze()
+            new_kamikaze = EnemyKamikaze()
             new_kamikaze.x = self.x + (i - 0.5) * 200 * math.cos(self.angle)
             new_kamikaze.y = self.y + (i - 0.5) * 200 * math.sin(self.angle)
             settings.enemies.append(new_kamikaze)
@@ -310,7 +309,7 @@ class Enemy_carrier():
             return False
 
 
-class Enemy_kamikaze:
+class EnemyKamikaze:
     def __init__(self):
         """
         Initialization function for the enemy kamikaze class
@@ -431,7 +430,7 @@ class Mine:
         pass
 
 
-class Enemy_missile():
+class EnemyMissile:
     def __init__(self, x, y, angle):
         """
         Initialization function for the enemy missile class
@@ -507,28 +506,27 @@ def processing(screen):
     :param screen: a surface which enemies will be drawn on
     :return: None
     """
-    global enemy_counter
 
     if settings.tick_counter % 60 == 0:
         new_mine = Mine()
         settings.enemies.append(new_mine)
 
     if settings.tick_counter % 120 == 0:
-        new_kamikaze = Enemy_kamikaze()
+        new_kamikaze = EnemyKamikaze()
         settings.enemies.append(new_kamikaze)
 
     if settings.tick_counter % 240 == 0:
         heading = random.choice([-1, 1])
         for i in range(3):
-            new_enemy = Enemy_standart(heading)
+            new_enemy = EnemyStandart(heading)
             settings.enemies.append(new_enemy)
 
     if settings.tick_counter % 600 == 0:
-        new_heavy = Enemy_heavy()
+        new_heavy = EnemyHeavy()
         settings.enemies.append(new_heavy)
 
     if settings.tick_counter % 1200 == 0:
-        new_carrier = Enemy_carrier()
+        new_carrier = EnemyCarrier()
         settings.enemies.append(new_carrier)
 
     for d in ammunition.death:
@@ -595,8 +593,6 @@ def rot_center(image, angle):
     :param angle: an angle to rotate
     :return:
     """
-    WIDTH = image.get_width()
-    HEIGHT = image.get_height()
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = rot_image.get_rect()
@@ -612,8 +608,6 @@ def rot_center_square(image, angle):
     :param angle: an angle to rotate
     :return:
     """
-    WIDTH = image.get_width()
-    HEIGHT = image.get_height()
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = orig_rect.copy()
