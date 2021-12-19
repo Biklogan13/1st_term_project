@@ -58,6 +58,7 @@ def init():
     light_ring_image.set_colorkey((255, 255, 255))
 
     pygame.mixer.init()
+    pygame.mixer.set_num_channels(50)
     explosion_sound = pygame.mixer.Sound(EXPLOSION_SOUND)
     laser_sound = pygame.mixer.Sound(LASER_SOUND_PATH)
     cannons = pygame.mixer.Sound(CANNONS_SOUND_PATH)
