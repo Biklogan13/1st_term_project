@@ -230,7 +230,7 @@ class EnemyHeavy:
         if self.ticks % 180 == 0:
             for i in (-2, -1, 0, 1, 2):
                 new_missile = EnemyMissile(self.x, self.y, self.angle + math.pi * i / 12)
-                settings.enemy_bullets.append(new_missile)
+                settings.enemies.append(new_missile)
 
 
 class EnemyCarrier:
@@ -284,7 +284,7 @@ class EnemyCarrier:
         A function which makes an enemy carrier launch kamikazes
         :return: None
         """
-        if self.x < settings.WIDTH and self.x > 0 and self.ticks % 20 == 0:
+        if 0 < self.x < settings.WIDTH and self.ticks % 20 == 0:
             i = random.random()
             new_kamikaze = EnemyKamikaze()
             new_kamikaze.x = self.x + (i - 0.5) * 200 * math.cos(self.angle)
@@ -446,25 +446,41 @@ class EnemyMissile:
         self.live = 1
         self.timer = 150
         self.damage = settings.enemy_missile_damage
+        self.steering = 0
+        self.phase = 0
 
     def move(self):
         """
         A function which moves an enemy missile
         :return: None
         """
-        self.angle += (math.atan2(settings.spaceship.x - self.x, settings.spaceship.y - self.y) - self.angle) / 20
+        self.steering = math.atan2(settings.spaceship.x - self.x, settings.spaceship.y - self.y)
+        x1 = math.cos(self.steering)
+        y1 = math.sin(self.steering)
+
+        for i in range(3):
+            x0 = (math.cos(self.angle) + x1) / 2
+            y0 = (math.sin(self.angle) + y1) / 2
+            if x0 == 0 and y0 == 0:
+                x0 = 0.1 * math.sin(self.steering)
+                y0 = -0.1 * math.cos(self.steering)
+            x1 = math.copysign(math.sqrt(1 / (1 + y0 ** 2 / x0 ** 2)), x0)
+            y1 = math.copysign(math.sqrt(1 / (1 + x0 ** 2 / y0 ** 2)), y0)
+
+        self.angle = math.atan2(y1, x1)
         self.Vx = 15 * math.sin(self.angle)
         self.Vy = 15 * math.cos(self.angle)
         self.x += self.Vx
         self.y += self.Vy
 
-    def draw(self):
+    def draw(self, screen):
         """
         A function which draws an enemy missile
+        :param screen: a surface which image of a mine will be drawn on
         :return: None
         """
         if self.live > 0:
-            self.surface = levels.screen
+            self.surface = screen
             self.image = rot_center_square(missile_image, self.angle * 360 / (2 * math.pi) - 180)
             self.surface.blit(self.image, (self.x - 30, self.y - 30))
 
@@ -476,6 +492,12 @@ class EnemyMissile:
         """
         return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2
 
+    def shoot(self):
+        """
+        A function inherent to all enemies which does nothing
+        :return:  None
+        """
+        pass
 
 def init():
     """
