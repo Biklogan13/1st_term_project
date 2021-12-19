@@ -29,7 +29,7 @@ class Coin:
         """
         Initialization function for the coin class
         :param x: initial x-coordinate of a coin
-        :param y: initial y-coordinate pf a coin
+        :param y: initial y-coordinate of a coin
         :param denomination: value of a coin
         """
         self.x = x
@@ -68,6 +68,7 @@ class Coin:
             settings.money += self.denomination
             settings.super_charge += 10
             settings.coins.remove(self)
+            ammunition.coin_flip_sound.play()
 
 
 class EnemyStandart:
@@ -509,7 +510,6 @@ def processing(screen):
     :param screen: a surface which enemies will be drawn on
     :return: None
     """
-
     if settings.tick_counter % 60 == 0:
         new_mine = Mine()
         settings.enemies.append(new_mine)
@@ -536,6 +536,9 @@ def processing(screen):
         if d.frame == 5:
             ammunition.death.remove(d)
         d.play()
+
+    if settings.super_charge >= 100:
+        settings.super_charge = 100
 
     for k in settings.enemies:
         if k.live <= 0:
