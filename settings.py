@@ -37,7 +37,14 @@ ORANGE = (255, 165, 0)
 
 # Common classes
 class Button:
-    def __init__(self, x, y, width, height, action):
+    def __init__(self, x, y, width, height):
+        """
+        Initialization of button object.
+        :param x: x coordinate of the
+        :param y: y coordinate of the button
+        :param width: width of the button
+        :param height: height of the button
+        """
         self.x = x
         self.y = y
         self.width = width
@@ -47,9 +54,13 @@ class Button:
         self.image = None
         self.image_hover = None
         self.image_pressed = None
-        self.action = action
 
     def check_mouse(self, event):
+        """
+        Checks if player pressed the button. If does? returns true and plays click sound.
+        :param event: pygame MOUSEBUTTONDOWN event
+        :return: bool value that says that button was pressed
+        """
         check = event.button == 1 and\
                 0 <= event.pos[0] - self.x <= self.width and\
                 0 <= event.pos[1] - self.y <= self.height
@@ -58,6 +69,10 @@ class Button:
         return check
 
     def hover_test(self, event):
+        """
+        Checks if mouse is hovering over button. If does sets the button hover value to True.
+        :param event: pygame.MOUSEMOVEMENT event
+        """
         if 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
             self.hover = True
         else:
