@@ -729,6 +729,8 @@ def create_screen():
             i.button.enough_money = False
 
     # Drawing left-sided menu
+    blit_menu()
+
     for b in buttons:
         if b.action == 'switch_to_' + shop_section:
             b.pressed = True
