@@ -456,7 +456,8 @@ class UpgradesItem(Item):
         :param i: number of item in items_upgrades
         :param file: file in which saving will be done
         """
-        file.write(str(i) + ' ' + str(delegate(self.button.purchase, 'return')) + ' ' + str(self.button.cost) + '\n')
+        file.write(str(i) + ' ' + str(delegate(self.button.purchase, 'return')) + ' ' + str(self.button.cost)
+                   + ' ' + str(self.button.maxed_out) + '\n')
 
     def load_data(self, words):
         """
@@ -465,6 +466,8 @@ class UpgradesItem(Item):
         """
         delegate(self.button.purchase, str('make ' + str(words[1])))
         self.button.cost = int(words[2])
+        if words[3] == 'True':
+            self.button.maxed_out = True
 
 
 class CosmeticsItem(Item):
