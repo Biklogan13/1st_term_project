@@ -81,7 +81,7 @@ class Bullet:
         :param self.r: radius of the bullet
         :param self.vx: x velocity of the bullet
         :param self.vy: y velocity of the bullet
-        :param self.timer: number of frames that  bullet can live
+        :param self.timer: number of frames that a bullet can live
         :param self.damage: damage that bullet deals
         :param self.angle: angle of shot
         :param self.bullet: the surface with image on it

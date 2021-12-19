@@ -3,13 +3,20 @@ import os
 
 import settings
 
-# Global variables of menu section
+# ---------------- Global variables of menu section ----------------
+
+
 # Surface on which menu elements will be drown
 screen = None
+
 # An array which contains all Buttons objects
 buttons = []
+
 # Array which contains all images which will be displayed directly on screen
 images = dict.fromkeys(['name', 'plate'])
+
+
+# ---------------------------- Classes ----------------------------
 
 
 class MenuButton(settings.Button):
@@ -56,6 +63,9 @@ class MenuButton(settings.Button):
                 settings.flag = 'shop'
 
 
+# -------------------- Initialization functions --------------------
+
+
 def load_images():
     """
     Loads all images which are going to be blit directly on screen.
@@ -76,7 +86,7 @@ def load_images():
     images['plate'] = pygame.transform.scale(plate, (500, 500))
 
 
-def create_interface_elements():
+def create_buttons():
     """
     Creates interface elements (button objects).
     """
@@ -121,7 +131,10 @@ def init():
     screen = pygame.Surface(settings.SIZE)
 
     load_images()
-    create_interface_elements()
+    create_buttons()
+
+
+# ----------------- functions which create screen -----------------
 
 
 def create_screen():

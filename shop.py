@@ -4,240 +4,75 @@ import math
 
 import settings
 
+
+# ---------------- Global variables of shop section ----------------
+
+
+# Surface on which shop elements will be drown
+screen = None
+
+# Shop background
+background = None
+
 # Colors
 WHITE = (255, 255, 255)
 DARK_GREEN = (1, 31, 38)
 
 # Fonts
-font_path = os.path.join('.', 'interface_elements', 'Montserrat-Bold.ttf')
-
-# Creating global variables (variables needed for more than 1 frame but only in shop module)
-buttons, items_ships, items_upgrades, items_cosmetics = [], [], [], []
-buy_button_selected, buy_button_select, buy_button_select_hover, \
-    buy_button_buy_enough_money, buy_button_buy_enough_money_hover,\
-    buy_button_buy_not_enough_money = None, None, None, None, None, None
-section_indicator = 'ships'
-magnitude = 120
-current_items = None
-screen = None
 font, font_small = None, None
 
-# Images paths
-background_path = os.path.join('.', 'backgrounds', 'shop_background.jpg')
-background = pygame.image.load(background_path)
+# Indicator os shop section
+shop_section = 'ships'
 
-menu_background_1_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
-menu_background_1 = pygame.image.load(menu_background_1_path)
-menu_background_2_path = os.path.join('.', 'backgrounds', 'menu_background_2.jpg')
-menu_background_2 = pygame.image.load(menu_background_2_path)
-menu_background_3_path = os.path.join('.', 'backgrounds', 'menu_background_2.jpg')
-menu_background_3 = pygame.image.load(menu_background_3_path)
-menu_background_4_path = os.path.join('.', 'backgrounds', 'menu_background_4.png')
-menu_background_4 = pygame.image.load(menu_background_4_path)
-menu_background_5_path = os.path.join('.', 'backgrounds', 'menu_background_5.png')
-menu_background_5 = pygame.image.load(menu_background_5_path)
-menu_background_6_path = os.path.join('.', 'backgrounds', 'menu_background_6.png')
-menu_background_6 = pygame.image.load(menu_background_6_path)
-menu_backgrounds = [menu_background_1, menu_background_2, menu_background_3,
-                    menu_background_4, menu_background_5, menu_background_6]
+# Array which contains shop menu buttons
+buttons = []
 
-section_indicator_path = os.path.join('.', 'interface_elements', 'section_indicator.png')
-section_indicator = pygame.image.load(section_indicator_path)
+# Items for purchasing
+items_ships, items_upgrades, items_cosmetics = [], [], []
 
-shop_plate_path = os.path.join('.', 'interface_elements', 'shop_plate.png')
-shop_plate = pygame.image.load(shop_plate_path)
-left_side_path = os.path.join('.', 'interface_elements', 'left_side.png')
-left_side = pygame.image.load(left_side_path)
-right_side_path = os.path.join('.', 'interface_elements', 'right_side.png')
-right_side = pygame.image.load(right_side_path)
-price_tag_path = os.path.join('.', 'interface_elements', 'price_tag.png')
-price_tag = pygame.image.load(price_tag_path)
+# Buttons elements
+buy_button_elements = dict.fromkeys(['select', 'selected', 'select_hover', 'buy_enough_money',
+                                     'buy_enough_money_hover', 'buy_not_enough_money'])
+upgrade_button_elements = dict.fromkeys(['enough_money', 'not_enough_money', 'hover'])
 
-gun_icon_50_path = os.path.join('.', 'interface_elements', 'gun_icon_50.png')
-gun_icon_50 = pygame.image.load(gun_icon_50_path)
-plasma_icon_50_path = os.path.join('.', 'interface_elements', 'plasma_icon_50.png')
-plasma_icon_50 = pygame.image.load(plasma_icon_50_path)
-laser_icon_50_path = os.path.join('.', 'interface_elements', 'laser_icon_50.png')
-laser_icon_50 = pygame.image.load(laser_icon_50_path)
-
-gun_icon_150_path = os.path.join('.', 'interface_elements', 'gun_icon_150.png')
-gun_icon_150 = pygame.image.load(gun_icon_150_path)
-plasma_icon_150_path = os.path.join('.', 'interface_elements', 'plasma_icon_150.png')
-plasma_icon_150 = pygame.image.load(plasma_icon_150_path)
-laser_icon_150_path = os.path.join('.', 'interface_elements', 'laser_icon_150.png')
-laser_icon_150 = pygame.image.load(laser_icon_150_path)
-
-ships_button_image_path = os.path.join('.', 'interface_elements', 'ships_button.png')
-upgrades_button_image_path = os.path.join('.', 'interface_elements', 'upgrades_button.png')
-cosmetics_button_image_path = os.path.join('.', 'interface_elements', 'cosmetics_button.png')
-
-ships_button_image_hover_path = os.path.join('.', 'interface_elements', 'ships_button_hover.png')
-upgrades_button_image_hover_path = os.path.join('.', 'interface_elements', 'upgrades_button_hover.png')
-cosmetics_button_image_hover_path = os.path.join('.', 'interface_elements', 'cosmetics_button_hover.png')
-
-ships_button_image_pressed_path = os.path.join('.', 'interface_elements', 'ships_button_pressed.png')
-upgrades_button_image_pressed_path = os.path.join('.', 'interface_elements', 'upgrades_button_pressed.png')
-cosmetics_button_image_pressed_path = os.path.join('.', 'interface_elements', 'cosmetics_button_pressed.png')
-
-buy_button_selected_path = os.path.join('.', 'interface_elements', 'buy_button_selected.png')
-buy_button_select_path = os.path.join('.', 'interface_elements', 'buy_button_select.png')
-buy_button_select_hover_path = os.path.join('.', 'interface_elements', 'buy_button_select_hover.png')
-buy_button_buy_enough_money_path = os.path.join('.', 'interface_elements', 'buy_button_buy_enough_money.png')
-buy_button_buy_enough_money_hover_path = os.path.join('.', 'interface_elements', 'buy_button_buy_enough_money_hover.png')
-buy_button_buy_not_enough_money_path = os.path.join('.', 'interface_elements', 'buy_button_buy_not_enough_money.png')
-
-upgrade_button_not_enough_money_path = os.path.join('.', 'interface_elements', 'upgrade_button_not_enough_money.png')
-upgrade_button_not_enough_money = pygame.image.load(upgrade_button_not_enough_money_path)
-upgrade_button_enough_money_path = os.path.join('.', 'interface_elements', 'upgrade_button_enough_money.png')
-upgrade_button_enough_money = pygame.image.load(upgrade_button_enough_money_path)
-upgrade_button_hover_path = os.path.join('.', 'interface_elements', 'upgrade_button_hover.png')
-upgrade_button_hover = pygame.image.load(upgrade_button_hover_path)
+# Arrays which contains all images which will be displayed directly on screen
+left_block = dict.fromkeys(['menu_plate', 'plate'])
+weapon_icons = dict.fromkeys(['gun', 'plasma', 'laser'])
+item_plate = dict.fromkeys(['left_side', 'right_side', 'plate', 'price_tag'])
 
 
-class Item:
-    def __init__(self, x, y, width, height, image, cost, purchase, name, capture):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        if width == settings.WIDTH - 480:
-            self.button = ShopButton(self.x + self.width - 500, self.y + self.height // 2, 400, 100, purchase, cost)
-        else:
-            self.button = ShopButton(self.x + 100, self.y + 50, 100, 100, purchase, cost)
-        self.image = image
-        self.phase = 0
-        self.name = name
-        self.capture = capture
-
-    def move(self, y, move):
-        if move:
-            self.y += y
-            self.button.y += y
-
-    def draw(self):
-        # Plate
-        screen.blit(left_side, (self.x, self.y))
-        screen.blit(pygame.transform.scale(shop_plate, (self.width - 100, self.height)), (self.x + 50, self.y))
-        screen.blit(right_side, (self.x + self.width - 50, self.y))
-        # Button
-        self.button.draw()
-        # Content
-        if settings.shop_section == 'ships':
-            # Cost
-            screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
-            screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
-            # Text
-            screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
-            screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
-            # Image
-            rot_image = pygame.transform.rotate(self.image,
-                                            math.atan2(60, magnitude * math.cos(self.phase)) * 180 / math.pi - 90)
-            w, h = rot_image.get_rect().size
-            screen.blit(rot_image,
-                    (self.x + 150 + magnitude + magnitude * math.sin(self.phase) - w // 2, self.y + 100 - h // 2))
-            if self.button.hover or self.button.selected:
-                self.phase += 0.02
-                self.phase = self.phase % (2 * math.pi)
-        elif settings.shop_section == 'upgrades':
-            if not self.button.bought:
-                # Cost
-                screen.blit(price_tag, (self.x + 250, self.y + 45))
-                screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + 320, self.y + 45))
-                # Text
-                screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
-                screen.blit(font_small.render(var_text(self.capture, self.button.upgrade), True, DARK_GREEN),
-                            (self.x + 100, self.y + 220))
-            else:
-                screen.blit(font.render('MAXED OUT', True, DARK_GREEN), (self.x + 100, self.y + 180))
-        elif settings.shop_section == 'cosmetics':
-            # Cost
-            screen.blit(price_tag, (self.x + self.width - 500, self.y + 45))
-            screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
-            # Text
-            screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
-            # Image
-            sc_image = pygame.transform.scale(self.image, (int(150 / settings.HEIGHT * settings.WIDTH), 150))
-            screen.blit(sc_image, (self.x + 100, self.y + 50))
-
-
-class ShopButton(settings.Button):
-    def __init__(self, x, y, width, height, purchase, cost):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.cost = cost
-        self.bought = False
-        self.hover = False
-        self.selected = False
-        self.enough_money = False
-        self.purchase = purchase
-        self.upgrade = 0
-
-    def act(self, event):
-        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
-            if self.bought and settings.shop_section == 'ships':
-                for i in current_items:
-                    i.button.selected = False
-                self.selected = True
-                settings.current_skin = self.purchase
-            elif self.bought and settings.shop_section == 'cosmetics':
-                for i in current_items:
-                    i.button.selected = False
-                self.selected = True
-                settings.menu_background = self.purchase
-            elif self.cost <= settings.money and not self.bought:
-                self.bought = True
-                settings.money -= self.cost
-                if settings.shop_section == 'upgrades':
-                    delegate(self.purchase, self.upgrade)
-                    if int(delegate(self.purchase, 'return')) > 1:
-                        self.bought = False
-                    self.cost = int(self.cost*1.1)
-
-    def draw(self):
-        if settings.shop_section == 'upgrades' and not self.bought:
-            if self.enough_money:
-                if self.hover:
-                    screen.blit(upgrade_button_hover, (self.x, self.y))
-                else:
-                    screen.blit(upgrade_button_enough_money, (self.x, self.y))
-            else:
-                screen.blit(upgrade_button_not_enough_money, (self.x, self.y))
-        elif settings.shop_section != 'upgrades':
-            if self.selected:
-                screen.blit(buy_button_selected, (self.x, self.y))
-            elif self.bought:
-                if self.hover:
-                    screen.blit(buy_button_select_hover, (self.x, self.y))
-                else:
-                    screen.blit(buy_button_select, (self.x, self.y))
-            else:
-                if self.enough_money:
-                    if self.hover:
-                        screen.blit(buy_button_buy_enough_money_hover, (self.x, self.y))
-                    else:
-                        screen.blit(buy_button_buy_enough_money, (self.x, self.y))
-                else:
-                    screen.blit(buy_button_buy_not_enough_money, (self.x, self.y))
+# ---------------------- Secondary functions ----------------------
 
 
 def var_text(arr, plus):
+    """
+    Transforms array into string with integers responding to variables replaced with variables value.
+    When variable is placed in array 2-nd time, replaces int with variables value + plus variable
+    :param arr: array which contains integers and strings
+    :param plus: value which added to variable if is=t shows up second time
+    :return:
+    """
     ret = ''
-    mult = 0
+    multiplier = 0
     for i in range(len(arr)):
         if type(arr[i]) is int:
             if plus > 0:
-                ret += str(int(delegate(arr[i], 'return')) + mult * plus)
+                ret += str(int(delegate(arr[i], 'return')) + multiplier * plus)
             else:
-                ret += str(round((60 / (int(delegate(arr[i], 'return')) + mult * plus)), 2))
-            mult = 1
+                ret += str(round((60 / (int(delegate(arr[i], 'return')) + multiplier * plus)), 2))
+            multiplier = 1
         else:
             ret += arr[i]
     return ret
 
 
 def delegate(marker, value):
+    """
+    Function which allows shop objects to interact with settings variables.
+    :param marker: value which shows which variable to modify
+    :param value: value which is added to variable from settings
+    :return: str of a variable from settings
+    """
     if value == 'return':
         if marker == 0:
             return str(settings.bullet_damage)
@@ -264,122 +99,605 @@ def delegate(marker, value):
             settings.laser_damage += value
 
 
-def init():
-    global buttons, screen, background, section_indicator, shop_plate, left_side, right_side, price_tag,\
-        buy_button_selected, buy_button_select, buy_button_select_hover, buy_button_buy_enough_money,\
-        buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money, font, font_small, menu_backgrounds
+# ---------------------------- Classes ----------------------------
 
-    settings.shop_section = 'ships'
 
-    # Font
+class ShopMenuButton(settings.Button):
+    def __init__(self, x, y, size, action, image, image_hover, image_pressed):
+        """
+        Initializes button specified for left block of shop.
+        :param x: x coordinate of the button
+        :param y: y coordinate of the button
+        :param size: (width, height) tuple which defines size of the button
+        :param action: 1 of 3 actions: 'switch_to_ships', 'switch_to_upgrades', 'switch_to_cosmetics'
+        :param image: image of the button when mouse is not hovering over it and it's not selected
+        :param image_hover: image of the button when mouse is hovering over it and it's not selected
+        :param image_pressed: image of the button when it's selected
+        """
+        self.x = x
+        self.y = y
+        self.width = size[0]
+        self.height = size[1]
+        self.action = action
+        self.hover = False
+        self.pressed = False
+        self.image = image
+        self.image_hover = image_hover
+        self.image_pressed = image_pressed
+
+    def draw(self):
+        """
+        Draws button on a current section screen, taking into account current button state.
+        """
+        if self.image is None:
+            pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
+        elif self.pressed:
+            screen.blit(self.image_pressed, (self.x, self.y))
+        elif self.hover:
+            screen.blit(self.image_hover, (self.x, self.y))
+        else:
+            screen.blit(self.image, (self.x, self.y))
+
+    def act(self, event):
+        """
+        Detects if player pressed the button and acts based on its act parameter.
+        :param event: pygame.MOUSEBUTTONDOWN event
+        """
+        global shop_section
+        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+            if self.action == 'switch_to_ships':
+                shop_section = 'ships'
+            elif self.action == 'switch_to_upgrades':
+                shop_section = 'upgrades'
+            elif self.action == 'switch_to_cosmetics':
+                shop_section = 'cosmetics'
+
+
+class ShopBuyButton(settings.Button):
+    def __init__(self, x, y, purchase, cost, section):
+        """
+        Initializes button specified for buying items in shop.
+        :param x: x coordinate of the button
+        :param y: y coordinate of the button
+        :param purchase: object to buy with this button
+        :param cost: cost of the item
+        :param section: section in which item is placed
+        """
+        self.x = x
+        self.y = y
+        self.width = 400
+        self.height = 100
+        self.section = section
+        self.cost = cost
+        self.purchase = purchase
+        self.bought = False
+        self.hover = False
+        self.selected = False
+        self.enough_money = False
+
+    def act(self, event):
+        """
+        Detects if player pressed the button and acts based on its act parameter.
+        :param event: pygame.MOUSEBUTTONDOWN event
+        """
+        if self.check_mouse(event):
+            if self.bought:
+                if self.section == 'ships':
+                    items = items_ships
+                    settings.current_skin = self.purchase
+                else:
+                    items = items_cosmetics
+                    settings.menu_background = self.purchase
+                for i in items:
+                    i.button.selected = False
+                self.selected = True
+            elif self.cost <= settings.money and not self.bought:
+                self.bought = True
+                settings.money -= self.cost
+
+    def draw(self):
+        """
+        Draws button on a current section screen, taking into account current button state.
+        """
+        if self.selected:
+            screen.blit(buy_button_elements['selected'], (self.x, self.y))
+        elif self.bought:
+            if self.hover:
+                screen.blit(buy_button_elements['select_hover'], (self.x, self.y))
+            else:
+                screen.blit(buy_button_elements['select'], (self.x, self.y))
+        else:
+            if self.enough_money:
+                if self.hover:
+                    screen.blit(buy_button_elements['buy_enough_money_hover'], (self.x, self.y))
+                else:
+                    screen.blit(buy_button_elements['buy_enough_money'], (self.x, self.y))
+            else:
+                screen.blit(buy_button_elements['buy_not_enough_money'], (self.x, self.y))
+
+
+class ShopUpgradeButton(settings.Button):
+    def __init__(self, x, y, purchase, cost, upgrade):
+        """
+        Initializes button specified for upgrading items in shop.
+        :param x: x coordinate of the button
+        :param y: y coordinate of the button
+        :param purchase: x coordinate of the button
+        :param cost: cost of the item
+        :param upgrade: value added to upgraded variable when button pressed
+        """
+        self.x = x
+        self.y = y
+        self.width = 100
+        self.height = 100
+        self.cost = cost
+        self.maxed_out = False
+        self.hover = False
+        self.enough_money = False
+        self.purchase = purchase
+        self.upgrade = upgrade
+
+    def act(self, event):
+        """
+        Detects if player pressed the button and acts based on its act parameter.
+        :param event: pygame.MOUSEBUTTON event
+        """
+        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+            if self.cost <= settings.money and not self.maxed_out:
+                settings.money -= self.cost
+                delegate(self.purchase, self.upgrade)
+                if int(delegate(self.purchase, 'return')) <= 1:
+                    self.maxed_out = True
+                self.cost = int(self.cost * 1.1)
+
+    def draw(self):
+        """
+        Draws button on a current section screen, taking into account current button state.
+        """
+        if not self.maxed_out:
+            if self.enough_money:
+                if self.hover:
+                    screen.blit(upgrade_button_elements['hover'], (self.x, self.y))
+                else:
+                    screen.blit(upgrade_button_elements['enough_money'], (self.x, self.y))
+            else:
+                screen.blit(upgrade_button_elements['not_enough_money'], (self.x, self.y))
+
+
+class Item:
+    def __init__(self, y, image, cost, purchase, name, capture):
+        """
+        Initialization of a block on which item is displayed.
+        :param y: y coordinate of the block
+        :param image: image which will be displayed on the block
+        :param cost: cost of the item
+        :param purchase: item which is displayed on the block for bying
+        :param name: name of the item
+        :param capture: caption of the item
+        """
+        self.x = 440
+        self.y = y
+        self.width = settings.WIDTH - 480
+        self.height = 300
+        self.button = ShopBuyButton(self.x + self.width - 500, self.y + self.height // 2, purchase, cost, 'ships')
+        self.image = image
+        self.phase = 0
+        self.magnitude = 120
+        self.name = name
+        self.capture = capture
+
+    def move(self, y, move):
+        """
+        Moves block based on the y parameter which corresponds to the rotation of the mouse wheel.
+        :param y: value by which item is moved
+        :param move: boolean value which shows blocks can move or not
+        """
+        if move:
+            self.y += y
+            self.button.y += y
+
+    def draw_plate_and_button(self):
+        """
+        Draws plate on which all pictures and text is displayed.
+        """
+        screen.blit(item_plate['left_side'], (self.x, self.y))
+        screen.blit(pygame.transform.scale(item_plate['plate'], (self.width - 100, self.height)), (self.x + 50, self.y))
+        screen.blit(item_plate['right_side'], (self.x + self.width - 50, self.y))
+        self.button.draw()
+
+
+class ShipsItem(Item):
+    def draw(self):
+        """
+        Draws a block with a ship, text and ShopBuyButton on it.
+        """
+        self.draw_plate_and_button()
+
+        # Cost
+        screen.blit(item_plate['price_tag'], (self.x + self.width - 500, self.y + 45))
+        screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
+
+        # Text
+        screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
+        screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
+
+        # Image
+        rot_image = pygame.transform.rotate(self.image,
+                                            math.atan2(60, self.magnitude * math.cos(self.phase)) * 180 / math.pi - 90)
+        w, h = rot_image.get_rect().size
+        screen.blit(rot_image,
+                    (self.x + 150 + self.magnitude + self.magnitude * math.sin(self.phase) - w // 2, self.y + 100 - h // 2))
+        # Moving spaceship
+        if self.button.hover or self.button.selected:
+            self.phase += 0.02
+            self.phase = self.phase % (2 * math.pi)
+
+
+class UpgradesItem(Item):
+    def __init__(self, x, y, cost, purchase, upgrade, name, capture):
+        """
+        Initialization of a block on which item is displayed.
+        :param x: x coordinate of the block
+        :param y: y coordinate of the block
+        :param cost: cost of the item
+        :param purchase: item for purchase
+        :param upgrade: value by which purchase will be upgraded
+        :param name: name of the item
+        :param capture: capture of the item
+        """
+        self.x = x
+        self.y = y
+        self.width = (settings.WIDTH - 480) // 2 - 20
+        self.height = 300
+        self.button = ShopUpgradeButton(self.x + 100, self.y + 50, purchase, cost, upgrade)
+        self.name = name
+        self.capture = capture
+
+    def draw(self):
+        """
+        Draws a block with text and ShopUpgradeButton on it.
+        """
+        self.draw_plate_and_button()
+
+        if not self.button.maxed_out:
+            # Cost
+            screen.blit(item_plate['price_tag'], (self.x + 250, self.y + 45))
+            screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + 320, self.y + 45))
+
+            # Text
+            screen.blit(font_small.render(self.name, True, DARK_GREEN), (self.x + 100, self.y + 180))
+            screen.blit(font_small.render(var_text(self.capture, self.button.upgrade), True, DARK_GREEN),
+                        (self.x + 100, self.y + 220))
+        else:
+            screen.blit(font.render('MAXED OUT', True, DARK_GREEN), (self.x + 100, self.y + 180))
+
+
+class CosmeticsItem(Item):
+    def __init__(self, y, image, cost, purchase, capture):
+        """
+        Initialization of a block on which item is displayed.
+        :param y: y coordinate of the block
+        :param image: image which will be displayed on the block
+        :param cost: cost of the item
+        :param purchase: item for purchase
+        :param capture: capture of the item
+        """
+        self.x = 440
+        self.y = y
+        self.width = settings.WIDTH - 480
+        self.height = 300
+        self.button = ShopBuyButton(self.x + self.width - 500, self.y + self.height // 2, purchase, cost, 'cosmetics')
+        self.image = image
+        self.capture = capture
+
+    def draw(self):
+        """
+        Draws a block with text, picture and ShopBuyButton on it.
+        """
+        self.draw_plate_and_button()
+
+        # Cost
+        screen.blit(item_plate['price_tag'], (self.x + self.width - 500, self.y + 45))
+        screen.blit(font.render(str(self.button.cost), True, DARK_GREEN), (self.x + self.width - 430, self.y + 45))
+
+        # Text
+        screen.blit(font_small.render(self.capture, True, DARK_GREEN), (self.x + 100, self.y + 220))
+
+        # Image
+        sc_image = pygame.transform.scale(self.image, (int(150 / settings.HEIGHT * settings.WIDTH), 150))
+        screen.blit(sc_image, (self.x + 100, self.y + 50))
+
+
+# -------------------- Initialization functions --------------------
+
+
+def load_images():
+    """
+    Loads all images which are going to be blit directly on screen.
+    """
+    global background
+
+    # Shop background
+    background_path = os.path.join('.', 'backgrounds', 'shop_background.jpg')
+    background = pygame.image.load(background_path)
+    background = pygame.transform.scale(background, settings.SIZE)
+
+    # Section indicator
+    menu_plate_path = os.path.join('.', 'interface_elements', 'section_indicator.png')
+    menu_plate = pygame.image.load(menu_plate_path)
+    left_block['menu_plate'] = pygame.transform.scale(menu_plate, (400, 1080))
+
+    # Item plate
+    shop_plate_path = os.path.join('.', 'interface_elements', 'shop_plate.png')
+    item_plate['plate'] = pygame.image.load(shop_plate_path)
+
+    left_side_path = os.path.join('.', 'interface_elements', 'left_side.png')
+    left_side = pygame.image.load(left_side_path)
+    item_plate['left_side'] = pygame.transform.scale(left_side, (50, 300))
+
+    right_side_path = os.path.join('.', 'interface_elements', 'right_side.png')
+    right_side = pygame.image.load(right_side_path)
+    item_plate['right_side'] = pygame.transform.scale(right_side, (50, 300))
+
+    price_tag_path = os.path.join('.', 'interface_elements', 'price_tag.png')
+    item_plate['price_tag'] = pygame.image.load(price_tag_path)
+
+    # Weapon icons
+    gun_icon_150_path = os.path.join('.', 'interface_elements', 'gun_icon_150.png')
+    weapon_icons['gun'] = pygame.image.load(gun_icon_150_path)
+    plasma_icon_150_path = os.path.join('.', 'interface_elements', 'plasma_icon_150.png')
+    weapon_icons['plasma'] = pygame.image.load(plasma_icon_150_path)
+    laser_icon_150_path = os.path.join('.', 'interface_elements', 'laser_icon_150.png')
+    weapon_icons['laser'] = pygame.image.load(laser_icon_150_path)
+
+    gun_icon_50_path = os.path.join('.', 'interface_elements', 'gun_icon_50.png')
+    weapon_icons['gun'] = pygame.image.load(gun_icon_50_path)
+    plasma_icon_50_path = os.path.join('.', 'interface_elements', 'plasma_icon_50.png')
+    weapon_icons['plasma'] = pygame.image.load(plasma_icon_50_path)
+    laser_icon_50_path = os.path.join('.', 'interface_elements', 'laser_icon_50.png')
+    weapon_icons['laser'] = pygame.image.load(laser_icon_50_path)
+
+
+def load_fonts():
+    """
+    Loads all needed fonts.
+    """
+    global font, font_small
+
+    font_path = os.path.join('.', 'interface_elements', 'Montserrat-Bold.ttf')
     font = pygame.font.Font(font_path, 55)
     font_small = pygame.font.Font(font_path, 30)
 
-    # Creating screen and transforming images
-    screen = pygame.Surface(settings.SIZE)
-    background = pygame.transform.scale(background, settings.SIZE)
-    left_side = pygame.transform.scale(left_side, (50, 300))
-    right_side = pygame.transform.scale(right_side, (50, 300))
-    section_indicator = pygame.transform.scale(section_indicator, (400, 1080))
 
-    for i in range(len(menu_backgrounds)):
-        menu_backgrounds[i] = pygame.transform.scale(menu_backgrounds[i], settings.SIZE)
+def load_buy_button_images():
+    """
+    Loading images for different states of the buy button.
+    """
+    # Loading images for buttons
+    button_size = (400, 100)
 
-    # Creating Items
-    # Ships
-    items_ships.append(Item(440, 40, settings.WIDTH - 480, 300, settings.skins[1].image, 2000, settings.skins[1],
-                            'Standard spaceship', 'Super is lightring'))
+    buy_button_selected_path = os.path.join('.', 'interface_elements', 'buy_button_selected.png')
+    buy_button_selected = pygame.image.load(buy_button_selected_path).convert_alpha()
+    buy_button_elements['selected'] = pygame.transform.scale(buy_button_selected, button_size)
 
-    items_ships.append(Item(440, 380, settings.WIDTH - 480, 300, settings.skins[0].image, 2000, settings.skins[0],
-                            'Zuckerberg machine', 'Super is teleportation'))
-    # Upgrades
-    items_upgrades.append(Item(440, 40, (settings.WIDTH - 480) // 2 - 20, 300, None, 100, 0, 'Increase gun DMG',
-                               ['from ', 0, ' to ', 0]))
-    items_upgrades[0].button.upgrade = 1
+    buy_button_select_path = os.path.join('.', 'interface_elements', 'buy_button_select.png')
+    buy_button_select = pygame.image.load(buy_button_select_path).convert_alpha()
+    buy_button_elements['select'] = pygame.transform.scale(buy_button_select, button_size)
 
-    items_upgrades.append(Item(440 + (settings.WIDTH - 480) // 2 + 20, 40, (settings.WIDTH - 480) // 2 - 20, 300, None,
-                               1000, 1, 'Increase gun FR', ['from ', 1, ' to ', 1]))
-    items_upgrades[1].button.upgrade = -1
+    buy_button_select_hover_path = os.path.join('.', 'interface_elements', 'buy_button_select_hover.png')
+    buy_button_select_hover = pygame.image.load(buy_button_select_hover_path).convert_alpha()
+    buy_button_elements['select_hover'] = pygame.transform.scale(buy_button_select_hover, button_size)
 
-    items_upgrades.append(Item(440, 380, (settings.WIDTH - 480) // 2 - 20, 300, None, 20, 2, 'Increase plasma DMG',
-                               ['from ', 2, ' to ', 2]))
-    items_upgrades[2].button.upgrade = 1
+    buy_button_buy_enough_money_path = os.path.join('.', 'interface_elements', 'buy_button_buy_enough_money.png')
+    buy_button_buy_enough_money = pygame.image.load(buy_button_buy_enough_money_path).convert_alpha()
+    buy_button_elements['buy_enough_money'] = pygame.transform.scale(buy_button_buy_enough_money, button_size)
 
-    items_upgrades.append(Item(440 + (settings.WIDTH - 480) // 2 + 20, 380, (settings.WIDTH - 480) // 2 - 20, 300, None,
-                               100, 3, 'Increase plasma FR', ['from ', 3, ' to ', 3]))
-    items_upgrades[3].button.upgrade = -1
+    buy_button_buy_enough_money_hover_path = os.path.join('.', 'interface_elements',
+                                                          'buy_button_buy_enough_money_hover.png')
+    buy_button_buy_enough_money_hover = pygame.image.load(buy_button_buy_enough_money_hover_path).convert_alpha()
+    buy_button_elements['buy_enough_money_hover'] = pygame.transform.scale(buy_button_buy_enough_money_hover, button_size)
 
-    items_upgrades.append(Item(440, 720, (settings.WIDTH - 480) // 2 - 20, 300, None, 1000, 4, 'Increase laser DMG',
-                               ['from ', 4, ' to ', 4]))
-    items_upgrades[4].button.upgrade = 1
+    buy_button_buy_not_enough_money_path = os.path.join('.', 'interface_elements',
+                                                        'buy_button_buy_not_enough_money.png')
+    buy_button_buy_not_enough_money = pygame.image.load(buy_button_buy_not_enough_money_path).convert_alpha()
+    buy_button_elements['buy_not_enough_money'] = pygame.transform.scale(buy_button_buy_not_enough_money, button_size)
 
-    # Cosmetics
-    items_cosmetics.append(Item(440, 40, settings.WIDTH - 480, 300, menu_backgrounds[0], 200, menu_backgrounds[0],
-                                '', 'Standard menu background'))
 
-    items_cosmetics.append(Item(440, 380, settings.WIDTH - 480, 300, menu_backgrounds[1], 200, menu_backgrounds[1],
-                                '', 'Green nebula'))
+def load_upgrade_button_images():
+    """
+    Loading images for different states of the upgrades button.
+    """
+    # Loading images for buttons
+    upgrade_button_not_enough_money_path = os.path.join('.', 'interface_elements',
+                                                        'upgrade_button_not_enough_money.png')
+    upgrade_button_elements['not_enough_money'] = pygame.image.load(upgrade_button_not_enough_money_path)
 
-    items_cosmetics.append(Item(440, 720, settings.WIDTH - 480, 300, menu_backgrounds[2], 200, menu_backgrounds[2],
-                                '', 'Planet'))
+    upgrade_button_enough_money_path = os.path.join('.', 'interface_elements', 'upgrade_button_enough_money.png')
+    upgrade_button_elements['enough_money'] = pygame.image.load(upgrade_button_enough_money_path)
 
-    items_cosmetics.append(Item(440, 1060, settings.WIDTH - 480, 300, menu_backgrounds[3], 200, menu_backgrounds[3],
-                                '', 'Purple nebula'))
+    upgrade_button_hover_path = os.path.join('.', 'interface_elements', 'upgrade_button_hover.png')
+    upgrade_button_elements['hover'] = pygame.image.load(upgrade_button_hover_path)
 
-    items_cosmetics.append(Item(440, 1400, settings.WIDTH - 480, 300, menu_backgrounds[4], 200, menu_backgrounds[4],
-                                '', 'Planet and rockets'))
 
-    items_cosmetics.append(Item(440, 1740, settings.WIDTH - 480, 300, menu_backgrounds[5], 200, menu_backgrounds[5],
-                                '', 'Landscape'))
+def create_shop_menu_buttons():
+    """
+    Creates ShopMenuButton objects.
+    """
+    global buttons
 
-    # Creating Buttons
-    ships_button = settings.Button(50, settings.HEIGHT // 2 - 145, 300, 75, 'switch_to_ships')
-    upgrades_button = settings.Button(50, settings.HEIGHT // 2 - 270, 300, 75, 'switch_to_upgrades')
-    cosmetics_button = settings.Button(50, settings.HEIGHT // 2 - 395, 300, 75, 'switch_to_cosmetics')
+    # Loading images for buttons
+    ships_button_image_path = os.path.join('.', 'interface_elements', 'ships_button.png')
+    upgrades_button_image_path = os.path.join('.', 'interface_elements', 'upgrades_button.png')
+    cosmetics_button_image_path = os.path.join('.', 'interface_elements', 'cosmetics_button.png')
+    ships_button_image = pygame.image.load(ships_button_image_path).convert_alpha()
+    upgrades_button_image = pygame.image.load(upgrades_button_image_path).convert_alpha()
+    cosmetics_button_image = pygame.image.load(cosmetics_button_image_path).convert_alpha()
 
+    ships_button_image_hover_path = os.path.join('.', 'interface_elements', 'ships_button_hover.png')
+    upgrades_button_image_hover_path = os.path.join('.', 'interface_elements', 'upgrades_button_hover.png')
+    cosmetics_button_image_hover_path = os.path.join('.', 'interface_elements', 'cosmetics_button_hover.png')
+    ships_button_image_hover = pygame.image.load(ships_button_image_hover_path).convert_alpha()
+    upgrades_button_image_hover = pygame.image.load(upgrades_button_image_hover_path).convert_alpha()
+    cosmetics_button_image_hover = pygame.image.load(cosmetics_button_image_hover_path).convert_alpha()
+
+    ships_button_image_pressed_path = os.path.join('.', 'interface_elements', 'ships_button_pressed.png')
+    upgrades_button_image_pressed_path = os.path.join('.', 'interface_elements', 'upgrades_button_pressed.png')
+    cosmetics_button_image_pressed_path = os.path.join('.', 'interface_elements', 'cosmetics_button_pressed.png')
+    ships_button_image_pressed = pygame.image.load(ships_button_image_pressed_path).convert_alpha()
+    upgrades_button_image_pressed = pygame.image.load(upgrades_button_image_pressed_path).convert_alpha()
+    cosmetics_button_image_pressed = pygame.image.load(cosmetics_button_image_pressed_path).convert_alpha()
+
+    # Resizing images
     button_size = (300, 75)
+    [ships_button_image, upgrades_button_image, cosmetics_button_image,
+     ships_button_image_hover, upgrades_button_image_hover, cosmetics_button_image_hover,
+     ships_button_image_pressed, upgrades_button_image_pressed, cosmetics_button_image_pressed] =\
+        [pygame.transform.scale(image, button_size) for image in
+         [ships_button_image, upgrades_button_image, cosmetics_button_image,
+          ships_button_image_hover, upgrades_button_image_hover, cosmetics_button_image_hover,
+          ships_button_image_pressed, upgrades_button_image_pressed, cosmetics_button_image_pressed]]
 
-    ships_button.image = pygame.image.load(ships_button_image_path).convert_alpha()
-    upgrades_button.image = pygame.image.load(upgrades_button_image_path).convert_alpha()
-    cosmetics_button.image = pygame.image.load(cosmetics_button_image_path).convert_alpha()
-
-    ships_button.image_hover = pygame.image.load(ships_button_image_hover_path).convert_alpha()
-    upgrades_button.image_hover = pygame.image.load(upgrades_button_image_hover_path).convert_alpha()
-    cosmetics_button.image_hover = pygame.image.load(cosmetics_button_image_hover_path).convert_alpha()
-
-    ships_button.image_pressed = pygame.image.load(ships_button_image_pressed_path).convert_alpha()
-    upgrades_button.image_pressed = pygame.image.load(upgrades_button_image_pressed_path).convert_alpha()
-    cosmetics_button.image_pressed = pygame.image.load(cosmetics_button_image_pressed_path).convert_alpha()
-
-    ships_button.image, upgrades_button.image, cosmetics_button.image,\
-    ships_button.image_hover, upgrades_button.image_hover, cosmetics_button.image_hover,\
-    ships_button.image_pressed, upgrades_button.image_pressed, cosmetics_button.image_pressed = [
-        pygame.transform.scale(image, button_size) for image in
-        (ships_button.image, upgrades_button.image, cosmetics_button.image,
-         ships_button.image_hover, upgrades_button.image_hover, cosmetics_button.image_hover,
-         ships_button.image_pressed, upgrades_button.image_pressed, cosmetics_button.image_pressed)]
-
+    # Creating button objects
+    ships_button = ShopMenuButton(50, settings.HEIGHT // 2 - 145, button_size, 'switch_to_ships',
+                                  ships_button_image, ships_button_image_hover, ships_button_image_pressed)
+    upgrades_button = ShopMenuButton(50, settings.HEIGHT // 2 - 270, button_size, 'switch_to_upgrades',
+                                     upgrades_button_image, upgrades_button_image_hover, upgrades_button_image_pressed)
+    cosmetics_button = ShopMenuButton(50, settings.HEIGHT // 2 - 395, button_size, 'switch_to_cosmetics',
+                                      cosmetics_button_image, cosmetics_button_image_hover,
+                                      cosmetics_button_image_pressed)
     ships_button.pressed = True
     buttons += [cosmetics_button, upgrades_button, ships_button]
 
-    buy_button_selected = pygame.image.load(buy_button_selected_path).convert_alpha()
-    buy_button_select = pygame.image.load(buy_button_select_path).convert_alpha()
-    buy_button_select_hover = pygame.image.load(buy_button_select_hover_path).convert_alpha()
-    buy_button_buy_enough_money = pygame.image.load(buy_button_buy_enough_money_path).convert_alpha()
-    buy_button_buy_enough_money_hover = pygame.image.load(buy_button_buy_enough_money_hover_path).convert_alpha()
-    buy_button_buy_not_enough_money = pygame.image.load(buy_button_buy_not_enough_money_path).convert_alpha()
 
-    button_size = (400, 100)
+def create_ships_items():
+    """
+    Creates ships items which are displayed in the shop.
+    """
+    # Creating ItemsShips objects
+    items_ships.append(ShipsItem(40, settings.skins[1].image, 2000, settings.skins[1],
+                                 'Standard spaceship', 'Super is light ring'))
 
-    buy_button_selected, buy_button_select, buy_button_select_hover, \
-    buy_button_buy_enough_money, buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money = [
-        pygame.transform.scale(image, button_size) for image in
-        (buy_button_selected, buy_button_select, buy_button_select_hover,
-         buy_button_buy_enough_money, buy_button_buy_enough_money_hover, buy_button_buy_not_enough_money)]
+    items_ships.append(ShipsItem(380, settings.skins[0].image, 2000, settings.skins[0],
+                                 'Zuckerberg machine', 'Super is teleportation'))
+
+
+def create_upgrades_items():
+    """
+    Creates upgrades items which are displayed in the shop.
+    """
+    # Creating ItemsUpgrades objects
+    items_upgrades.append(UpgradesItem(440, 40, 100, 0, 1, 'Increase gun DMG', ['from ', 0, ' to ', 0]))
+
+    items_upgrades.append(UpgradesItem(440 + (settings.WIDTH - 480) // 2 + 20, 40, 1000, 1, -1,
+                                       'Increase gun FR', ['from ', 1, ' to ', 1]))
+
+    items_upgrades.append(UpgradesItem(440, 380, 20, 2, 1, 'Increase plasma DMG', ['from ', 2, ' to ', 2]))
+
+    items_upgrades.append(UpgradesItem(440 + (settings.WIDTH - 480) // 2 + 20, 380, 100, 3, -1,
+                                       'Increase plasma FR', ['from ', 3, ' to ', 3]))
+
+    items_upgrades.append(UpgradesItem(440, 720, 1000, 4, 1, 'Increase laser DMG', ['from ', 4, ' to ', 4]))
+
+
+def create_cosmetics_items():
+    """
+    Creates cosmetics items (backgrounds) which are displayed in the shop.
+    """
+    # Loading backgrounds for purchasing
+    menu_background_1_path = os.path.join('.', 'backgrounds', 'menu_background_1.png')
+    menu_background_1 = pygame.image.load(menu_background_1_path)
+
+    menu_background_2_path = os.path.join('.', 'backgrounds', 'menu_background_2.jpg')
+    menu_background_2 = pygame.image.load(menu_background_2_path)
+
+    menu_background_3_path = os.path.join('.', 'backgrounds', 'menu_background_3.png')
+    menu_background_3 = pygame.image.load(menu_background_3_path)
+
+    menu_background_4_path = os.path.join('.', 'backgrounds', 'menu_background_4.png')
+    menu_background_4 = pygame.image.load(menu_background_4_path)
+
+    menu_background_5_path = os.path.join('.', 'backgrounds', 'menu_background_5.png')
+    menu_background_5 = pygame.image.load(menu_background_5_path)
+
+    menu_background_6_path = os.path.join('.', 'backgrounds', 'menu_background_6.png')
+    menu_background_6 = pygame.image.load(menu_background_6_path)
+
+    # Resizing images
+    [menu_background_1, menu_background_2, menu_background_3,
+     menu_background_4, menu_background_5, menu_background_6] =\
+        [pygame.transform.scale(image, settings.SIZE) for image in
+         [menu_background_1, menu_background_2, menu_background_3,
+          menu_background_4, menu_background_5, menu_background_6]]
+
+    # Creating CosmeticItems for backgrounds
+    items_cosmetics.append(CosmeticsItem(40, menu_background_1, 200, menu_background_1, 'Standard background'))
+
+    items_cosmetics.append(CosmeticsItem(40 + 340, menu_background_2, 200, menu_background_2, 'Green nebula'))
+
+    items_cosmetics.append(CosmeticsItem(40 + 340 * 2, menu_background_3, 200, menu_background_3, 'Planet'))
+
+    items_cosmetics.append(CosmeticsItem(40 + 340 * 3, menu_background_4, 200, menu_background_4, 'Purple nebula'))
+
+    items_cosmetics.append(CosmeticsItem(40 + 340 * 4, menu_background_5, 200, menu_background_5, 'Planet and rockets'))
+
+    items_cosmetics.append(CosmeticsItem(40 + 340 * 5, menu_background_6, 200, menu_background_6, 'Landscape'))
+
+
+def init():
+    """
+    Loads all data and creates all objects necessary for displaying shop.
+    """
+    global screen
+    screen = pygame.Surface(settings.SIZE)
+
+    # Loading data
+    load_images()
+    load_fonts()
+    load_buy_button_images()
+    load_upgrade_button_images()
+
+    # Creating objects
+    create_shop_menu_buttons()
+    create_ships_items()
+    create_upgrades_items()
+    create_cosmetics_items()
+
+
+# ----------------- functions which create screen -----------------
+
+
+def blit_menu():
+    """
+    Draws shop menu on the screen.
+    """
+    # Plate
+    screen.blit(left_block['menu_plate'], (0, int(settings.HEIGHT / 2 - 540)))
+    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT / 2) + 50 + 45 // 2))
+
+    # Gun stats
+    screen.blit(weapon_icons['gun'], (50, int(settings.HEIGHT / 2 + 175)))
+    screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' +
+                                  str(round(60 / settings.bullets_firerate, 2)),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 185))
+
+    # Plasma stats
+    screen.blit(weapon_icons['plasma'], (50, int(settings.HEIGHT / 2 + 245)))
+    screen.blit(font_small.render('DMG: ' + str(settings.plasma_ball_damage) + ' FR: ' +
+                                  str(round(60 / settings.plasma_balls_firerate, 2)),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 255))
+
+    # Laser stats
+    screen.blit(weapon_icons['laser'], (50, int(settings.HEIGHT / 2 + 315)))
+    screen.blit(font_small.render('TIC DMG: ' + str(settings.laser_damage),
+                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 325))
 
 
 def create_screen():
-    global buttons, screen, items_ships, items_upgrades, items_cosmetics, section_indicator, current_items
+    """
+    Defines the appearance and event processing of the game when player is in the menu (settings.flag == 'menu').
+    :return: pygame.surface with the size of screen
+    """
+    global screen, shop_section
     screen.blit(background, (0, 0))
 
     # Events
@@ -396,11 +714,11 @@ def create_screen():
                 b.hover_test(event)
 
     # Selection of section
-    if settings.shop_section == 'ships':
+    if shop_section == 'ships':
         current_items = items_ships
-    elif settings.shop_section == 'upgrades':
+    elif shop_section == 'upgrades':
         current_items = items_upgrades
-    elif settings.shop_section == 'cosmetics':
+    elif shop_section == 'cosmetics':
         current_items = items_cosmetics
 
     # Money analysis
@@ -411,32 +729,16 @@ def create_screen():
             i.button.enough_money = False
 
     # Drawing left-sided menu
-    screen.blit(section_indicator, (0, int(settings.HEIGHT/2 - 540)))
-    screen.blit(font.render(str(settings.money), True, DARK_GREEN), (200, int(settings.HEIGHT / 2) + 50 + 45 // 2))
-    # Gun stats
-    screen.blit(gun_icon_50, (50, int(settings.HEIGHT / 2 + 175)))
-    screen.blit(font_small.render('DMG: ' + str(settings.bullet_damage) + ' FR: ' +
-                                  str(round(60 / settings.bullets_firerate, 2)),
-                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 185))
-    # Plasma stats
-    screen.blit(plasma_icon_50, (50, int(settings.HEIGHT / 2 + 245)))
-    screen.blit(font_small.render('DMG: ' + str(settings.plasma_ball_damage) + ' FR: ' +
-                                  str(round(60 / settings.plasma_balls_firerate, 2)),
-                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 255))
-    # Laser stats
-    screen.blit(laser_icon_50, (50, int(settings.HEIGHT / 2 + 315)))
-    screen.blit(font_small.render('TIC DMG: ' + str(settings.laser_damage),
-                                  True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 325))
-
     for b in buttons:
-        if b.action == 'switch_to_'+settings.shop_section:
+        if b.action == 'switch_to_' + shop_section:
             b.pressed = True
         else:
             b.pressed = False
 
     for b in buttons:
-        b.draw(screen)
+        b.draw()
 
+    # Checking blocks movement
     for event in events:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for i in current_items:
@@ -465,5 +767,6 @@ def create_screen():
     if keys[pygame.K_ESCAPE]:
         settings.flag = 'menu'
 
+    # Returning the screen which will be displayed
     return screen
 

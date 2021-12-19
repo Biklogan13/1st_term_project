@@ -7,18 +7,26 @@ import shuttle
 import settings
 import ammunition
 
-pygame.init()
+
+# --------------- Global variables of levels section ---------------
+
 
 # Global variables of levels section
 # Surface on which levels elements will be drown
 screen = None
+
 # Background of the levels section
 level_background = None
+
 # Type of selected ammo
 ammo_type = 0
+
 # Arrays which contain all images which will be displayed directly on screen
 left_indicator = dict.fromkeys(['bullets', 'plasma', 'laser'])
 right_indicator = dict.fromkeys(['plate', 'bar_edges', 'super_bar', 'super_bar_ready', 'hp_bar'])
+
+
+# ---------------------- Secondary functions ----------------------
 
 
 def red_image(image_original):
@@ -36,7 +44,7 @@ def red_image(image_original):
     mask_inv.fill((255, 255, 255, 255))
     mask_inv.blit(mask, (0, 0), None, pygame.BLEND_RGB_SUB)
 
-    # Pouring image with red
+    # Filling image with red
     red = pygame.Surface(image.get_size()).convert_alpha()
     red.fill((255, 0, 0, 100))
     image.blit(red, (0, 0))
@@ -46,6 +54,9 @@ def red_image(image_original):
     image.set_colorkey((255, 255, 255))
 
     return image
+
+
+# -------------------- Initialization functions --------------------
 
 
 def load_images():
@@ -104,6 +115,9 @@ def init():
 
     load_images()
     ammunition.init()
+
+
+# ----------------- functions which create screen -----------------
 
 
 def blit_indicators():
@@ -168,6 +182,7 @@ def create_screen():
     # Drawing indicators
     blit_indicators()
 
+    # Returning the screen which will be displayed
     return screen
 
 
