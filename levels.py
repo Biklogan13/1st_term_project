@@ -179,6 +179,8 @@ def game_over():
         ship_explosion_frame += 1
     for k in settings.enemies:
         settings.enemies.remove(k)
+    for c in settings.coins:
+        settings.coins.remove(c)
     if game_over_timer == 1:
         settings.money = settings.money // 2
         ammunition.explosion_sound.play()
