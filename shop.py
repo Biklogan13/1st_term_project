@@ -41,6 +41,47 @@ weapon_icons = dict.fromkeys(['gun', 'plasma', 'laser'])
 item_plate = dict.fromkeys(['left_side', 'right_side', 'plate', 'price_tag'])
 
 
+# --------------------- Saving data functions ---------------------
+
+
+def load_player_data(data):
+    """
+    Loads player purchases and upgrades from txt file.
+    """
+    for i in range(len(data)):
+        words = data[i].split()
+        if words[0] == '#':
+            flag = words[1]
+        else:
+            if flag == 'ships':
+                items_ships[int(words[0])].load_data(words)
+            if flag == 'upgrades':
+                items_upgrades[int(words[0])].load_data(words)
+            if flag == 'cosmetics':
+                items_cosmetics[int(words[0])].load_data(words)
+
+
+def save_player_data(file):
+    """
+    Saves player purchases and upgrades into txt file.
+    :param file: file in which data is saved
+    """
+    # Ships items
+    file.write('# ships' + '\n')
+    for i in range(len(items_ships)):
+        items_ships[i].save_data(i, file)
+
+    # Upgrades
+    file.write('# upgrades' + '\n')
+    for i in range(len(items_upgrades)):
+        items_upgrades[i].save_data(i, file)
+
+    # Cosmetics items
+    file.write('# cosmetics' + '\n')
+    for i in range(len(items_cosmetics)):
+        items_cosmetics[i].save_data(i, file)
+
+
 # ---------------------- Secondary functions ----------------------
 
 
@@ -69,11 +110,13 @@ def var_text(arr, plus):
 def delegate(marker, value):
     """
     Function which allows shop objects to interact with settings variables.
+    It can return their value, add something to their value or rewrite completely.
     :param marker: value which shows which variable to modify
     :param value: value which is added to variable from settings
     :return: str of a variable from settings
     """
     if value == 'return':
+
         if marker == 0:
             return str(settings.bullet_damage)
         elif marker == 1:
@@ -86,7 +129,22 @@ def delegate(marker, value):
             return str(settings.laser_damage)
         else:
             print('ERROR, invalid marker')
-    else:
+
+    elif str(value).split()[0] == 'make':
+
+        if marker == 0:
+            settings.bullet_damage = int(value.split()[1])
+        elif marker == 1:
+            settings.bullets_firerate = int(value.split()[1])
+        elif marker == 2:
+            settings.plasma_ball_damage = int(value.split()[1])
+        elif marker == 3:
+            settings.plasma_balls_firerate = int(value.split()[1])
+        elif marker == 4:
+            settings.laser_damage = int(value.split()[1])
+
+    elif type(value) == int:
+
         if marker == 0:
             settings.bullet_damage += value
         elif marker == 1:
@@ -332,6 +390,16 @@ class ShipsItem(Item):
             self.phase += 0.02
             self.phase = self.phase % (2 * math.pi)
 
+    def save_data(self, i, file):
+        file.write(str(i) + ' ' + str(self.button.bought) + ' ' + str(self.button.selected) + '\n')
+
+    def load_data(self, words):
+        if words[1] == 'True':
+            self.button.bought = True
+        if words[2] == 'True':
+            self.button.selected = True
+            settings.current_skin = self.button.purchase
+
 
 class UpgradesItem(Item):
     def __init__(self, x, y, cost, purchase, upgrade, name, capture):
@@ -371,6 +439,13 @@ class UpgradesItem(Item):
         else:
             screen.blit(font.render('MAXED OUT', True, DARK_GREEN), (self.x + 100, self.y + 180))
 
+    def save_data(self, i, file):
+        file.write(str(i) + ' ' + str(delegate(self.button.purchase, 'return')) + ' ' + str(self.button.cost) + '\n')
+
+    def load_data(self, words):
+        delegate(self.button.purchase, str('make ' + str(words[1])))
+        self.button.cost = int(words[2])
+
 
 class CosmeticsItem(Item):
     def __init__(self, y, image, cost, purchase, capture):
@@ -406,6 +481,16 @@ class CosmeticsItem(Item):
         # Image
         sc_image = pygame.transform.scale(self.image, (int(150 / settings.HEIGHT * settings.WIDTH), 150))
         screen.blit(sc_image, (self.x + 100, self.y + 50))
+
+    def save_data(self, i, file):
+        file.write(str(i) + ' ' + str(self.button.bought) + ' ' + str(self.button.selected) + '\n')
+
+    def load_data(self, words):
+        if words[1] == 'True':
+            self.button.bought = True
+        if words[2] == 'True':
+            self.button.selected = True
+            settings.menu_background = self.button.purchase
 
 
 # -------------------- Initialization functions --------------------

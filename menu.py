@@ -4,34 +4,6 @@ import os
 import settings
 
 
-# --------------------- Saving data functions ---------------------
-
-
-def load_player_data():
-    """
-    Loads player progress from txt file.
-    """
-    check_file = os.path.exists('player_data.txt')
-    if check_file:
-        file = open('player_data.txt', 'r')
-        data = file.readlines()
-        # Settings variables
-        for line in data:
-            words = line.split()
-            if words[0] == 'money':
-                settings.money = int(words[1])
-        file.close()
-
-
-def save_player_data():
-    """
-    Saves player progress into txt file.
-    """
-    file = open('player_data.txt', 'w')
-    file.write('money ' + str(settings.money))
-    file.close()
-
-
 # ---------------- Global variables of menu section ----------------
 
 
@@ -84,7 +56,6 @@ class MenuButton(settings.Button):
         """
         if self.check_mouse(event):
             if self.action == 'exit':
-                save_player_data()
                 pygame.quit()
                 settings.running = False
             elif self.action == 'switch_to_levels':
@@ -172,9 +143,6 @@ def init():
     load_sounds()
     load_images()
     create_buttons()
-
-    # Loading player data
-    load_player_data()
 
 
 # ----------------- functions which create screen -----------------
