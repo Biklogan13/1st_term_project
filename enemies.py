@@ -34,8 +34,9 @@ class Coin:
         """
         self.x = x
         self.y = y
-        self.r = 10
+        self.r = 30
         self.denomination = denomination
+        self.frame = 0
 
     def draw(self, screen):
         """
@@ -43,7 +44,7 @@ class Coin:
         :param screen: a surface which coin will be drawn on
         :return: None
         """
-        pygame.draw.circle(screen, (255, 255, 255), (self.x, self.y), self.r)
+        levels.screen.blit(ammunition.coin_flip_animation[self.frame], (self.x - self.r, self.y - self.r))
 
     def move(self):
         """
@@ -54,6 +55,8 @@ class Coin:
         if dist <= 200:
             self.x += int((settings.spaceship.x - self.x) * 0.1)
             self.y += int((settings.spaceship.y - self.y) * 0.1)
+        self.frame += 1
+        self.frame = self.frame % 28
 
     def hit_test(self):
         """

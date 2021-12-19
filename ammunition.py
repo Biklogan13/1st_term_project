@@ -13,7 +13,8 @@ laser = None
 objects_hit_by_laser = []
 laser_min_hit = [3*settings.WIDTH, 0, 0, 0]
 # variables for sprites
-bullet_image, light_ring_image, plasma_ball_sprites, blow, death, light_ring_animation = None, None, [], [], [], []
+bullet_image, light_ring_image, plasma_ball_sprites, blow, death, light_ring_animation, coin_flip_animation \
+    = None, None, [], [], [], [], []
 # variables for sounds
 laser_sound, plasma_gun_sound, light_ring_sound, explosion_sound, cannons = None, None, None, None, None
 # ammunition sprites
@@ -32,11 +33,15 @@ EXPLOSION_SOUND = os.path.join('.', 'Sounds', 'explosion.mp3')
 
 def init():
     global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, bullet_image, light_ring_sound, blow, \
-        death, explosion_sound, plasma_ball_sprites
+        death, explosion_sound, plasma_ball_sprites, coin_flip_animation
 
     for i in range(1, 7):
         blow.append(pygame.image.load(os.path.join('.', 'blow', 'blow' + str(i) + '.png')))
     print(len(blow))
+
+    for i in range(1, 28):
+        coin_flip_animation.append(pygame.transform.scale(pygame.image.load(os.path.join('.',
+                                   'coin flip', 'coin-flip-49-' + str(i) + '.png')), (60, 60)))
 
     plasma_ball_1 = pygame.image.load(PLASMA_1_PATH)
     plasma_ball_1.set_colorkey((255, 255, 255))
