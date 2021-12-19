@@ -176,8 +176,8 @@ def game_over():
     """
     global game_over_timer, ship_explosion_frame
     settings.spaceship.Vx = settings.spaceship.Vy = 0
-    screen.blit(font.render('YOUR SHIP DESTROYED', True, (255, 255, 255)),
-                (settings.WIDTH / 2 - 425, settings.HEIGHT / 2 - 50))
+    screen.blit(font.render('YOUR SHIP WAS DESTROYED', True, (255, 255, 255)),
+                (settings.WIDTH / 2 - 520, settings.HEIGHT / 2 - 50))
     screen.blit(font_small.render('you lost half of your coins', True, (255, 255, 255)),
                 (settings.WIDTH / 2 - 175, settings.HEIGHT / 2 + 20))
     settings.spaceship.x = settings.WIDTH / 2
