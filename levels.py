@@ -21,10 +21,16 @@ level_background = None
 # Type of selected ammo
 ammo_type = 0
 
+# Fonts
+font, font_small = None, None
+
 # Arrays which contain all images which will be displayed directly on screen
 left_indicator = dict.fromkeys(['bullets', 'plasma', 'laser'])
 right_indicator = dict.fromkeys(['plate', 'bar_edges', 'super_bar', 'super_bar_ready', 'hp_bar'])
 
+# Variables for game over
+game_over_timer, ship_explosion_frame = 0, 0
+#ship_death = ammunition.ShipDeathAnimation(settings.spaceship.x, settings.spaceship.y)
 
 # ---------------------- Secondary functions ----------------------
 
@@ -113,6 +119,8 @@ def init():
     global screen
     screen = pygame.Surface(settings.SIZE)
 
+    load_fonts()
+
     load_images()
     ammunition.init()
 
@@ -148,6 +156,42 @@ def blit_indicators():
 
     screen.blit(right_indicator['bar_edges'], (settings.WIDTH - 350, settings.HEIGHT - 100))
 
+def load_fonts():
+    """
+    Loads all needed fonts.
+    """
+    global font, font_small
+
+    font_path = os.path.join('.', 'interface_elements', 'Montserrat-Bold.ttf')
+    font = pygame.font.Font(font_path, 70)
+    font_small = pygame.font.Font(font_path, 30)
+
+
+def game_over():
+    global game_over_timer, ship_explosion_frame
+    settings.spaceship.Vx = settings.spaceship.Vy = 0
+    screen.blit(font.render('YOUR SHIP DESTROYED', True, (255, 255, 255)), (settings.WIDTH / 2 - 425, settings.HEIGHT / 2 - 50))
+    screen.blit(font_small.render('you lost half of your coins', True, (255, 255, 255)), (settings.WIDTH / 2 - 175, settings.HEIGHT / 2 + 20))
+    game_over_timer += 1
+    if ship_explosion_frame < 5:
+        screen.blit(ammunition.ship_blow_a[ship_explosion_frame], (settings.spaceship.x - settings.WIDTH / 2, settings.spaceship.y - settings.HEIGHT))
+    if settings.tick_counter % 5 and ship_explosion_frame < 6:
+        ship_explosion_frame += 1
+    for k in settings.enemies:
+        settings.enemies.remove(k)
+    if game_over_timer == 1:
+        settings.money = settings.money // 2
+        ammunition.explosion_sound.play()
+    if game_over_timer == 180:
+        settings.spaceship.hp = settings.spaceship.max_hp
+        ship_explosion_frame = 0
+        game_over_timer = 0
+
+
+
+
+
+
 
 def create_screen():
     """
@@ -181,6 +225,10 @@ def create_screen():
 
     # Drawing indicators
     blit_indicators()
+
+    # Game over
+    if settings.spaceship.hp <= 0:
+        game_over()
 
     # Returning the screen which will be displayed
     return screen
