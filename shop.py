@@ -391,14 +391,25 @@ class ShipsItem(Item):
             self.phase = self.phase % (2 * math.pi)
 
     def save_data(self, i, file):
+        """
+        Saves item data into txt file.
+        :param i: number of item in items_ships
+        :param file: file in which saving will be done
+        """
         file.write(str(i) + ' ' + str(self.button.bought) + ' ' + str(self.button.selected) + '\n')
 
     def load_data(self, words):
+        """
+        Loads item data from array of values.
+        :param words: array which contains item characteristics.
+        """
         if words[1] == 'True':
             self.button.bought = True
         if words[2] == 'True':
             self.button.selected = True
             settings.current_skin = self.button.purchase
+        else:
+            self.button.selected = False
 
 
 class UpgradesItem(Item):
@@ -440,9 +451,18 @@ class UpgradesItem(Item):
             screen.blit(font.render('MAXED OUT', True, DARK_GREEN), (self.x + 100, self.y + 180))
 
     def save_data(self, i, file):
+        """
+        Saves item data into txt file.
+        :param i: number of item in items_upgrades
+        :param file: file in which saving will be done
+        """
         file.write(str(i) + ' ' + str(delegate(self.button.purchase, 'return')) + ' ' + str(self.button.cost) + '\n')
 
     def load_data(self, words):
+        """
+        Loads item data from array of values.
+        :param words: array which contains item characteristics.
+        """
         delegate(self.button.purchase, str('make ' + str(words[1])))
         self.button.cost = int(words[2])
 
@@ -483,14 +503,25 @@ class CosmeticsItem(Item):
         screen.blit(sc_image, (self.x + 100, self.y + 50))
 
     def save_data(self, i, file):
+        """
+        Saves item data into txt file.
+        :param i: number of item in items_cosmetics
+        :param file: file in which saving will be done
+        """
         file.write(str(i) + ' ' + str(self.button.bought) + ' ' + str(self.button.selected) + '\n')
 
     def load_data(self, words):
+        """
+        Loads item data from array of values.
+        :param words: array which contains item characteristics.
+        """
         if words[1] == 'True':
             self.button.bought = True
         if words[2] == 'True':
             self.button.selected = True
             settings.menu_background = self.button.purchase
+        else:
+            self.button.selected = False
 
 
 # -------------------- Initialization functions --------------------
@@ -662,6 +693,7 @@ def create_ships_items():
     items_ships.append(ShipsItem(40, settings.skins[1].image, 0, settings.skins[1],
                                  'Standard spaceship', 'Super is light ring'))
     items_ships[0].button.bought = True
+    items_ships[0].button.selected = True
 
     items_ships.append(ShipsItem(380, settings.skins[0].image, 2000, settings.skins[0],
                                  'Zuckerberg machine', 'Super is teleportation'))
@@ -718,6 +750,7 @@ def create_cosmetics_items():
     # Creating CosmeticItems for backgrounds
     items_cosmetics.append(CosmeticsItem(40, menu_background_1, 0, menu_background_1, 'Standard background'))
     items_cosmetics[0].button.bought = True
+    items_cosmetics[0].button.selected = True
 
     items_cosmetics.append(CosmeticsItem(40 + 340, menu_background_2, 200, menu_background_2, 'Green nebula'))
 
