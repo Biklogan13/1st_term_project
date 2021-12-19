@@ -156,6 +156,7 @@ def blit_indicators():
 
     screen.blit(right_indicator['bar_edges'], (settings.WIDTH - 350, settings.HEIGHT - 100))
 
+
 def load_fonts():
     """
     Loads all needed fonts.
@@ -168,14 +169,24 @@ def load_fonts():
 
 
 def game_over():
+    """
+    Explode your ship with nearby hostiles and coins
+    gather half of your coins
+    respawn in the middle of the screen
+    """
     global game_over_timer, ship_explosion_frame
     settings.spaceship.Vx = settings.spaceship.Vy = 0
-    screen.blit(font.render('YOUR SHIP WAS DESTROYED', True, (255, 255, 255)), (settings.WIDTH / 2 - 500, settings.HEIGHT / 2 - 50))
-    screen.blit(font_small.render('you lost half of your coins', True, (255, 255, 255)), (settings.WIDTH / 2 - 175, settings.HEIGHT / 2 + 20))
+    screen.blit(font.render('YOUR SHIP DESTROYED', True, (255, 255, 255)),
+                (settings.WIDTH / 2 - 425, settings.HEIGHT / 2 - 50))
+    screen.blit(font_small.render('you lost half of your coins', True, (255, 255, 255)),
+                (settings.WIDTH / 2 - 175, settings.HEIGHT / 2 + 20))
+    settings.spaceship.x = settings.WIDTH / 2
+    settings.spaceship.y = settings.HEIGHT / 2
     game_over_timer += 1
     if ship_explosion_frame < 5:
-        screen.blit(ammunition.ship_blow_a[ship_explosion_frame], (settings.spaceship.x - settings.WIDTH / 2, settings.spaceship.y - settings.HEIGHT))
-    if settings.tick_counter % 5 and ship_explosion_frame < 6:
+        screen.blit(ammunition.ship_blow_a[ship_explosion_frame],
+                    (settings.spaceship.x - settings.WIDTH / 2, settings.spaceship.y - settings.HEIGHT))
+    if settings.tick_counter % 4 == 0 and ship_explosion_frame < 6:
         ship_explosion_frame += 1
     for k in settings.enemies:
         settings.enemies.remove(k)
@@ -188,11 +199,6 @@ def game_over():
         settings.spaceship.hp = settings.spaceship.max_hp
         ship_explosion_frame = 0
         game_over_timer = 0
-
-
-
-
-
 
 
 def create_screen():
