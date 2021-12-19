@@ -808,7 +808,7 @@ def blit_menu():
 
     # Laser stats
     screen.blit(weapon_icons['laser'], (50, int(settings.HEIGHT / 2 + 315)))
-    screen.blit(font_small.render('TIC DMG: ' + str(settings.laser_damage),
+    screen.blit(font_small.render('TICK DMG: ' + str(settings.laser_damage),
                                   True, DARK_GREEN), (120, int(settings.HEIGHT / 2) + 325))
 
 
