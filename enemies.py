@@ -38,7 +38,7 @@ class Coin:
             self.x += int((settings.spaceship.x - self.x) * 0.1)
             self.y += int((settings.spaceship.y - self.y) * 0.1)
 
-    def hittest(self):
+    def hit_test(self):
         if (self.x - settings.spaceship.x)**2 + (self.y - settings.spaceship.y)**2\
                <= (self.r + settings.spaceship.r)**2:
             settings.money += self.denomination
@@ -111,7 +111,7 @@ class Enemy_standart:
                 new_bullet.vy = 50 * math.sin(new_bullet.angle)
                 settings.enemy_bullets.append(new_bullet)
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             settings.spaceship.hp -= self.damage
             settings.spaceship.hit_timer = 10
@@ -156,7 +156,7 @@ class Enemy_heavy:
             self.image = rot_center_square(heavy_image, -self.angle*360/(-2*math.pi) + 180)
             screen.blit(self.image, (self.x - 60, self.y - 60))
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             settings.spaceship.hp -= self.damage
             settings.spaceship.hit_timer = 10
@@ -216,7 +216,7 @@ class Enemy_carrier():
             new_kamikaze.y = self.y + (i-0.5)*200*math.sin(self.angle)
             settings.enemies.append(new_kamikaze)
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         if (self.x - obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             settings.spaceship.hp -= self.damage
             settings.spaceship.hit_timer = 10
@@ -255,7 +255,7 @@ class Enemy_kamikaze:
         self.x += self.Vx
         self.y += self.Vy
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         if (self.x - settings.spaceship.x) ** 2 + (self.y - settings.spaceship. y) ** 2 <= (self.r + settings.spaceship.r) ** 2:
             settings.spaceship.hp -= self.damage
             settings.spaceship.hit_timer = 10
@@ -289,7 +289,7 @@ class Mine:
     def move(self):
         self.y += self.Vy
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         if (self.x - settings.spaceship.x) ** 2 + (self.y - settings.spaceship. y) ** 2 <= (self.r + settings.spaceship.r) ** 2:
             settings.spaceship.hp -= self.damage
             settings.spaceship.hit_timer = 10
@@ -329,7 +329,7 @@ class Enemy_missile():
             self.image = rot_center_square(missile_image, self.angle * 360 / (2 * math.pi) - 180)
             self.surface.blit(self.image, (self.x - 30, self.y - 30))
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2
 
 
@@ -389,30 +389,30 @@ def processing(screen):
 
     for k in settings.enemies:
         if k.live <= 0:
-            new_death = ammunition.death_animation(k.x, k.y)
+            new_death = ammunition.DeathAnimation(k.x, k.y)
             ammunition.death.append(new_death)
             settings.enemies.remove(k)
             settings.coins.append(Coin(k.x, k.y, 100))
-        if k.hittest(settings.spaceship):
+        if k.hit_test(settings.spaceship):
             k.live -= 50
         for b in settings.bullets:
-            if b.hittest(k):
+            if b.hit_test(k):
                 settings.bullets.remove(b)
                 k.live -= settings.bullet_damage
         for p in settings.plasma_balls:
             indicator = 0
-            if p.hittest(k):
-                for i in range(len(p.hitted)):
-                    if p.hitted[i] == k:
+            if p.hit_test(k):
+                for i in range(len(p.hit_by_plasma_ball)):
+                    if p.hit_by_plasma_ball[i] == k:
                         indicator += 1
                 if indicator == 0:
                     k.live -= settings.plasma_ball_damage
-                    p.hitted.append(k)
+                    p.hit_by_plasma_ball.append(k)
 
-        if ammunition.laser.hittest(k):
+        if ammunition.laser.hit_test(k):
             k.live -= settings.laser_damage
-        for b in ammunition.lightrings:
-            if b.hittest(k):
+        for b in ammunition.light_rings:
+            if b.hit_test(k):
                 k.live = 0
 
     for k in settings.enemies:
@@ -426,7 +426,7 @@ def processing(screen):
     for b in settings.enemy_bullets:
         b.draw()
         b.move()
-        if b.hittest(settings.spaceship):
+        if b.hit_test(settings.spaceship):
             settings.spaceship.hp -= b.damage
             b.live = 0
             settings.spaceship.hit_timer = 10
@@ -436,7 +436,7 @@ def processing(screen):
     for c in settings.coins:
         c.move()
         c.draw(screen)
-        c.hittest()
+        c.hit_test()
 
 
 def rot_center(image, angle):

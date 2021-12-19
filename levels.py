@@ -161,7 +161,7 @@ def create_screen():
         settings.flag = 'menu'
 
     # Processing in-game objects
-    ammunition.processing(screen, events)
+    ammunition.processing(events)
     enemies.processing(screen)
     shuttle.processing(screen)
 

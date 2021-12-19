@@ -6,33 +6,34 @@ import settings
 import random
 import os
 
-laser = None
-cannons = None
 ult = 1
-lightrings = []
-light_ring_animation = []
+light_rings = []
+# variables for laser to work
+laser = None
 objects_hit_by_laser = []
 laser_min_hit = [3*settings.WIDTH, 0, 0, 0]
-bullet_image, light_ring_image, plasma_ball_sprites = None, None, []
-
+# variables for sprites
+bullet_image, light_ring_image, plasma_ball_sprites, blow, death, light_ring_animation = None, None, [], [], [], []
+# variables for sounds
+laser_sound, plasma_gun_sound, light_ring_sound, explosion_sound, cannons = None, None, None, None, None
+# ammunition sprites
 PLASMA_1_PATH = os.path.join('.', 'ammo_sprites', 'plasma_1.png')
 PLASMA_2_PATH = os.path.join('.', 'ammo_sprites', 'plasma_2.png')
 PLASMA_3_PATH = os.path.join('.', 'ammo_sprites', 'plasma_3.png')
-
 PLASMA_BULLET_PATH = os.path.join('.', 'ammo_sprites', 'plasma_bullet.png')
 LIGHT_RING_PATH = os.path.join('.', 'ammo_sprites', 'lightring.png')
-
+# sounds
 LASER_SOUND_PATH = os.path.join('.', 'Sounds', 'LaserLaserBeam EE136601_preview-[AudioTrimmer.com].mp3')
 CANNONS_SOUND_PATH = os.path.join('.', 'Sounds', 'ES_Cannon Blast 4.mp3')
-PLASMAGUN_SOUND_PATH = os.path.join('.', 'Sounds', 'plasma_gun_powerup_01.mp3')
+PLASMA_GUN_SOUND_PATH = os.path.join('.', 'Sounds', 'plasma_gun_powerup_01.mp3')
 LIGHT_RING_SOUND_PATH = os.path.join('.', 'Sounds', 'Dio Brando - ZA WARUDO!.mp3')
 EXPLOSION_SOUND = os.path.join('.', 'Sounds', 'explosion.mp3')
 
-def init():
-    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, light_ring_sound, blow, death, explosion_sound
 
-    death = []
-    blow = []
+def init():
+    global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, bullet_image, light_ring_sound, blow, \
+        death, explosion_sound, plasma_ball_sprites
+
     for i in range(1, 7):
         blow.append(pygame.image.load(os.path.join('.', 'blow', 'blow' + str(i) + '.png')))
     print(len(blow))
@@ -45,19 +46,17 @@ def init():
     plasma_ball_3.set_colorkey((255, 255, 255))
     plasma_ball_sprites = [plasma_ball_1, plasma_ball_2, plasma_ball_3]
 
-    bullet_image = pygame.image.load(PLASMA_BULLET_PATH)
-    bullet_image = pygame.transform.scale(bullet_image, (80, 40))
-    settings.bullet_image = bullet_image
+    bullet_image = pygame.transform.scale(pygame.image.load(PLASMA_BULLET_PATH), (80, 40))
+    bullet_image = bullet_image
 
     light_ring_image = pygame.image.load(LIGHT_RING_PATH)
     light_ring_image.set_colorkey((255, 255, 255))
-    settings.plasma_ball_sprites = plasma_ball_sprites
 
     pygame.mixer.init()
     explosion_sound = pygame.mixer.Sound(EXPLOSION_SOUND)
     laser_sound = pygame.mixer.Sound(LASER_SOUND_PATH)
     cannons = pygame.mixer.Sound(CANNONS_SOUND_PATH)
-    plasma_gun_sound = pygame.mixer.Sound(PLASMAGUN_SOUND_PATH)
+    plasma_gun_sound = pygame.mixer.Sound(PLASMA_GUN_SOUND_PATH)
     light_ring_sound = pygame.mixer.Sound(LIGHT_RING_SOUND_PATH)
     pygame.mixer.Sound.set_volume(light_ring_sound, 10000000)
     pygame.mixer.Sound.set_volume(cannons, 0.02)
@@ -94,7 +93,7 @@ class Bullet:
         self.vx = 0
         self.vy = 0
         self.angle = math.atan2(self.vy, self.vx)
-        self.bullet = settings.bullet_image
+        self.bullet = bullet_image
         self.timer = 150
         self.damage = settings.bullet_damage
 
@@ -116,10 +115,10 @@ class Bullet:
         Draws an image of a bullet with it's center in coordinates x,y
         """
         self.angle = math.atan2(self.vy, self.vx)
-        self.bullet = rot_center(settings.bullet_image, self.angle * 360 / (-2 * math.pi))
+        self.bullet = rot_center(bullet_image, self.angle * 360 / (-2 * math.pi))
         self.screen.blit(self.bullet, (self.x - self.r, self.y - self.r))
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         """The function checks if the given object collides with the target described in the obj.
 
          Args:
@@ -185,30 +184,29 @@ class Laser:
                                                          settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                  settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
                                  settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=20)
-            pygame.draw.circle(self.screen, settings.RED, (settings.spaceship.x + 50 * math.cos(self.angle),
-                                                           settings.spaceship.y + 50 * math.sin(self.angle) + 20), 12, 0)
-            pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
-                                                            settings.spaceship.y + 50 * math.sin(self.angle) + 20),
+            pygame.draw.circle(self.screen, settings.RED, (settings.spaceship.x +
+                               50 * math.cos(self.angle), settings.spaceship.y + 50 * math.sin(self.angle) + 20), 12, 0)
+            pygame.draw.line(self.screen, settings.ORANGE, (settings.spaceship.x +
+                             50 * math.cos(self.angle), settings.spaceship.y + 50 * math.sin(self.angle) + 20),
                              (settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
                               settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=8)
-            pygame.draw.circle(self.screen, settings.ORANGE, (settings.spaceship.x + 50 * math.cos(self.angle),
-                                                              settings.spaceship.y + 50 * math.sin(self.angle) + 20), 4, 0)
+            pygame.draw.circle(self.screen, settings.ORANGE, (settings.spaceship.x +
+                               50 * math.cos(self.angle), settings.spaceship.y + 50 * math.sin(self.angle) + 20), 4, 0)
             pygame.draw.line(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
                                                             settings.spaceship.y + 50 * math.sin(self.angle) + 20), (
                                  settings.spaceship.x + math.cos(self.angle) * laser_min_hit[0],
                                  settings.spaceship.y + math.sin(self.angle) * laser_min_hit[0]), width=2)
-            pygame.draw.circle(self.screen, settings.YELLOW, (settings.spaceship.x + 50 * math.cos(self.angle),
-                                                              settings.spaceship.y + 50 * math.sin(self.angle) + 20), 1, 0)
+            pygame.draw.circle(self.screen, settings.YELLOW, (settings.spaceship.x +
+                               50 * math.cos(self.angle), settings.spaceship.y + 50 * math.sin(self.angle) + 20), 1, 0)
 
-
-    def targetting(self):
+    def targeting(self):
         """
         Changes firing angle to follow the cursor
         """
         self.angle = math.atan2((pygame.mouse.get_pos()[1] - settings.spaceship.y),
                                 (pygame.mouse.get_pos()[0] - settings.spaceship.x))
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         """
          The function checks if the laser gets the target described in the obj.
 
@@ -232,10 +230,10 @@ class Laser:
             self.hitting = 0
 
 
-class Plasma_ball:
-    def __init__(self, screen: pygame.Surface, x=40, y=450):
+class PlasmaBall:
+    def __init__(self, screen: pygame.Surface):
         """
-        Constructor of the Plasma_ball class.
+        Constructor of the PlasmaBall class.
         :param screen: surface where ball is being drawn
         :param self.x: x coordinate of the ball
         :param self.y: y coordinate of the ball
@@ -246,7 +244,7 @@ class Plasma_ball:
         :param self.damage: damage that ball deals
         :param self.angle: angle of shot
         :param self.sprite_number: number of the frame if animation
-        :param hitted: list of object that plasma ball have already hit
+        :param self.hit_by_plasma_ball: list of object that plasma ball have already hit
         :param self.surf: the surface with image on it
         """
         self.screen = screen
@@ -256,10 +254,10 @@ class Plasma_ball:
         self.vx = 0
         self.vy = 0
         self.timer = 900
-        self.surf = pygame.transform.scale(settings.plasma_ball_sprites[1], (2 * self.r, 2 * self.r))
+        self.surf = pygame.transform.scale(plasma_ball_sprites[0], (2 * self.r, 2 * self.r))
         self.angle = math.atan2(self.vy, self.vx)
         self.sprite_number = 1
-        self.hitted = []
+        self.hit_by_plasma_ball = []
 
     def move(self):
         """
@@ -274,7 +272,7 @@ class Plasma_ball:
         if self.timer % 10 == 0:
             self.sprite_number += 1
             self.sprite_number = self.sprite_number % 2
-            self.surf = pygame.transform.scale(settings.plasma_ball_sprites[self.sprite_number],
+            self.surf = pygame.transform.scale(plasma_ball_sprites[self.sprite_number],
                                                (2 * self.r, 2 * self.r))
 
     def draw(self):
@@ -283,7 +281,7 @@ class Plasma_ball:
         """
         self.screen.blit(self.surf, (self.x - self.r, self.y - self.r))
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         """
         The function checks if the ball collides with the target.
          Args:
@@ -294,20 +292,20 @@ class Plasma_ball:
         return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2
 
 
-class Lightring:
+class LightRing:
     def __init__(self, screen):
         """
-        Constructor of the class Lightring.
+        Constructor of the class LightRing.
         :param self.screen: surface, where image is being drawn
-        :param self.x: x coordinate of the lightring center
-        :param self.y: y coordinate of the lightring center
-        :param self.r: lightring's radius
-        :param self.v: lightring's velocity
+        :param self.x: x coordinate of the light ring center
+        :param self.y: y coordinate of the light ring center
+        :param self.r: light ring's radius
+        :param self.v: light ring's velocity
         :param self.surf: image of the ring
-        :param self.timer: number of frames that lightring lives
+        :param self.timer: number of frames that light ring lives
         :param self.k: animation frame number
         """
-        self.screen = levels.screen
+        self.screen = screen
         self.x = settings.spaceship.x
         self.y = settings.spaceship.y
         self.r = 100
@@ -331,7 +329,7 @@ class Lightring:
         """
         self.screen.blit(self.surf, (self.x - self.r / 2, self.y - self.r / 2))
 
-    def hittest(self, obj):
+    def hit_test(self, obj):
         """
         Checks collision with the target.
         :param obj: target
@@ -340,7 +338,7 @@ class Lightring:
         return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r - 500 + obj.r) ** 2
 
 
-class death_animation:
+class DeathAnimation:
     def __init__(self, x, y):
         """
         death animation class constructor
@@ -369,7 +367,6 @@ def rot_center(image, angle):
     :param angle: angle of rotation
     :return: rotated image
     """
-    orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = rot_image.get_rect()
     rot_rect.center = rot_image.get_rect().center
@@ -377,12 +374,11 @@ def rot_center(image, angle):
     return rot_image
 
 
-def processing(screen, events):
+def processing(events):
     """
     includes all allies shooting mechanics.
-    ult 1 is lightring
+    ult 1 is light ring
     ult 2 if teleport
-    :param screen:
     :param events:
     :return:
     """
@@ -418,7 +414,7 @@ def processing(screen, events):
         if settings.seconds == 1:
             plasma_gun_sound.play()
         if settings.seconds > settings.plasma_balls_firerate:
-            new_ball = Plasma_ball(levels.screen)
+            new_ball = PlasmaBall(levels.screen)
             new_ball.angle = math.atan2(
                 (pygame.mouse.get_pos()[1] - settings.spaceship.y),
                 (pygame.mouse.get_pos()[0] - settings.spaceship.x)) + random.randint(-10, 10) * 0.008
@@ -437,18 +433,18 @@ def processing(screen, events):
     else:
         laser.fire_end()
 
-    for b in lightrings:
+    for b in light_rings:
         b.draw()
         b.move()
         if b.timer <= 0:
-            lightrings.remove(b)
+            light_rings.remove(b)
 
     for event in events:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             if settings.current_skin.super == 0:
-                new_lightring = Lightring(levels.screen)
-                new_lightring.v = 30
-                lightrings.append(new_lightring)
+                new_light_ring = LightRing(levels.screen)
+                new_light_ring.v = 30
+                light_rings.append(new_light_ring)
                 light_ring_sound.play()
             elif settings.current_skin.super == 1:
                 settings.spaceship.x = pygame.mouse.get_pos()[0]
@@ -456,7 +452,7 @@ def processing(screen, events):
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             settings.ammo = levels.ammo_type
             settings.seconds = 0
-            if  levels.ammo_type == 2:
+            if levels.ammo_type == 2:
                 laser_sound.play()
         elif event.type == pygame.MOUSEBUTTONUP:
             settings.ammo = None
