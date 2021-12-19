@@ -1,4 +1,5 @@
 import pygame
+import os
 
 import menu
 import shop
@@ -8,41 +9,58 @@ import ammunition
 import enemies
 import settings
 
+
+# --------------------- Saving data functions ---------------------
+
+
+def load_player_data():
+    """
+    Loads player progress from txt file.
+    """
+    check_file = os.path.exists('player_data.txt')
+    if check_file:
+        file = open('player_data.txt', 'r')
+        data = file.readlines()
+        # Settings variables
+        for i in range(len(data)):
+            words = data[i].split()
+            if words[0] == '#' and words[1] == 'General_information':
+                pass
+            elif words[0] == '#' and words[1] == 'Purchases_and_selections':
+                shop.load_player_data(data[i + 1:])
+            elif words[0] == 'money':
+                settings.money = int(words[1])
+            elif words[0] == 'hp':
+                settings.spaceship.hp = int(words[1])
+
+        file.close()
+
+
+def save_player_data():
+    """
+    Saves player progress into txt file.
+    """
+    file = open('player_data.txt', 'w')
+
+    # General information
+    file.write('# General_information' + '\n')
+    file.write('money ' + str(settings.money) + '\n')
+    file.write('hp ' + str(settings.spaceship.hp) + '\n')
+
+    # Bought objects and upgrades
+    file.write('# Purchases_and_selections' + '\n')
+    shop.save_player_data(file)
+
+    file.close()
+
+
+# ------------------------- Initialization -------------------------
+
+
 # Initializing libraries
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
-
-# Setting a cursor
-arrow_strings = (  # sized 24x24
-  "XX                      ",
-  "XXX                     ",
-  "XXXX                    ",
-  "XX.XX                   ",
-  "XX..XX                  ",
-  "XX...XX                 ",
-  "XX....XX                ",
-  "XX.....XX               ",
-  "XX......XX              ",
-  "XX.......XX             ",
-  "XX........XX            ",
-  "XX........XXX           ",
-  "XX......XXXXX           ",
-  "XX.XXX..XX              ",
-  "XXXX XX..XX             ",
-  "XX   XX..XX             ",
-  "     XX..XX             ",
-  "      XX..XX            ",
-  "      XX..XX            ",
-  "       XXXX             ",
-  "       XX               ",
-  "                        ",
-  "                        ",
-  "                        ")
-
-cursor, mask = pygame.cursors.compile(arrow_strings, "X", ".")
-cursor_sizer = ((24, 24), (7, 11), cursor, mask)
-pygame.mouse.set_cursor(*cursor_sizer)
 
 # Setting a display
 info = pygame.display.Info()
@@ -61,9 +79,16 @@ shop.init()
 enemies.init()
 ammunition.init()
 
-# A cycle which blits game surfaces onto the main screen
+# Loading player data
+load_player_data()
+
+
+# --------------------------- Main core ---------------------------
+
+
 while settings.running:
     clock.tick(FPS)
+
     if settings.flag == 'menu':
         screen = menu.create_screen()
     elif settings.flag == 'levels':
@@ -78,4 +103,9 @@ while settings.running:
         pygame.display.update()
         settings.tick_counter += 1
 
+
+# ---------------------------- Quiting ----------------------------
+
+
+save_player_data()
 pygame.quit()

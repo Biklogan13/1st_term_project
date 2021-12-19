@@ -3,7 +3,6 @@ import os
 
 import settings
 
-pygame.mixer.init()
 
 # ---------------- Global variables of menu section ----------------
 
@@ -140,6 +139,7 @@ def init():
     global screen
     screen = pygame.Surface(settings.SIZE)
 
+    # Loading files
     load_sounds()
     load_images()
     create_buttons()
