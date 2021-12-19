@@ -446,14 +446,17 @@ def processing(events):
 
     for event in events:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            if settings.current_skin.super == 0:
+            if settings.current_skin.super == 0 and settings.super_charge > 100:
                 new_light_ring = LightRing(levels.screen)
                 new_light_ring.v = 30
                 light_rings.append(new_light_ring)
                 light_ring_sound.play()
-            elif settings.current_skin.super == 1:
+                settings.super_charge = 0
+            elif settings.current_skin.super == 1 and settings.super_charge > 20:
                 settings.spaceship.x = pygame.mouse.get_pos()[0]
                 settings.spaceship.y = pygame.mouse.get_pos()[1]
+                settings.super_charge = 0
+
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             settings.ammo = levels.ammo_type
             settings.seconds = 0
