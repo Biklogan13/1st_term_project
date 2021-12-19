@@ -170,7 +170,7 @@ def load_fonts():
 def game_over():
     global game_over_timer, ship_explosion_frame
     settings.spaceship.Vx = settings.spaceship.Vy = 0
-    screen.blit(font.render('YOUR SHIP DESTROYED', True, (255, 255, 255)), (settings.WIDTH / 2 - 425, settings.HEIGHT / 2 - 50))
+    screen.blit(font.render('YOUR SHIP WAS DESTROYED', True, (255, 255, 255)), (settings.WIDTH / 2 - 500, settings.HEIGHT / 2 - 50))
     screen.blit(font_small.render('you lost half of your coins', True, (255, 255, 255)), (settings.WIDTH / 2 - 175, settings.HEIGHT / 2 + 20))
     game_over_timer += 1
     if ship_explosion_frame < 5:

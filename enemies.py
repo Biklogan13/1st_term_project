@@ -230,7 +230,7 @@ class EnemyHeavy:
         if self.ticks % 180 == 0:
             for i in (-2, -1, 0, 1, 2):
                 new_missile = EnemyMissile(self.x, self.y, self.angle + math.pi * i / 12)
-                settings.enemy_bullets.append(new_missile)
+                settings.enemies.append(new_missile)
 
 
 class EnemyCarrier:
@@ -447,6 +447,7 @@ class EnemyMissile:
         self.timer = 150
         self.damage = settings.enemy_missile_damage
         self.steering = 0
+        self.phase = 0
 
     def move(self):
         """
@@ -472,13 +473,14 @@ class EnemyMissile:
         self.x += self.Vx
         self.y += self.Vy
 
-    def draw(self):
+    def draw(self, screen):
         """
         A function which draws an enemy missile
+        :param screen: a surface which image of a mine will be drawn on
         :return: None
         """
         if self.live > 0:
-            self.surface = levels.screen
+            self.surface = screen
             self.image = rot_center_square(missile_image, self.angle * 360 / (2 * math.pi) - 180)
             self.surface.blit(self.image, (self.x - 30, self.y - 30))
 
@@ -490,6 +492,12 @@ class EnemyMissile:
         """
         return (self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2
 
+    def shoot(self):
+        """
+        A function inherent to all enemies which does nothing
+        :return:  None
+        """
+        pass
 
 def init():
     """
