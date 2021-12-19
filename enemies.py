@@ -291,7 +291,7 @@ class EnemyCarrier:
         A function which makes an enemy carrier launch kamikazes
         :return: None
         """
-        if self.x < settings.WIDTH and self.x > 0 and self.ticks % 20 == 0:
+        if 0 < self.x < settings.WIDTH and self.ticks % 20 == 0:
             i = random.random()
             new_kamikaze = EnemyKamikaze()
             new_kamikaze.x = self.x + (i - 0.5) * 200 * math.cos(self.angle)
@@ -453,13 +453,27 @@ class EnemyMissile:
         self.live = 1
         self.timer = 150
         self.damage = settings.enemy_missile_damage
+        self.steering = 0
 
     def move(self):
         """
         A function which moves an enemy missile
         :return: None
         """
-        self.angle += (math.atan2(settings.spaceship.x - self.x, settings.spaceship.y - self.y) - self.angle) / 20
+        self.steering = math.atan2(settings.spaceship.x - self.x, settings.spaceship.y - self.y)
+        x1 = math.cos(self.steering)
+        y1 = math.sin(self.steering)
+
+        for i in range(3):
+            x0 = (math.cos(self.angle) + x1) / 2
+            y0 = (math.sin(self.angle) + y1) / 2
+            if x0 == 0 and y0 == 0:
+                x0 = 0.1 * math.sin(self.steering)
+                y0 = -0.1 * math.cos(self.steering)
+            x1 = math.copysign(math.sqrt(1 / (1 + y0 ** 2 / x0 ** 2)), x0)
+            y1 = math.copysign(math.sqrt(1 / (1 + x0 ** 2 / y0 ** 2)), y0)
+
+        self.angle = math.atan2(y1, x1)
         self.Vx = 15 * math.sin(self.angle)
         self.Vy = 15 * math.cos(self.angle)
         self.x += self.Vx
