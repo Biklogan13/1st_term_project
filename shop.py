@@ -144,7 +144,7 @@ class ShopMenuButton(settings.Button):
         :param event: pygame.MOUSEBUTTONDOWN event
         """
         global shop_section
-        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+        if self.check_mouse(event):
             if self.action == 'switch_to_ships':
                 shop_section = 'ships'
             elif self.action == 'switch_to_upgrades':
@@ -242,7 +242,7 @@ class ShopUpgradeButton(settings.Button):
         Detects if player pressed the button and acts based on its act parameter.
         :param event: pygame.MOUSEBUTTON event
         """
-        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+        if self.check_mouse(event):
             if self.cost <= settings.money and not self.maxed_out:
                 settings.money -= self.cost
                 delegate(self.purchase, self.upgrade)

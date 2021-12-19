@@ -3,6 +3,8 @@ import os
 
 import settings
 
+pygame.mixer.init()
+
 # ---------------- Global variables of menu section ----------------
 
 
@@ -53,7 +55,7 @@ class MenuButton(settings.Button):
         Detects if player pressed the button and acts based on its act parameter.
         :param event: pygame.MOUSEBUTTONDOWN event
         """
-        if event.button == 1 and 0 <= event.pos[0] - self.x <= self.width and 0 <= event.pos[1] - self.y <= self.height:
+        if self.check_mouse(event):
             if self.action == 'exit':
                 pygame.quit()
                 settings.running = False
@@ -64,6 +66,14 @@ class MenuButton(settings.Button):
 
 
 # -------------------- Initialization functions --------------------
+
+
+def load_sounds():
+    """
+    Loads all sounds necessary for menu (and other modules).
+    """
+    click_sound_path = os.path.join('.', 'Sounds', 'click_sound.mp3')
+    settings.click_sound = pygame.mixer.Sound(click_sound_path)
 
 
 def load_images():
@@ -130,6 +140,7 @@ def init():
     global screen
     screen = pygame.Surface(settings.SIZE)
 
+    load_sounds()
     load_images()
     create_buttons()
 
