@@ -574,8 +574,9 @@ def create_ships_items():
     Creates ships items which are displayed in the shop.
     """
     # Creating ItemsShips objects
-    items_ships.append(ShipsItem(40, settings.skins[1].image, 2000, settings.skins[1],
+    items_ships.append(ShipsItem(40, settings.skins[1].image, 0, settings.skins[1],
                                  'Standard spaceship', 'Super is light ring'))
+    items_ships[0].button.bought = True
 
     items_ships.append(ShipsItem(380, settings.skins[0].image, 2000, settings.skins[0],
                                  'Zuckerberg machine', 'Super is teleportation'))
@@ -630,7 +631,8 @@ def create_cosmetics_items():
           menu_background_4, menu_background_5, menu_background_6]]
 
     # Creating CosmeticItems for backgrounds
-    items_cosmetics.append(CosmeticsItem(40, menu_background_1, 200, menu_background_1, 'Standard background'))
+    items_cosmetics.append(CosmeticsItem(40, menu_background_1, 0, menu_background_1, 'Standard background'))
+    items_cosmetics[0].button.bought = True
 
     items_cosmetics.append(CosmeticsItem(40 + 340, menu_background_2, 200, menu_background_2, 'Green nebula'))
 
