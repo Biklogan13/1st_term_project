@@ -16,7 +16,8 @@ laser_min_hit = [3*settings.WIDTH, 0, 0, 0]
 bullet_image, light_ring_image, plasma_ball_sprites, blow, death, light_ring_animation, coin_flip_animation \
     = None, None, [], [], [], [], []
 # variables for sounds
-laser_sound, plasma_gun_sound, light_ring_sound, explosion_sound, cannons = None, None, None, None, None
+laser_sound, plasma_gun_sound, light_ring_sound, explosion_sound, cannons, coin_flip_sound \
+    = None, None, None, None, None, None
 # ammunition sprites
 PLASMA_1_PATH = os.path.join('.', 'ammo_sprites', 'plasma_1.png')
 PLASMA_2_PATH = os.path.join('.', 'ammo_sprites', 'plasma_2.png')
@@ -29,11 +30,12 @@ CANNONS_SOUND_PATH = os.path.join('.', 'Sounds', 'ES_Cannon Blast 4.mp3')
 PLASMA_GUN_SOUND_PATH = os.path.join('.', 'Sounds', 'plasma_gun_powerup_01.mp3')
 LIGHT_RING_SOUND_PATH = os.path.join('.', 'Sounds', 'Dio Brando - ZA WARUDO!.mp3')
 EXPLOSION_SOUND = os.path.join('.', 'Sounds', 'explosion.mp3')
+COIN_FLIP_SOUND_PATH = os.path.join('.', 'Sounds', 'coin flip sound.mp3')
 
 
 def init():
     global laser, cannons, laser_sound, plasma_gun_sound, light_ring_image, bullet_image, light_ring_sound, blow, \
-        death, explosion_sound, plasma_ball_sprites, coin_flip_animation
+        death, explosion_sound, plasma_ball_sprites, coin_flip_animation, coin_flip_sound
 
     for i in range(1, 7):
         blow.append(pygame.image.load(os.path.join('.', 'blow', 'blow' + str(i) + '.png')))
@@ -59,6 +61,7 @@ def init():
 
     pygame.mixer.init()
     pygame.mixer.set_num_channels(50)
+    coin_flip_sound = pygame.mixer.Sound(COIN_FLIP_SOUND_PATH)
     explosion_sound = pygame.mixer.Sound(EXPLOSION_SOUND)
     laser_sound = pygame.mixer.Sound(LASER_SOUND_PATH)
     cannons = pygame.mixer.Sound(CANNONS_SOUND_PATH)
@@ -68,6 +71,7 @@ def init():
     pygame.mixer.Sound.set_volume(cannons, 0.02)
     pygame.mixer.Sound.set_volume(laser_sound, 0.02)
     pygame.mixer.Sound.set_volume(plasma_gun_sound, 0.05)
+    pygame.mixer.Sound.set_volume(coin_flip_sound, 0.2)
     settings.RED = 0xFF0000
     settings.YELLOW = 0xFFC91F
     settings.ORANGE = (255, 165, 0)
@@ -447,16 +451,16 @@ def processing(events):
 
     for event in events:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            if settings.current_skin.super == 0 and settings.super_charge > 100:
+            if settings.current_skin.super == 0 and settings.super_charge >= 100:
                 new_light_ring = LightRing(levels.screen)
                 new_light_ring.v = 30
                 light_rings.append(new_light_ring)
                 light_ring_sound.play()
                 settings.super_charge = 0
-            elif settings.current_skin.super == 1 and settings.super_charge > 20:
+            elif settings.current_skin.super == 1 and settings.super_charge >= 20:
                 settings.spaceship.x = pygame.mouse.get_pos()[0]
                 settings.spaceship.y = pygame.mouse.get_pos()[1]
-                settings.super_charge = 0
+                settings.super_charge -= 20
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             settings.ammo = levels.ammo_type
