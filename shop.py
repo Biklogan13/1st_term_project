@@ -699,7 +699,7 @@ def create_ships_items():
     items_ships[0].button.selected = True
 
     items_ships.append(ShipsItem(380, settings.skins[0].image, 2000, settings.skins[0],
-                                 'Zuckerberg machine', 'Super is teleportation'))
+                                 'Teleporter spaceship', 'Super is teleportation'))
 
 
 def create_upgrades_items():
