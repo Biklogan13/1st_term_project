@@ -82,6 +82,10 @@ ammunition.init()
 # Loading player data
 load_player_data()
 
+# Load main theme
+pygame.mixer.music.load('Sounds/Bipolar Nightmare.mp3')
+pygame.mixer.music.play()
+pygame.mixer.music.set_volume(0.150)
 
 # --------------------------- Main core ---------------------------
 
